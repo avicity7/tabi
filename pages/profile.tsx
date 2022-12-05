@@ -10,14 +10,10 @@ const Profile = (user) => {
     const cancelRef = useRef()
     const router = useRouter();
     const [currentUser,setUser] = useState({})
-    const logout = async () => {
-    await signOut(auth);
+
+    const logout = async (e: React.MouseEvent<HTMLElement>) => {
+        await signOut(auth);
     };
-    const pushToUserPage = (e: React.MouseEvent<HTMLElement>) => {
-    if (currentUser == null) {
-        router.push('/signup')
-    }
-    }
 
     onAuthStateChanged(auth, (currentUser) => {
     setUser(currentUser);
@@ -27,44 +23,21 @@ const Profile = (user) => {
         <div className="px-6 pt-6 lg:px-8 sm:px-2 sticky top-0">
             <nav className="flex h-[5vh] items-center justify-between" aria-label="Global">
             <div className="flex lg:min-w-0 lg:flex-1 align-middle" aria-label="Global">
-                <a href="#" className="-m-1.5 p-1.5">
+                <Link href="/" className="-m-1.5 p-1.5">
                 <span className="font-DMSans font-bold text-4xl">tabi</span>
-                </a>
+                </Link>
             </div>
             </nav>
         </div>
 
         <div className="grid place-items-center h-[80vh] ">
-        <div className="flex min-w-0 flex-1 justify-center">
-            <span>{currentUser != null? (currentUser as any).email : <Avatar size = "xl"/>}</span>
-        </div>
-            <Button backgroundColor="#268DC7" color="white" onClick={onOpen}>Sign out</Button>
-            <AlertDialog
-                motionPreset='slideInBottom'
-                leastDestructiveRef={cancelRef}
-                onClose={onClose}
-                isOpen={isOpen}
-                isCentered
-            >
-                <AlertDialogOverlay />
-
-                <AlertDialogContent>
-                <AlertDialogHeader>Discard Changes?</AlertDialogHeader>
-                <AlertDialogCloseButton />
-                <AlertDialogBody>
-                    Are you sure you want to discard all of your notes? 44 words will be
-                    deleted.
-                </AlertDialogBody>
-                <AlertDialogFooter>
-                    <Button ref={cancelRef} onClick={onClose}>
-                    No
-                    </Button>
-                    <Button colorScheme='red' ml={3}>
-                    Yes
-                    </Button>
-                </AlertDialogFooter>
-                </AlertDialogContent>
-            </AlertDialog>
+            <div className="min-w-0 flex-1 justify-center">
+                <span>{currentUser != null? <Avatar name = {(currentUser as any).email} size = "xl" /> : <Avatar size = "xl"/>}</span>
+            </div>
+            <div className="min-w-0 flex-1 justify-center">
+                <span className='font-DMSans text-2xl'>{currentUser != null? (currentUser as any).email : <span>Not logged in</span>}</span>
+            </div>
+                <Button backgroundColor="#268DC7" color="white" onClick={logout}>Sign out</Button>
         </div>
     </div>
     )
