@@ -63,21 +63,4 @@ const Journey = () => {
         </div>
     ) 
 }
-
-export const getStaticPaths = async () => {
-    const paths = getAllPosts().map(({ slug }) => ({ params: { slug } }));
-    
-    return {
-    paths,
-    fallback: false,
-    };
-    };
-    
-export const getServerSideProps = async ({ params }) => {
-const post = await getSinglePost(params.slug);
-
-    return {
-    props: { ...post },
-    };
-};
 export default Journey
