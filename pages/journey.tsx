@@ -49,7 +49,7 @@ const Journey = ({data}) => {
                     </div>
                     <Text className="font-bold text-2xl pt-3 px-5 md:px-0 ">{data.journey_name}</Text>
                     <Text className="font-bold text-lg pt-5 px-5 md:px-0">About this Journey</Text>
-                    <Text className="font-regular text-regular pt-2 justify-start display-linebreak px-5 md:px-0">{data.journey_body.replace('<br/>', '\n')}</Text>
+                    <Text className="font-sm md:font-regular text-regular pt-2 justify-start display-linebreak px-5 md:px-0">{data.journey_body.replace('<br/>', '\n')}</Text>
                     <Text className="font-bold text-lg pt-5 justify-start px-5 md:px-0">Destinations in this Journey</Text>
                     <div className ="px-5 md:px-0">
                         <Skeleton height="200" />
