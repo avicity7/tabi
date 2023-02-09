@@ -20,6 +20,7 @@ const Profile = () => {
     const logout = async (e: React.MouseEvent<HTMLElement>) => {    
         e.preventDefault();
         const { error } = await supabase.auth.signOut();
+        router.push('/')
     };
 
     useEffect(()=>{
