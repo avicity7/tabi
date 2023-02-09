@@ -41,8 +41,8 @@ const Profile = () => {
         const registerPassword = (document.querySelector("#password") as HTMLInputElement).value;
         try { 
           const { data, error } = await supabase.auth.signUp({
-            email: registerEmail,
-            password: registerPassword,
+            email,
+            password
           })
           if (!error){
             router.replace('/')
@@ -72,6 +72,7 @@ const Profile = () => {
                         Email address
                     </label>
                     <input
+                        onChange={(e) => setEmail(e.target.value)}
                         id="email-address"
                         name="email"
                         type="email"
@@ -86,6 +87,7 @@ const Profile = () => {
                         Password
                     </label>
                     <input
+                        onChange={(e) => setPassword(e.target.value)}
                         id="password"
                         name="password"
                         type="password"
