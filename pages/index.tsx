@@ -66,7 +66,7 @@ const Home = ({data}) => {
         ))}
       </ul>
 
-      <div className = "fixed bottom-0 w-screen flex justify-end px-10 py-10">
+      <div className = "fixed bottom-0 w-screen flex justify-end px-6 md:px-10 py-10">
         <button className="w-12 h-12 rounded-full bg-white hover:bg-white shadow-md">
               <PencilSimple color="#268DC7" size="26" className = "mx-auto"/>
         </button>
