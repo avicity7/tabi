@@ -1,17 +1,14 @@
 import { useState } from 'react'
-import {onAuthStateChanged, signOut} from 'firebase/auth'
 import { useRouter } from "next/router";
-import { auth } from './api/firebase-config'
 import { Avatar, Box, Card, CardHeader, CardBody, CardFooter, Stack, Image, Heading, Text, Button, Divider, ButtonGroup, Skeleton,SkeletonText } from '@chakra-ui/react'
 import Link from 'next/link'
 import { PencilSimple, MagnifyingGlass, ArrowLeft } from "phosphor-react";
+import { createServerSupabaseClient, User } from '@supabase/auth-helpers-nextjs'
 
-const Journey = () => {
+const Journey = ({data}) => {
     const router = useRouter();
     const [currentUser,setUser] = useState({})
-    onAuthStateChanged(auth, (currentUser) => {
-        setUser(currentUser);
-      });
+
     const pushToUserPage = (e: React.MouseEvent<HTMLElement>) => {
         if (currentUser == null) {
           router.push('/signup')
@@ -48,9 +45,9 @@ const Journey = () => {
                         </button>
                         <Image className="max-h-80" borderRadius = {{base:"0",md:"lg"}} src='https://www.timetravelturtle.com/wp-content/uploads/2018/11/Tokyo-2018-280_feat1.jpg' alt='tokyo'/>
                     </div>
-                    <Text className="font-bold text-2xl py-3 px-5 justify-start">Journey Name</Text>
+                    <Text className="font-bold text-2xl py-3 px-5 justify-start">{data.journey_name}</Text>
                     <Text className="font-bold text-xl py-3 px-5 justify-start">About this Journey</Text>
-                    <SkeletonText mt='10' noOfLines={20} spacing='4' skeletonHeight='2' className='px-5 whitespace-normals'/>
+                    <Text className="font-regular text-lg py-3 px-5 justify-start">{data.journey_body}</Text>
                     <Text className="font-bold text-xl py-3 px-5 justify-start">Destinations in this Journey</Text>
                     <div className='px-5'>
                         <Skeleton height="200" />
@@ -62,6 +59,21 @@ const Journey = () => {
             
         </div>
     ) 
+}
+
+export async function getServerSideProps(ctx) {
+    const supabase = createServerSupabaseClient(ctx)
+    const { data, error } = await supabase
+    .from('journeys')
+    .select()
+    .eq('id', ctx.query.journey_id)
+
+
+    return {
+        props: {
+            data: data[0]
+        }
+    }
 }
 
 export default Journey

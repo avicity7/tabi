@@ -1,11 +1,11 @@
 import { useState } from 'react'
 import { useRouter } from "next/router";
 import Link from 'next/link'
-import {createUserWithEmailAndPassword, onAuthStateChanged, signInWithEmailAndPassword} from 'firebase/auth'
-import { auth } from './api/firebase-config'
+import { useUser, useSupabaseClient } from '@supabase/auth-helpers-react'
 
 
 const SignUp = () => {
+  const supabaseClient = useSupabaseClient()
   const router = useRouter();
   const [currentUser,setUser] = useState({})
   const register = async (e: React.MouseEvent<HTMLElement>) => {
@@ -13,16 +13,20 @@ const SignUp = () => {
       const registerEmail = (document.querySelector("#email-address") as HTMLInputElement).value;
       const registerPassword = (document.querySelector("#password") as HTMLInputElement).value;
       try { 
-          const user = await createUserWithEmailAndPassword(auth,registerEmail,registerPassword);
-          router.push('/')
+        const { data, error } = await supabaseClient.auth.signUp({
+          email: registerEmail,
+          password: registerPassword,
+        })
+        if (!error){
+          router.replace('/')
+        }
+        
+        
       }
       catch {
           console.log("Error")
       }
   };
-  onAuthStateChanged(auth, (currentUser) => {
-    setUser(currentUser);
-  });
 
   return (
     <div className="flex h-[80vh] items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
