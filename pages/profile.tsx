@@ -189,7 +189,8 @@ const Profile = () => {
                 <div className="flex h-[5vh] items-center justify-between px-5" aria-label="Global">
                     <div className="flex lg:min-w-0 lg:flex-1 align-middle" aria-label="Global">
                     <Link href="/" className="-m-1.5 p-1.5">
-                        <span className="font-DMSans font-bold text-4xl">tabi</span>
+                        <span className="font-DMSans font-bold text-3xl">tabi</span>
+                        <span className="font-DMSans text-xs ml-1">alpha</span>
                     </Link>
                     </div>
                     <button className='flex min-w-0 flex-1 justify-end px-5'>

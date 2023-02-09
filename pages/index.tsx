@@ -25,11 +25,12 @@ const Home = ({data}) => {
 
   return (
     <div className="isolate bg-white">
+      
       <header className="sticky top-0 z-10 px-2 py-4 bg-white">
           <div className="flex h-[5vh] items-center justify-between px-5" aria-label="Global">
             <div className="flex lg:min-w-0 lg:flex-1 align-middle" aria-label="Global">
               <Link href="/" className="-m-1.5 p-1.5">
-                <span className="font-DMSans font-bold text-4xl">tabi</span>
+                <span className="font-DMSans font-bold text-3xl">tabi</span>
                 <span className="font-DMSans text-xs ml-1">alpha</span>
               </Link>
             </div>
@@ -43,6 +44,7 @@ const Home = ({data}) => {
             </div>
           </div>
       </header>
+
       <ul>
         {data.map((journey) => (
           <li key="{journey}">
@@ -63,13 +65,15 @@ const Home = ({data}) => {
           </li>
         ))}
       </ul>
+
       <div className = "fixed bottom-0 w-screen flex justify-end px-10 py-10">
         <button className="w-12 h-12 rounded-full bg-white hover:bg-white shadow-md">
               <PencilSimple color="#268DC7" size="26" className = "mx-auto"/>
         </button>
       </div>
+
       <footer className="bg-white">
-        <div className="grid grid-cols-2 gap-8 px-6 py-8 md:grid-cols-4">
+        <div className="font-DMSans grid grid-cols-2 gap-8 px-6 py-8 md:grid-cols-4">
             <div>
                 <h2 className="mb-6 text-sm font-semibold text-gray-500 uppercase ">Company</h2>
                 <ul className="text-gray-500 ">
@@ -124,7 +128,7 @@ const Home = ({data}) => {
                 </ul>
             </div>
         </div>
-        <div className="px-4 py-6 bg-gray-100  md:flex md:items-center md:justify-between">
+        <div className="font-DMSans px-4 py-6 bg-gray-100  md:flex md:items-center md:justify-between">
             <span className="text-sm text-gray-500 sm:text-center">© 2023 <a href="https://flowbite.com/">tabi™</a>. All Rights Reserved.
             </span>
             <div className="flex mt-4 space-x-6 sm:justify-center md:mt-0">

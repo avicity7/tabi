@@ -22,4 +22,7 @@
     font-weight: 700;
     src: url("../public/fonts/DMSans-Bold.ttf") format("ttf");
   }
+  .display-linebreak {
+    white-space: pre-line;
+  }
 }
