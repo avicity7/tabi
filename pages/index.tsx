@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { PencilSimple, MagnifyingGlass } from "phosphor-react";
 import { createServerSupabaseClient, User } from '@supabase/auth-helpers-nextjs'
 import { useUser, useSupabaseClient } from '@supabase/auth-helpers-react'
+import PersonOutlineRoundedIcon from '@mui/icons-material/PersonOutlineRounded';
 
 const Home = ({data}) => {
   console.log(data);
@@ -55,7 +56,8 @@ const Home = ({data}) => {
                     <CardBody>
                       <Stack spacing='3'>
                         <Text fontSize='2xl' className="font-bold text-left">{journey.journey_name}</Text>
-                        <Text fontSize='md' className="font-regular text-left" color="grey">{journey.journey_summary}</Text>
+                        <div class="flex flex-row items-center"><PersonOutlineRoundedIcon fontSize="xs" color="gray"/><Text fontSize='xs' className="font-light text-left pl-1" color="gray">hiroyuki</Text></div>
+                        <Text fontSize='md' className="font-regular text-left" color="gray">{journey.journey_summary}</Text>
                       </Stack>
                     </CardBody>
                     
