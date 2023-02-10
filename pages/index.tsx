@@ -5,7 +5,7 @@ import Link from 'next/link'
 import { PencilSimple, MagnifyingGlass } from "phosphor-react";
 import { createServerSupabaseClient, User } from '@supabase/auth-helpers-nextjs'
 import { useUser, useSupabaseClient } from '@supabase/auth-helpers-react'
-import PersonOutlineRoundedIcon from '@mui/icons-material/PersonOutlineRounded';
+import { PersonOutlineRounded, ArrowUpwardRounded } from '@mui/icons-material';
 
 const Home = ({data}) => {
   console.log(data);
@@ -51,13 +51,22 @@ const Home = ({data}) => {
           <li key="{journey}">
               <div className="grid place-items-center h-[80vh] font-DMSans">
                 <button onClick={() => {pushToJourney(journey.id)}}>
-                  <Card maxW={{base: 'sm',md: 'xl'}} className = "my-5 mx-5" overflow="hidden">
+                  <Card maxW={{base: 'sm',md: 'lg'}} className = "my-5 mx-5" overflow="hidden">
                     <Image objectFit='cover' src='https://www.timetravelturtle.com/wp-content/uploads/2018/11/Tokyo-2018-280_feat1.jpg' alt='tokyo'/>
                     <CardBody>
                       <Stack spacing='3'>
-                        <Text fontSize='2xl' className="font-bold text-left">{journey.journey_name}</Text>
-                        <div class="flex flex-row items-center"><PersonOutlineRoundedIcon fontSize="xs" color="gray"/><Text fontSize='xs' className="font-light text-left pl-1" color="gray">hiroyuki</Text></div>
-                        <Text fontSize='md' className="font-regular text-left" color="gray">{journey.journey_summary}</Text>
+                        <div className="flex flex-row justify-between">
+                          <Text fontSize='2xl' className="font-bold text-left">{journey.journey_name}</Text>
+                          <div className="flex flex-row items-center">
+                            <ArrowUpwardRounded fontSize="medium" style={{ color: '#268DC7'}}/>
+                            <Text fontSize='2xl' className="font-bold text-left pl-1">{journey.journey_upvotes}</Text>
+                          </div>
+                        </div>
+                        <div className="flex flex-row items-center">
+                          <PersonOutlineRounded fontSize="inherit" style={{ color: 'gray' }}/>
+                          <Text fontSize='xs' className="font-medium text-left pl-0.5" color="gray">hiroyuki</Text>
+                        </div>
+                        <Text fontSize='md' className="font-regular text-left" color="black">{journey.journey_summary}</Text>
                       </Stack>
                     </CardBody>
                     
