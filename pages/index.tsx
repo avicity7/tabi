@@ -5,13 +5,25 @@ import Link from 'next/link'
 import { PencilSimple, MagnifyingGlass } from "phosphor-react";
 import { createServerSupabaseClient, User } from '@supabase/auth-helpers-nextjs'
 import { useUser, useSupabaseClient } from '@supabase/auth-helpers-react'
-import { PersonOutlineRounded, ArrowUpwardRounded } from '@mui/icons-material';
+import { PersonOutlineRounded, ArrowUpwardRounded, MenuRounded } from '@mui/icons-material';
+import { 
+  Show, 
+  Hide, 
+  useDisclosure, 
+  Drawer,
+  DrawerBody,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerOverlay,
+  DrawerContent,
+  DrawerCloseButton, } from '@chakra-ui/react'
 
 const Home = ({data}) => {
   console.log(data);
   const router = useRouter();
   const supabase = useSupabaseClient()
   const user = useUser();
+  const { isOpen, onOpen, onClose } = useDisclosure()
 
   const pushToUserPage = (e: React.MouseEvent<HTMLElement>) => {
       router.push('/profile')
@@ -29,12 +41,30 @@ const Home = ({data}) => {
       
       <header className="sticky top-0 z-10 px-2 py-4 bg-white">
           <div className="flex h-[5vh] items-center justify-between px-5" aria-label="Global">
-            <div className="flex lg:min-w-0 lg:flex-1 align-middle" aria-label="Global">
-              <Link href="/" className="-m-1.5 p-1.5">
-                <span className="font-DMSans font-bold text-3xl">tabi</span>
-                <span className="font-DMSans text-xs ml-1">alpha</span>
-              </Link>
-            </div>
+            <Show above="md">
+              <div className="flex lg:min-w-0 lg:flex-1 align-middle" aria-label="Global">
+                <Link href="/" className="-m-1.5 p-1.5">
+                  <span className="font-DMSans font-bold text-3xl">tabi</span>
+                  <span className="font-DMSans text-xs ml-1">alpha</span>
+                </Link>
+              </div>
+            </Show>
+            <Hide above="md">
+              <button onClick={onOpen}>
+                <MenuRounded />
+              </button>
+              <Drawer placement={'left'} onClose={onClose} isOpen={isOpen}>
+                <DrawerOverlay />
+                <DrawerContent>
+                  <DrawerHeader borderBottomWidth='1px'>Basic Drawer</DrawerHeader>
+                  <DrawerBody>
+                    <p>Some contents...</p>
+                    <p>Some contents...</p>
+                    <p>Some contents...</p>
+                  </DrawerBody>
+                </DrawerContent>
+              </Drawer>
+            </Hide>
             <button className='flex min-w-0 flex-1 justify-end px-5'>
               <MagnifyingGlass size = "26"></MagnifyingGlass>
             </button>
