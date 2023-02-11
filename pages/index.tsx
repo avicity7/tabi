@@ -111,6 +111,14 @@ const Home = ({data}) => {
                 </DrawerContent>
               </Drawer>
             </Hide>
+            <Hide above="md">
+              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 font-DMSans flex lg:min-w-0 lg:flex-1 align-middle">
+                <Link href="/" className="-m-1.5 p-1.5">
+                    <span className="font-DMSans font-bold text-3xl">tabi</span>
+                    <span className="font-DMSans text-xs ml-1 text-tabiBlue">alpha</span>
+                </Link>
+              </div>
+            </Hide>
             <button onClick={onOpenSearch} className='flex min-w-0 flex-1 justify-end px-5'>
               <MagnifyingGlass size = "26"></MagnifyingGlass>
             </button>
