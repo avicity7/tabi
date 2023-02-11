@@ -34,6 +34,7 @@ const Home = ({data}) => {
   const user = useUser();
   const { isOpen: isOpenDrawer, onOpen: onOpenDrawer, onClose: onCloseDrawer } = useDisclosure()
   const { isOpen: isOpenSearch, onOpen: onOpenSearch, onClose: onCloseSearch } = useDisclosure()
+  
   const pushToUserPage = (e: React.MouseEvent<HTMLElement>) => {
       router.push('/profile')
   }
@@ -136,7 +137,7 @@ const Home = ({data}) => {
             </Modal>
             <div>
                 <button onClick={pushToUserPage}>
-                  <span>{user != null? <Avatar name = {(user as any).email} size = "sm" /> : <Avatar size = "sm"/>}</span>
+                  <span>{<Avatar name = {(user as any).email} size = "sm" />}</span>
                 </button>
             </div>
           </div>
