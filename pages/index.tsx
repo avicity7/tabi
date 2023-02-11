@@ -83,7 +83,7 @@ const Home = ({data}) => {
           <li key="{journey}">
               <div className="grid place-items-center h-[80vh] font-DMSans">
                 <button onClick={() => {pushToJourney(journey.id)}}>
-                  <Card maxW={{base: 'md',md: 'lg'}} className = "my-5 mx-5" overflow="hidden">
+                  <Card maxW={'lg'} className = "my-5 mx-5" overflow="hidden">
                     <Image objectFit='cover' src='https://www.timetravelturtle.com/wp-content/uploads/2018/11/Tokyo-2018-280_feat1.jpg' alt='tokyo'/>
                     <CardBody>
                       <Stack spacing='3'>
