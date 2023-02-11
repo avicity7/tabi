@@ -2,8 +2,11 @@
 *Helping you go on your next Journey*
 
 ## Tech Stack 
-Next.js (front-end, framework)  
-ChakraUI, TailwindCSS, HeadlessUI (front-end, styling)  
+Frontend Framework - Next.js
+
+Frontend Styling - TailwindCSS, ChakraUI 
+
+Backend - Supabase (Auth, Database)
 
 ##  Development Journey 
 Read some of my thoughts while developing tabi: *In development*
