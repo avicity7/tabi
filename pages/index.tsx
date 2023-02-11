@@ -86,7 +86,7 @@ const Home = ({data}) => {
                     <div className="flex lg:min-w-0 lg:flex-1 align-middle" aria-label="Global">
                       <Link href="/" className="-m-1.5 p-1.5">
                         <span className="font-DMSans font-bold text-3xl">tabi</span>
-                        <span className="font-DMSans text-xs ml-1 text-TabiBlue">alpha</span>
+                        <span className="font-DMSans text-xs ml-1 text-tabiBlue">alpha</span>
                       </Link>
                     </div>
                   </DrawerHeader>
@@ -95,14 +95,14 @@ const Home = ({data}) => {
                       <button>
                         <div className="flex flex-row items-center">
                           <Icon height="24" icon="akar-icons:map" style={{color:'#268DC7'}} />
-                          <Text fontSize='md' className="font-medium text-left pl-2" style={{color:'#268DC7'}}>Journeys</Text>
+                          <Text fontSize='md' className="font-bold text-left pl-2" style={{color:'#268DC7'}}>Journeys</Text>
                           <Text></Text>
                         </div>
                       </button>
                       <button>
                         <div className="flex flex-row items-center pt-5">
                           <Icon height="24" icon="tabler:messages" style={{color:'#CBCBCB'}} />
-                          <Text fontSize='md' className="font-medium text-left pl-2" style={{color:'#CBCBCB'}}>Social</Text>
+                          <Text fontSize='md' className="font-bold text-left pl-2" style={{color:'#CBCBCB'}}>Social</Text>
                           <Text></Text>
                         </div>
                       </button>
