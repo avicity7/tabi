@@ -100,7 +100,7 @@ const Home = ({data}) => {
                         </div>
                       </button>
                       <button>
-                        <div className="flex flex-row items-center pt-5">
+                        <div className="flex flex-row items-center pt-5 font-DMSans">
                           <Icon height="24" icon="tabler:messages" style={{color:'#CBCBCB'}} />
                           <Text fontSize='md' className="font-medium text-left pl-2" style={{color:'#CBCBCB'}}>Social</Text>
                           <Text></Text>
