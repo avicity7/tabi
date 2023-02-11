@@ -29,7 +29,6 @@ import {
 } from '@chakra-ui/react'
 
 const Home = ({data}) => {
-  console.log(data);
   const router = useRouter();
   const supabase = useSupabaseClient()
   const user = useUser();
