@@ -57,7 +57,7 @@ const Home = ({data}) => {
                   <span className="font-DMSans font-bold text-3xl">tabi</span>
                   <span className="font-DMSans text-xs ml-1 text-tabiBlue">alpha</span>
                 </Link>
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 font-DMSans">
                   <button>
                     <div className="flex flex-row items-center">
                       <Icon height="18" icon="akar-icons:map" style={{color:'#268DC7'}} />
@@ -93,16 +93,16 @@ const Home = ({data}) => {
                   <DrawerBody>
                     <Stack>
                       <button>
-                        <div className="flex flex-row items-center">
+                        <div className="flex flex-row items-center font-DMSans">
                           <Icon height="24" icon="akar-icons:map" style={{color:'#268DC7'}} />
-                          <Text fontSize='md' className="font-bold text-left pl-2" style={{color:'#268DC7'}}>Journeys</Text>
+                          <Text fontSize='md' className="font-medium text-left pl-2" style={{color:'#268DC7'}}>Journeys</Text>
                           <Text></Text>
                         </div>
                       </button>
                       <button>
                         <div className="flex flex-row items-center pt-5">
                           <Icon height="24" icon="tabler:messages" style={{color:'#CBCBCB'}} />
-                          <Text fontSize='md' className="font-bold text-left pl-2" style={{color:'#CBCBCB'}}>Social</Text>
+                          <Text fontSize='md' className="font-medium text-left pl-2" style={{color:'#CBCBCB'}}>Social</Text>
                           <Text></Text>
                         </div>
                       </button>
