@@ -18,15 +18,23 @@ import {
   DrawerHeader,
   DrawerOverlay,
   DrawerContent,
-  DrawerCloseButton, } from '@chakra-ui/react'
+  DrawerCloseButton,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+  ModalCloseButton,
+} from '@chakra-ui/react'
 
 const Home = ({data}) => {
   console.log(data);
   const router = useRouter();
   const supabase = useSupabaseClient()
   const user = useUser();
-  const { isOpen, onOpen, onClose } = useDisclosure()
-
+  const { isOpen: isOpenDrawer, onOpen: onOpenDrawer, onClose: onCloseDrawer } = useDisclosure()
+  const { isOpen: isOpenSearch, onOpen: onOpenSearch, onClose: onCloseSearch } = useDisclosure()
   const pushToUserPage = (e: React.MouseEvent<HTMLElement>) => {
       router.push('/profile')
   }
@@ -42,34 +50,83 @@ const Home = ({data}) => {
     <div className="isolate bg-white">
       
       <header className="sticky top-0 z-10 px-2 py-4 bg-white">
-          <div className="flex h-[5vh] items-center justify-between px-5" aria-label="Global">
+          <div className="flex h-[5vh] items-center justify-between px-5">
             <Show above="md">
-              <div className="flex lg:min-w-0 lg:flex-1 align-middle" aria-label="Global">
+              <div className="flex align-middle">
                 <Link href="/" className="-m-1.5 p-1.5">
                   <span className="font-DMSans font-bold text-3xl">tabi</span>
-                  <span className="font-DMSans text-xs ml-1">alpha</span>
+                  <span className="font-DMSans text-xs ml-1 text-tabiBlue">alpha</span>
                 </Link>
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+                  <button>
+                    <div className="flex flex-row items-center">
+                      <Icon height="18" icon="akar-icons:map" style={{color:'#268DC7'}} />
+                      <Text fontSize='md' className="font-medium text-left pl-2" style={{color:'#268DC7'}}>Journeys</Text>
+                      <Text></Text>
+                    </div>
+                  </button>
+                  <button>
+                    <div className="flex flex-row items-center pl-5">
+                      <Icon height="18" icon="tabler:messages" style={{color:'#CBCBCB'}} />
+                      <Text fontSize='md' className="font-medium text-left pl-2" style={{color:'#CBCBCB'}}>Social</Text>
+                      <Text></Text>
+                    </div>
+                  </button>
+                </div>
               </div>
             </Show>
             <Hide above="md">
-              <button onClick={onOpen}>
+              <button onClick={onOpenDrawer}>
                 <MenuRoundedIcon />
               </button>
-              <Drawer placement={'left'} onClose={onClose} isOpen={isOpen}>
+              <Drawer placement={'left'} onClose={onCloseDrawer} isOpen={isOpenDrawer}>
                 <DrawerOverlay />
-                <DrawerContent>
-                  <DrawerHeader borderBottomWidth='1px'>Basic Drawer</DrawerHeader>
+                <DrawerContent borderRadius="md">
+                  <DrawerHeader>
+                    <div className="flex lg:min-w-0 lg:flex-1 align-middle" aria-label="Global">
+                      <Link href="/" className="-m-1.5 p-1.5">
+                        <span className="font-DMSans font-bold text-3xl">tabi</span>
+                        <span className="font-DMSans text-xs ml-1 text-TabiBlue">alpha</span>
+                      </Link>
+                    </div>
+                  </DrawerHeader>
                   <DrawerBody>
-                    <p>Some contents...</p>
-                    <p>Some contents...</p>
-                    <p>Some contents...</p>
+                    <Stack>
+                      <button>
+                        <div className="flex flex-row items-center">
+                          <Icon height="24" icon="akar-icons:map" style={{color:'#268DC7'}} />
+                          <Text fontSize='md' className="font-medium text-left pl-2" style={{color:'#268DC7'}}>Journeys</Text>
+                          <Text></Text>
+                        </div>
+                      </button>
+                      <button>
+                        <div className="flex flex-row items-center pt-5">
+                          <Icon height="24" icon="tabler:messages" style={{color:'#CBCBCB'}} />
+                          <Text fontSize='md' className="font-medium text-left pl-2" style={{color:'#CBCBCB'}}>Social</Text>
+                          <Text></Text>
+                        </div>
+                      </button>
+                    </Stack>
                   </DrawerBody>
                 </DrawerContent>
               </Drawer>
             </Hide>
-            <button className='flex min-w-0 flex-1 justify-end px-5'>
+            <button onClick={onOpenSearch} className='flex min-w-0 flex-1 justify-end px-5'>
               <MagnifyingGlass size = "26"></MagnifyingGlass>
             </button>
+            <Modal isOpen={isOpenSearch} onClose={onCloseSearch}>
+              <ModalOverlay />
+              <ModalContent>
+                <ModalHeader className="font-DMSans">Search for Journey</ModalHeader>
+                <ModalBody className="font-DMSans">
+                  <Text>Search</Text>
+                </ModalBody>
+
+                <ModalFooter className="font-DMSans">
+                  <Button onClick={onCloseSearch} variant='ghost'>Cancel Search</Button>
+                </ModalFooter>
+              </ModalContent>
+            </Modal>
             <div>
                 <button onClick={pushToUserPage}>
                   <span>{user != null? <Avatar name = {(user as any).email} size = "sm" /> : <Avatar size = "sm"/>}</span>
@@ -84,7 +141,7 @@ const Home = ({data}) => {
               <div className="grid place-items-center h-[80vh] font-DMSans">
                 <button onClick={() => {pushToJourney(journey.id)}}>
                   <Card maxW={'lg'} className = "my-5 mx-5" overflow="hidden">
-                    <Image objectFit='cover' src='https://www.timetravelturtle.com/wp-content/uploads/2018/11/Tokyo-2018-280_feat1.jpg' alt='tokyo'/>
+                    <Image objectFit='fill' src='https://www.timetravelturtle.com/wp-content/uploads/2018/11/Tokyo-2018-280_feat1.jpg' alt='tokyo'/>
                     <CardBody>
                       <Stack spacing='3'>
                         <div className="flex flex-row justify-between">
