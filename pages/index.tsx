@@ -6,6 +6,7 @@ import { PencilSimple, MagnifyingGlass } from "phosphor-react";
 import { createServerSupabaseClient, User } from '@supabase/auth-helpers-nextjs'
 import { useUser, useSupabaseClient } from '@supabase/auth-helpers-react'
 import { PersonOutlineRounded, ArrowUpwardRounded, MenuRounded } from '@mui/icons-material';
+import { Icon } from '@iconify-icon/react';
 import { 
   Show, 
   Hide, 
@@ -93,8 +94,8 @@ const Home = ({data}) => {
                           </div>
                         </div>
                         <div className="flex flex-row items-center">
-                          <PersonOutlineRounded fontSize="inherit" style={{ color: 'gray' }}/>
-                          <Text fontSize='xs' className="font-medium text-left pl-0.5" color="gray">hiroyuki</Text>
+                          <Icon icon="charm:person" style={{color:'#CBCBCB'}} />
+                          <Text fontSize='xs' className="font-regular text-left pl-0.5 pt-0.3" style={{color:'#CBCBCB'}}>hiroyuki</Text>
                         </div>
                         <Text fontSize='md' className="font-regular text-left" color="black">{journey.journey_summary}</Text>
                       </Stack>
