@@ -3,7 +3,9 @@
 
 ## Tech Stack 
 Frontend Framework - Next.js
+
 Frontend Styling - TailwindCSS, ChakraUI 
+
 Backend - Supabase (Auth, Database)
 
 ##  Development Journey 
