@@ -5,7 +5,8 @@ import Link from 'next/link'
 import { PencilSimple, MagnifyingGlass } from "phosphor-react";
 import { createServerSupabaseClient, User } from '@supabase/auth-helpers-nextjs'
 import { useUser, useSupabaseClient } from '@supabase/auth-helpers-react'
-import { PersonOutlineRounded, ArrowUpwardRounded, MenuRounded } from '@mui/icons-material';
+import ArrowUpwardRoundedIcon from '@mui/icons-material/ArrowUpwardRounded';
+import MenuRoundedIcon from '@mui/icons-material/MenuRounded';
 import { Icon } from '@iconify-icon/react';
 import { 
   Show, 
@@ -52,7 +53,7 @@ const Home = ({data}) => {
             </Show>
             <Hide above="md">
               <button onClick={onOpen}>
-                <MenuRounded />
+                <MenuRoundedIcon />
               </button>
               <Drawer placement={'left'} onClose={onClose} isOpen={isOpen}>
                 <DrawerOverlay />
@@ -89,7 +90,7 @@ const Home = ({data}) => {
                         <div className="flex flex-row justify-between">
                           <Text fontSize='2xl' className="font-bold text-left">{journey.journey_name}</Text>
                           <div className="flex flex-row items-center">
-                            <ArrowUpwardRounded fontSize="medium" style={{ color: '#268DC7'}}/>
+                            <ArrowUpwardRoundedIcon fontSize="medium" style={{ color: '#268DC7'}}/>
                             <Text fontSize='2xl' className="font-bold text-left pl-1">{journey.journey_upvotes}</Text>
                           </div>
                         </div>
