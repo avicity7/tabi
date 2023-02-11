@@ -9,4 +9,4 @@ Frontend Styling - TailwindCSS, ChakraUI
 Backend - Supabase (Auth, Database)
 
 ##  Development Journey 
-Read some of my thoughts while developing tabi: *In development*
+Read some of my thoughts while developing tabi: https://medium.com/@karlorjalo
