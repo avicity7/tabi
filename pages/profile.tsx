@@ -1,34 +1,16 @@
 import { useEffect, useState, useRef } from 'react'
 import { useRouter } from "next/router";
-import Link from 'next/link'
-import { PencilSimple, MagnifyingGlass,ArrowLeft } from "phosphor-react";
+import { PencilSimple } from "phosphor-react";
 import { useUser, useSupabaseClient } from '@supabase/auth-helpers-react';
-import ArrowUpwardRoundedIcon from '@mui/icons-material/ArrowUpwardRounded';
-import MenuRoundedIcon from '@mui/icons-material/MenuRounded';
 import { Icon } from '@iconify-icon/react';
 import { 
     Text,
     Avatar,
-    Button,
-    Show, 
-    Hide, 
     useDisclosure, 
-    Drawer,
-    DrawerBody,
-    DrawerFooter,
-    DrawerHeader,
-    DrawerOverlay,
-    DrawerContent,
-    DrawerCloseButton,
-    Modal,
-    ModalOverlay,
-    ModalContent,
-    ModalHeader,
-    ModalFooter,
-    ModalBody,
-    ModalCloseButton,
     Stack
-  } from '@chakra-ui/react'
+} from '@chakra-ui/react';
+
+import Navbar from '../components/navbar';
 
 const Profile = () => {
     const supabase = useSupabaseClient()
@@ -213,100 +195,7 @@ const Profile = () => {
 
     return ( //Logged in user page
     <div className="isolate bg-white flex flex-col h-screen justify-between">
-        <header className="sticky top-0 z-10 px-2 py-4 bg-white">
-          <div className="flex h-[5vh] items-center justify-between px-5">
-            <Show above="md">
-              <div className="flex align-middle">
-                <Link href="/" className="-m-1.5 p-1.5">
-                  <span className="font-DMSans font-bold text-3xl">tabi</span>
-                  <span className="font-DMSans text-xs ml-1 text-tabiBlue">alpha</span>
-                </Link>
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 font-DMSans">
-                  <button onClick={()=>{router.push('/')}}>
-                    <div className="flex flex-row items-center">
-                      <Icon height="18" icon="akar-icons:map" style={{color:'#CBCBCB'}} />
-                      <Text fontSize='md' className="font-medium text-left pl-2" style={{color:'#CBCBCB'}}>Journeys</Text>
-                      <Text></Text>
-                    </div>
-                  </button>
-                  <button>
-                    <div className="flex flex-row items-center pl-5">
-                      <Icon height="18" icon="tabler:messages" style={{color:'#CBCBCB'}} />
-                      <Text fontSize='md' className="font-medium text-left pl-2" style={{color:'#CBCBCB'}}>Social</Text>
-                      <Text></Text>
-                    </div>
-                  </button>
-                </div>
-              </div>
-            </Show>
-            <Hide above="md">
-              <button onClick={onOpenDrawer}>
-                <MenuRoundedIcon />
-              </button>
-              <Drawer placement={'left'} onClose={onCloseDrawer} isOpen={isOpenDrawer}>
-                <DrawerOverlay />
-                <DrawerContent borderRadius="md">
-                  <DrawerHeader>
-                    <div className="flex lg:min-w-0 lg:flex-1 align-middle" aria-label="Global">
-                      <Link href="/" className="-m-1.5 p-1.5">
-                        <span className="font-DMSans font-bold text-3xl">tabi</span>
-                        <span className="font-DMSans text-xs ml-1 text-tabiBlue">alpha</span>
-                      </Link>
-                    </div>
-                  </DrawerHeader>
-                  <DrawerBody>
-                    <Stack>
-                      <button>
-                        <div className="flex flex-row items-center font-DMSans">
-                          <Icon height="24" icon="akar-icons:map" style={{color:'#CBCBCB'}} />
-                          <Text fontSize='md' className="font-medium text-left pl-2" style={{color:'#CBCBCB'}}>Journeys</Text>
-                          <Text></Text>
-                        </div>
-                      </button>
-                      <button>
-                        <div className="flex flex-row items-center pt-5 font-DMSans">
-                          <Icon height="24" icon="tabler:messages" style={{color:'#CBCBCB'}} />
-                          <Text fontSize='md' className="font-medium text-left pl-2" style={{color:'#CBCBCB'}}>Social</Text>
-                          <Text></Text>
-                        </div>
-                      </button>
-                    </Stack>
-                  </DrawerBody>
-                </DrawerContent>
-              </Drawer>
-            </Hide>
-            <Hide above="md">
-              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 font-DMSans flex lg:min-w-0 lg:flex-1 align-middle">
-                <Link href="/" className="-m-1.5 p-1.5">
-                    <span className="font-DMSans font-bold text-3xl">tabi</span>
-                    <span className="font-DMSans text-xs ml-1 text-tabiBlue">alpha</span>
-                </Link>
-              </div>
-            </Hide>
-            <button onClick={onOpenSearch} className='flex min-w-0 flex-1 justify-end px-5'>
-              <MagnifyingGlass size = "26"></MagnifyingGlass>
-            </button>
-            <Modal isOpen={isOpenSearch} onClose={onCloseSearch}>
-              <ModalOverlay />
-              <ModalContent>
-                <ModalHeader className="font-DMSans">Search for Journey</ModalHeader>
-                <ModalBody className="font-DMSans">
-                  <Text>Search</Text>
-                </ModalBody>
-
-                <ModalFooter className="font-DMSans">
-                  <Button onClick={onCloseSearch} variant='ghost'>Cancel Search</Button>
-                </ModalFooter>
-              </ModalContent>
-            </Modal>
-            <div>
-                <button onClick={()=>{router.push('/profile')}}>
-                  <span>{<Avatar name = {(user as any).email} size = "sm" />}</span>
-                </button>
-            </div>
-          </div>
-        </header>
-        
+        <Navbar activePage={'profile'} user={user} router={router} onOpenDrawer={onOpenDrawer} onCloseDrawer={onCloseDrawer} isOpenDrawer={isOpenDrawer} onOpenSearch={onOpenSearch} isOpenSearch={isOpenSearch} onCloseSearch={onCloseSearch}/>
 
         <div className="grid place-items-center">
             <Stack>
