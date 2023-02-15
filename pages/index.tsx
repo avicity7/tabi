@@ -38,8 +38,8 @@ const Home = ({data}) => {
 
       <ul>
         {data.map((journey) => (
-          <li key="{journey}">
-              <div className="grid place-items-center h-[80vh] font-DMSans">
+          <li key={journey.id}>
+              <div className="grid place-items-center font-DMSans">
                 <button onClick={() => {pushToJourney(journey.id)}}>
                   <Card maxW={'lg'} className = "my-5 mx-5" overflow="hidden">
                     <Image objectFit='fill' src='https://www.timetravelturtle.com/wp-content/uploads/2018/11/Tokyo-2018-280_feat1.jpg' alt='tokyo'/>
@@ -54,7 +54,7 @@ const Home = ({data}) => {
                         </div>
                         <div className="flex flex-row items-center">
                           <Icon icon="charm:person" style={{color:'#CBCBCB'}} />
-                          <Text fontSize='xs' className="font-medium text-left pl-0.5 pt-0.3" style={{color:'#CBCBCB'}}>hiroyuki</Text>
+                          <Text fontSize='xs' className="font-medium text-left pl-0.5 pt-0.3" style={{color:'#CBCBCB'}}>{journey.author_username}</Text>
                         </div>
                         <Text fontSize='md' className="font-regular text-left" color="black">{journey.journey_summary}</Text>
                       </Stack>
