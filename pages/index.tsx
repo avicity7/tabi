@@ -1,29 +1,19 @@
-import { useState } from 'react'
 import { useRouter } from "next/router";
-import { Avatar, Box, Card, CardHeader, CardBody, CardFooter, Stack, Image, Heading, Text, Button, Divider, ButtonGroup, Skeleton,SkeletonText } from '@chakra-ui/react'
-import Link from 'next/link';
-import { PencilSimple, MagnifyingGlass } from "phosphor-react";
-import { createServerSupabaseClient, User } from '@supabase/auth-helpers-nextjs';
-import { useUser, useSupabaseClient } from '@supabase/auth-helpers-react';
+import { Card, CardBody, Stack, Image, Text, } from '@chakra-ui/react'
+import { createServerSupabaseClient } from '@supabase/auth-helpers-nextjs';
+import { useUser } from '@supabase/auth-helpers-react';
 import ArrowUpwardRoundedIcon from '@mui/icons-material/ArrowUpwardRounded';
-import MenuRoundedIcon from '@mui/icons-material/MenuRounded';
 import { Icon } from '@iconify-icon/react';
 import { useDisclosure } from '@chakra-ui/react';
-
 
 import Navbar from '../components/navbar';
 import JourneyCreateButton from '../components/journeyCreateButton';
 
 const Home = ({data}) => {
   const router = useRouter();
-  const supabase = useSupabaseClient()
   const user = useUser();
   const { isOpen: isOpenDrawer, onOpen: onOpenDrawer, onClose: onCloseDrawer } = useDisclosure()
   const { isOpen: isOpenSearch, onOpen: onOpenSearch, onClose: onCloseSearch } = useDisclosure()
-
-  const pushToUserPage = (e: React.MouseEvent<HTMLElement>) => {
-      router.push('/profile')
-  }
 
   const pushToJourney = (journey_id) => {
     router.push({
