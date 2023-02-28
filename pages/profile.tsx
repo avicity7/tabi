@@ -195,7 +195,7 @@ const Profile = () => {
 
     return ( //Logged in user page
     <div className="isolate bg-white flex flex-col h-screen justify-between">
-        <Navbar activePage={'profile'} user={user} router={router} onOpenDrawer={onOpenDrawer} onCloseDrawer={onCloseDrawer} isOpenDrawer={isOpenDrawer} onOpenSearch={onOpenSearch} isOpenSearch={isOpenSearch} onCloseSearch={onCloseSearch}/>
+        <Navbar activePage={'profile'} onOpenDrawer={onOpenDrawer} onCloseDrawer={onCloseDrawer} isOpenDrawer={isOpenDrawer} onOpenSearch={onOpenSearch} isOpenSearch={isOpenSearch} onCloseSearch={onCloseSearch}/>
 
         <div className="grid place-items-center">
             <Stack>

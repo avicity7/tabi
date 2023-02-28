@@ -2,8 +2,7 @@ import { useState, useEffect } from 'react'
 import { useRouter } from "next/router";
 import { Stack, Image, Text, Skeleton, SkeletonText} from '@chakra-ui/react'
 import { ArrowLeft } from "phosphor-react";
-import { createServerSupabaseClient, User } from '@supabase/auth-helpers-nextjs';
-import { createClient } from '@supabase/supabase-js'
+import { createClient } from '@supabase/supabase-js';
 import { useUser } from '@supabase/auth-helpers-react';
 import { Icon } from '@iconify-icon/react';
 import { useDisclosure } from '@chakra-ui/react';
@@ -48,7 +47,7 @@ const Journey = () => {
     if (data.journey == '' || data.comments == ''){
         return(
             <div className="isolate bg-white">
-                <Navbar activePage={'index'} user={user} router={router} onOpenDrawer={onOpenDrawer} onCloseDrawer={onCloseDrawer} isOpenDrawer={isOpenDrawer} onOpenSearch={onOpenSearch} isOpenSearch={isOpenSearch} onCloseSearch={onCloseSearch}/>
+                <Navbar activePage={'index'} onOpenDrawer={onOpenDrawer} onCloseDrawer={onCloseDrawer} isOpenDrawer={isOpenDrawer} onOpenSearch={onOpenSearch} isOpenSearch={isOpenSearch} onCloseSearch={onCloseSearch}/>
 
                 <div className="grid place-items-center font-DMSans">
                     <Stack className="flex max-w-2xl">
@@ -80,7 +79,7 @@ const Journey = () => {
     else {
         return(
             <div className="isolate bg-white">
-                <Navbar activePage={'index'} user={user} router={router} onOpenDrawer={onOpenDrawer} onCloseDrawer={onCloseDrawer} isOpenDrawer={isOpenDrawer} onOpenSearch={onOpenSearch} isOpenSearch={isOpenSearch} onCloseSearch={onCloseSearch}/>
+                <Navbar activePage={'index'} onOpenDrawer={onOpenDrawer} onCloseDrawer={onCloseDrawer} isOpenDrawer={isOpenDrawer} onOpenSearch={onOpenSearch} isOpenSearch={isOpenSearch} onCloseSearch={onCloseSearch}/>
 
                 <div className="grid place-items-center font-DMSans">
                     <Stack className="flex max-w-2xl">

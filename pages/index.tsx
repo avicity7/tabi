@@ -2,7 +2,7 @@ import { useRouter } from "next/router";
 import { Card, CardBody, Stack, Image, Text, } from '@chakra-ui/react'
 import { createServerSupabaseClient } from '@supabase/auth-helpers-nextjs';
 import { useUser } from '@supabase/auth-helpers-react';
-import ArrowUpwardRoundedIcon from '@mui/icons-material/ArrowUpwardRounded';
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import { Icon } from '@iconify-icon/react';
 import { useDisclosure } from '@chakra-ui/react';
 
@@ -24,10 +24,10 @@ const Home = ({data}) => {
 
   return (
     <div className="isolate bg-white">
-      <Navbar activePage={'index'} user={user} router={router} onOpenDrawer={onOpenDrawer} onCloseDrawer={onCloseDrawer} isOpenDrawer={isOpenDrawer} onOpenSearch={onOpenSearch} isOpenSearch={isOpenSearch} onCloseSearch={onCloseSearch}/>
+      <Navbar activePage={'index'} onOpenDrawer={onOpenDrawer} onCloseDrawer={onCloseDrawer} isOpenDrawer={isOpenDrawer} onOpenSearch={onOpenSearch} isOpenSearch={isOpenSearch} onCloseSearch={onCloseSearch}/>
 
       <ul>
-        {data.map((journey) => (
+        {data.map((journey) => ( journey.public &&
           <li key={journey.id}>
               <div className="grid place-items-center font-DMSans">
                 <button onClick={() => {pushToJourney(journey.id)}}>
@@ -38,7 +38,7 @@ const Home = ({data}) => {
                         <div className="flex flex-row justify-between">
                           <Text fontSize='2xl' className="font-bold text-left">{journey.journey_name}</Text>
                           <div className="flex flex-row items-center">
-                            <ArrowUpwardRoundedIcon fontSize="medium" style={{ color: '#268DC7'}}/>
+                            <FavoriteBorderIcon fontSize="medium" style={{ color: '#268DC7'}}/>
                             <Text fontSize='2xl' className="font-bold text-left pl-1">{journey.journey_upvotes}</Text>
                           </div>
                         </div>
