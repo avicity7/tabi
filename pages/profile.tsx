@@ -11,6 +11,7 @@ import {
 } from '@chakra-ui/react';
 
 import Navbar from '../components/navbar';
+import JourneyCreateButton from '../components/journeyCreateButton';
 
 const Profile = () => {
     const supabase = useSupabaseClient()
@@ -210,15 +211,11 @@ const Profile = () => {
             </Stack>
         </div>
 
-        <div className = "fixed bottom-0 w-screen flex justify-end px-6 md:px-10 py-10">
-            <button className="w-12 h-12 rounded-full bg-white hover:bg-white shadow-md">
-                <PencilSimple color="#268DC7" size="26" className = "mx-auto"/>
-            </button>
-        </div>
+        <JourneyCreateButton />
 
         <div className="justify-center px-auto mx-auto mb-5">
             <span className='font-DMSans font-regular text-sm mb-5' style = {{color: 'gray'}}>You haven&apos;t created any Journeys yet. </span>
-            <button className='font-DMSans font-regular text-sm mb-5' style = {{color: '#268DC7'}}>Create one now</button>
+            <button onClick={()=>{router.push('/creation')}}className='font-DMSans font-regular text-sm mb-5' style = {{color: '#268DC7'}}>Create one now</button>
         </div>
 
 

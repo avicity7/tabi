@@ -26,3 +26,7 @@
     white-space: pre-line;
   }
 }
+
+.request-popup .leaflet-popup-content-wrapper {
+  border-radius: 0px;
+}

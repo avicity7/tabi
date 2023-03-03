@@ -7,7 +7,8 @@ import { useUser } from '@supabase/auth-helpers-react';
 import { Icon } from '@iconify-icon/react';
 import { useDisclosure } from '@chakra-ui/react';
 
-import Navbar from '../components/navbar'
+import Navbar from '../components/navbar';
+import BackButton from '../components/backButton';
 
 const Journey = () => {
     const router = useRouter();
@@ -21,7 +22,7 @@ const Journey = () => {
         const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL,process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY)
         const fetchData = async() => {
             const { data:journey, error:journeyError } = await supabase
-            .from('journeys')
+            .from('publicJourneys')
             .select()
             .eq('id', router.query.journey_id)
 
@@ -31,31 +32,28 @@ const Journey = () => {
             .select()
             .eq('journey_id', router.query.journey_id)
 
-            setData({journey:journey[0], comments:comments})
+            try{
+                setData({journey:journey[0], comments:comments})
+            }
+            catch{
+                
+            }
         }
         fetchData();
-    },[data,router.query.journey_id])
+    },[])
 
-    const pushToUserPage = (e: React.MouseEvent<HTMLElement>) => {
-        if (currentUser == null) {
-          router.push('/signup')
-        }
-        else { 
-          router.push('/profile')
-        }
-    }
     if (data.journey == '' || data.comments == ''){
         return(
             <div className="isolate bg-white">
                 <Navbar activePage={'index'} onOpenDrawer={onOpenDrawer} onCloseDrawer={onCloseDrawer} isOpenDrawer={isOpenDrawer} onOpenSearch={onOpenSearch} isOpenSearch={isOpenSearch} onCloseSearch={onCloseSearch}/>
 
                 <div className="grid place-items-center font-DMSans">
-                    <Stack className="flex max-w-2xl">
+                    <Stack className="flex max-w-4xl">
                         <div className = "relative mb-5">
-                            <button className="absolute top-0 w-8 h-8 rounded-full bg-white shadow-md mx-5 my-5" onClick={() => {router.push('/')}}>
-                                <ArrowLeft color="black" size="18" className = "mx-auto"/>
-                            </button>
-                            <Image className="max-h-80" borderRadius = {{base:"0",md:"lg"}} src='https://www.timetravelturtle.com/wp-content/uploads/2018/11/Tokyo-2018-280_feat1.jpg' alt='tokyo'/>
+                            <div className="absolute top-0 mx-5">
+                                <BackButton onClick={()=>{router.push('/')}}/>
+                            </div>
+                            <Image className="object-cover min-w-160" borderRadius = {{base:"0",md:"lg"}} src='https://www.timetravelturtle.com/wp-content/uploads/2018/11/Tokyo-2018-280_feat1.jpg' alt='tokyo'/>
                         </div>
                         <div className="px-5"> 
                             <Skeleton height='40px'/>
@@ -72,7 +70,6 @@ const Journey = () => {
                         <SkeletonText mt='4' noOfLines={4} spacing='4' skeletonHeight='2' />
                     </Stack>
                 </div>
-                
             </div>
         )
     }
@@ -82,12 +79,14 @@ const Journey = () => {
                 <Navbar activePage={'index'} onOpenDrawer={onOpenDrawer} onCloseDrawer={onCloseDrawer} isOpenDrawer={isOpenDrawer} onOpenSearch={onOpenSearch} isOpenSearch={isOpenSearch} onCloseSearch={onCloseSearch}/>
 
                 <div className="grid place-items-center font-DMSans">
-                    <Stack className="flex max-w-2xl">
+                    <Stack className="flex max-w-4xl">
                         <div className = "relative mb-5">
-                            <button className="absolute top-0 w-8 h-8 rounded-full bg-white shadow-md mx-5 my-5" onClick={() => {router.push('/')}}>
-                                <ArrowLeft color="black" size="18" className = "mx-auto"/>
-                            </button>
-                            <Image className="max-h-80" borderRadius = {{base:"0",md:"lg"}} src='https://www.timetravelturtle.com/wp-content/uploads/2018/11/Tokyo-2018-280_feat1.jpg' alt='tokyo'/>
+                            <div className="absolute top-0 mx-5">
+                                <BackButton onClick={()=>{router.push('/')}}/>
+                            </div>
+                            <div className="bg-red-400">
+                                <Image className="object-fill h-[80%] w-[100%]" borderRadius = "lg" src='https://www.timetravelturtle.com/wp-content/uploads/2018/11/Tokyo-2018-280_feat1.jpg' alt='Journey Image'/>
+                            </div>
                         </div>
                         <Text className="font-bold text-2xl px-5 md:px-0 ">{data.journey.journey_name}</Text>
                         <Text className="font-bold text-lg pt-5 px-5 md:px-0">About this Journey</Text>
@@ -101,7 +100,7 @@ const Journey = () => {
                             {data.comments.map((comment) => (
                                 <li key="{comment}">
                                     <div className="font-DMSans px-5 md:px-0">
-                                        <Text className='font-bold text-md'>{comment.author_id}</Text>
+                                        <Text className='font-medium text-md'>{comment.author_id}</Text>
                                         <Text>{comment.comment_body}</Text>
                                     </div>
                                 </li>
@@ -109,7 +108,6 @@ const Journey = () => {
                         </ul>
                     </Stack>
                 </div>
-                
             </div>
         ) 
     }
