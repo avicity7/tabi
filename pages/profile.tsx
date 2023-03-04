@@ -2,6 +2,7 @@ import { useEffect, useState, useRef } from 'react'
 import { useRouter } from "next/router";
 import { PencilSimple } from "phosphor-react";
 import { useUser, useSupabaseClient } from '@supabase/auth-helpers-react';
+import { createServerSupabaseClient } from '@supabase/auth-helpers-nextjs';
 import { Icon } from '@iconify-icon/react';
 import { 
     Text,
@@ -12,11 +13,12 @@ import {
 
 import Navbar from '../components/navbar';
 import JourneyCreateButton from '../components/journeyCreateButton';
+import getUsername from '../utils/getUsername';
 
-const Profile = () => {
+const Profile = (props) => {
     const supabase = useSupabaseClient()
     const router = useRouter();
-    const user = useUser();
+    const username = props.username
 
     const [email, setEmail] = useState(''); 
     const [password, setPassword] = useState(''); 
@@ -31,10 +33,6 @@ const Profile = () => {
         const { error } = await supabase.auth.signOut();
         router.push('/')
     };
-
-    useEffect(()=>{
-        console.log(user)
-    },[user])
 
     const loginAction = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
@@ -63,7 +61,8 @@ const Profile = () => {
             console.log("Error")
         }
     };
-    if (!user && method == 'signup'){//signup
+
+    if (!username && method == 'signup'){//signup
         return (
         <div className="flex h-[80vh] items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
             <div className="m-auto w-full max-w-md space-y-8">
@@ -130,7 +129,7 @@ const Profile = () => {
         )
     }
     
-    else if (!user && method == 'login') {//login
+    else if (!username && method == 'login') {//login
         return (
             <div className="flex h-[80vh] items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
                 <div className="m-auto w-full max-w-md space-y-8">
@@ -196,16 +195,16 @@ const Profile = () => {
 
     return ( //Logged in user page
     <div className="isolate bg-white flex flex-col h-screen justify-between">
-        <Navbar activePage={'profile'} onOpenDrawer={onOpenDrawer} onCloseDrawer={onCloseDrawer} isOpenDrawer={isOpenDrawer} onOpenSearch={onOpenSearch} isOpenSearch={isOpenSearch} onCloseSearch={onCloseSearch}/>
+        <Navbar activePage={'profile'} username={username}/>
 
         <div className="grid place-items-center">
             <Stack>
                 <div className="justify-center px-auto mx-auto mb-5">
                     <p className='font-DMSans font-bold text-sm mb-5' style = {{color: '#268DC7'}}>Your Account</p>
-                    <Avatar name = {(user as any).email} size = "xl" />
+                    <Avatar name = {username} size = "xl" />
                 </div>
-                <div className="justify-center">
-                    <span className='font-DMSans text-2xl'>{(user as any).email}</span>
+                <div className="flex justify-center">
+                    <span className='font-DMSans text-2xl'>{username}</span>
                 </div>
                 {/* <button className="bg-tabiBlue hover:bg-tabiBlueDark text-white p-2 rounded-lg" onClick={logout}>Sign out</button> */}
             </Stack>
@@ -291,5 +290,29 @@ const Profile = () => {
     )
 }
 
+export const getServerSideProps = async (ctx) => {
+    const supabase = createServerSupabaseClient(ctx);
+
+    const { data: { session } } = await supabase.auth.getSession();
+
+    const fetchUsername = async() => {
+        let result = ""
+
+        const fetchedUsername = await getUsername(session.user.email)
+
+        if (fetchedUsername != undefined ) {
+            return fetchedUsername
+        }
+
+    } 
+  
+    const username = await fetchUsername();
+
+    return {
+        props: {
+        username: username
+        },
+    }
+}
 
 export default Profile

@@ -1,10 +1,11 @@
 import { useRouter } from "next/router";
 import { useUser } from '@supabase/auth-helpers-react';
-import { Avatar, Stack, Text, Button } from '@chakra-ui/react'
+import { Avatar, Stack, Text, Button, Input } from '@chakra-ui/react'
 import MenuRoundedIcon from '@mui/icons-material/MenuRounded';
 import SearchRoundedIcon from '@mui/icons-material/SearchRounded';
 import { Icon } from '@iconify-icon/react';
 import Link from 'next/link';
+import { Fragment, useState, useEffect } from 'react';
 import { 
   Show, 
   Hide, 
@@ -13,20 +14,33 @@ import {
   DrawerHeader,
   DrawerOverlay,
   DrawerContent,
-  Modal,
   ModalOverlay,
   ModalContent,
   ModalHeader,
   ModalFooter,
   ModalBody,
 } from '@chakra-ui/react'
+import { Dialog, Transition } from '@headlessui/react'
 
-const Navbar = ({activePage, onOpenDrawer, onCloseDrawer, isOpenDrawer, onOpenSearch, isOpenSearch, onCloseSearch}) =>{
+import getUsername from "../utils/getUsername";
+
+const Navbar = (props) =>{
+  const activePage = props.activePage;
+  const username = props.username;
   const router = useRouter();
-  const user = useUser();
+
+  const [searchOpen, setSearchOpen] = useState(false);
+  const handleSearchOpen = () => setSearchOpen(true);
+  const handleSearchClose = () => setSearchOpen(false);
+
+  const [drawerOpen, setDrawerOpen] = useState(false);
+  const handleDrawerOpen = () => setSearchOpen(true);
+  const handleDrawerClose = () => setSearchOpen(false);
+
   return(
       <header className="sticky top-0 z-10 px-2 py-4 bg-white">
         <div className="flex h-[5vh] items-center justify-between px-5">
+
           <Hide below="md">
             <div className="flex align-middle">
               <Link href="/" className="-m-1.5 p-1.5">
@@ -51,11 +65,12 @@ const Navbar = ({activePage, onOpenDrawer, onCloseDrawer, isOpenDrawer, onOpenSe
               </div>
             </div>
           </Hide>
+
           <Show below="md">
-            <button onClick={onOpenDrawer}>
+            <button onClick={handleDrawerOpen}>
               <MenuRoundedIcon />
             </button>
-            <Drawer placement={'left'} onClose={onCloseDrawer} isOpen={isOpenDrawer}>
+            <Drawer placement={'left'} onClose={handleDrawerClose} isOpen={drawerOpen}>
               <DrawerOverlay />
               <DrawerContent borderRadius="md">
                 <DrawerHeader>
@@ -87,6 +102,7 @@ const Navbar = ({activePage, onOpenDrawer, onCloseDrawer, isOpenDrawer, onOpenSe
               </DrawerContent>
             </Drawer>
           </Show>
+
           <Show below="md">
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 font-DMSans flex lg:min-w-0 lg:flex-1 align-middle">
               <Link href="/" className="-m-1.5 p-1.5">
@@ -95,29 +111,75 @@ const Navbar = ({activePage, onOpenDrawer, onCloseDrawer, isOpenDrawer, onOpenSe
               </Link>
             </div>
           </Show>
+
           <div className='flex flex-1 justify-end px-5'>
-            <button onClick={onOpenSearch} className='min-w-0 justify-end'>
+            <button onClick={handleSearchOpen} className='min-w-0 justify-end'>
               <SearchRoundedIcon/>
             </button>
           </div>
-          <Modal isOpen={isOpenSearch} onClose={onCloseSearch}>
-            <ModalOverlay />
-            <ModalContent>
-              <ModalHeader className="font-DMSans">Search for Journey</ModalHeader>
-              <ModalBody className="font-DMSans">
-                <Text>Search</Text>
-              </ModalBody>
+          
+          <Transition appear show={searchOpen} as={Fragment}>
+            <Dialog as="div" className="relative z-10" onClose={handleSearchClose}>
+              <Transition.Child
+                as={Fragment}
+                enter="ease-out duration-300"
+                enterFrom="opacity-0"
+                enterTo="opacity-100"
+                leave="ease-in duration-200"
+                leaveFrom="opacity-100"
+                leaveTo="opacity-0"
+              >
+                <div className="fixed inset-0 bg-black bg-opacity-25" />
+              </Transition.Child>
 
-              <ModalFooter className="font-DMSans">
-                <Button onClick={onCloseSearch} variant='ghost'>Cancel Search</Button>
-              </ModalFooter>
-            </ModalContent>
-          </Modal>
+              <div className="fixed inset-0 overflow-y-auto">
+                <div className="flex min-h-full items-center justify-center p-4 text-center">
+                  <Transition.Child
+                    as={Fragment}
+                    enter="ease-out duration-300"
+                    enterFrom="opacity-0 scale-95"
+                    enterTo="opacity-100 scale-100"
+                    leave="ease-in duration-200"
+                    leaveFrom="opacity-100 scale-100"
+                    leaveTo="opacity-0 scale-95"
+                  >
+                    <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
+
+                      <Dialog.Title
+                        as="h3"
+                        className="text-lg font-bold font-DMSans"
+                      >
+                        Search
+                      </Dialog.Title>
+
+                      <Stack>
+                        <div className="mt-5 mb-5">
+                          <Input />
+                        </div>
+
+                        <div className="flex justify-end">
+                          <button
+                            type="button"
+                            className="font-DMSans inline-flex justify-center rounded-md border border-transparent bg-tabiBlue px-4 py-2 text-sm font-medium text-white hover:bg-tabiBlueDark"
+                            onClick={()=>{}}
+                          >
+                            Search
+                          </button>
+                        </div>
+                      </Stack>
+                    </Dialog.Panel>
+                  </Transition.Child>
+                </div>
+              </div>
+            </Dialog>
+          </Transition>
+
           <div>
               <button onClick={()=>{router.push('/profile')}}>
-                <span>{user != null? <Avatar name = {(user as any).email} size = "sm" /> : <Avatar size = "sm"/>}</span>
+                <span>{<Avatar name = {username} size = "sm" />}</span>
               </button>
           </div>
+
         </div>
     </header>
   )

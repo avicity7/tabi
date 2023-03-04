@@ -3,19 +3,22 @@ import { useRouter } from "next/router";
 import { useUser } from '@supabase/auth-helpers-react';
 import { createClient } from '@supabase/supabase-js';
 
+import getUsername from '../utils/getUsername'
 
-const createJourney = async (router,journeyName) => { 
-    console.log(journeyName);
+
+const createJourney = async (user,router,journeyName) => { 
+    let username = await getUsername(user.email);
     const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL,process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY);
 
     const {status, error}= await supabase
-        .from('journeys')
-        .insert({'journey_name':journeyName})
+        .from('privateJourneys')
+        .insert({'journey_name':journeyName,'author_username':username})
     
     if (!error) {
         router.push('/')
     }
-}   
+}
+
 
 const Creation = () => {
     const router = useRouter();
@@ -50,7 +53,7 @@ const Creation = () => {
 
                 <div>
                     <button
-                    onClick={()=>{createJourney(router,journeyName)}}
+                    onClick={()=>{createJourney(user,router,journeyName)}}
                     type="submit"
                     className="group relative flex w-full justify-center rounded-md border border-transparent bg-tabiBlue py-2 px-4 text-sm font-DMSans font-medium text-white hover:bg-tabiBlueDark focus:outline-none focus:ring-2 focus:ring-tabiBlue focus:ring-offset-2"
                     >

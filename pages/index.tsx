@@ -1,17 +1,20 @@
 import { useRouter } from "next/router";
 import { Card, CardBody, Stack, Image, Text, Spinner, } from '@chakra-ui/react'
-import { createServerSupabaseClient } from '@supabase/auth-helpers-nextjs';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import { Icon } from '@iconify-icon/react';
 import { useDisclosure } from '@chakra-ui/react';
 import { useState, useEffect } from 'react';
 import { createClient } from '@supabase/supabase-js';
+import { createServerSupabaseClient } from '@supabase/auth-helpers-nextjs';
 
 import Navbar from '../components/navbar';
 import JourneyCreateButton from '../components/journeyCreateButton';
+import getUsername from "../utils/getUsername";
 
-const Home = () => {
+
+const Home = (props) => {
   const router = useRouter();
+  const username = props.username;
   const { isOpen: isOpenDrawer, onOpen: onOpenDrawer, onClose: onCloseDrawer } = useDisclosure();
   const { isOpen: isOpenSearch, onOpen: onOpenSearch, onClose: onCloseSearch } = useDisclosure();
   const [data, setData] = useState([]);
@@ -43,7 +46,7 @@ const Home = () => {
   if (data.length == 0){ //Return loading Spinner
     return (
       <div className="isolate bg-white">
-        <Navbar activePage={'index'} onOpenDrawer={onOpenDrawer} onCloseDrawer={onCloseDrawer} isOpenDrawer={isOpenDrawer} onOpenSearch={onOpenSearch} isOpenSearch={isOpenSearch} onCloseSearch={onCloseSearch}/>
+        <Navbar activePage={'index'} username={username}/>
 
         <div className="flex justify-center items-center h-[91.2vh]">
             <Stack>
@@ -63,7 +66,7 @@ const Home = () => {
   else { //Show Journeys
     return (
       <div className="isolate bg-white">
-        <Navbar activePage={'index'} onOpenDrawer={onOpenDrawer} onCloseDrawer={onCloseDrawer} isOpenDrawer={isOpenDrawer} onOpenSearch={onOpenSearch} isOpenSearch={isOpenSearch} onCloseSearch={onCloseSearch}/>
+        <Navbar activePage={'index'} username={username}/>
 
         <ul>
           {data.map((journey) => (
@@ -83,7 +86,7 @@ const Home = () => {
                           </div>
                           <div className="flex flex-row items-center">
                             <Icon icon="charm:person" style={{color:'#CBCBCB'}} />
-                            <Text fontSize='xs' className="font-medium text-left pl-0.5 pt-0.3" style={{color:'#CBCBCB'}}>{journey.author_username}</Text>
+                            <Text fontSize='sm' className="font-normal text-left pl-0.5 pt-0.3" style={{color:'#CBCBCB'}}>{journey.author_username}</Text>
                           </div>
                           <Text fontSize='md' className="font-regular text-left" color="black">{journey.journey_summary}</Text>
                         </Stack>
@@ -101,5 +104,31 @@ const Home = () => {
     )
   }
 }
+
+export const getServerSideProps = async (ctx) => {
+  const supabase = createServerSupabaseClient(ctx);
+
+  const { data: { session } } = await supabase.auth.getSession();
+
+  const fetchUsername = async() => {
+      let result = ""
+
+      const fetchedUsername = await getUsername(session.user.email)
+
+      if (fetchedUsername != undefined ) {
+          return fetchedUsername
+      }
+
+  } 
+
+  const username = await fetchUsername();
+
+  return {
+      props: {
+      username: username
+      },
+  }
+}
+
 
 export default Home

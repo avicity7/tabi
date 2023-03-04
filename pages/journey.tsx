@@ -1,26 +1,22 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from "next/router";
 import { Stack, Image, Text, Skeleton, SkeletonText} from '@chakra-ui/react'
-import { ArrowLeft } from "phosphor-react";
 import { createClient } from '@supabase/supabase-js';
-import { useUser } from '@supabase/auth-helpers-react';
-import { Icon } from '@iconify-icon/react';
-import { useDisclosure } from '@chakra-ui/react';
+import { createServerSupabaseClient } from '@supabase/auth-helpers-nextjs';
 
 import Navbar from '../components/navbar';
 import BackButton from '../components/backButton';
+import getUsername from '../utils/getUsername';
 
-const Journey = () => {
+const Journey = (props) => {
     const router = useRouter();
-    const [currentUser,setUser] = useState({});
-    const user = useUser();
-    const { isOpen: isOpenDrawer, onOpen: onOpenDrawer, onClose: onCloseDrawer } = useDisclosure();
-    const { isOpen: isOpenSearch, onOpen: onOpenSearch, onClose: onCloseSearch } = useDisclosure();
+    const username = props.username;
     const [data, setData] = useState({journey:'' as any,comments:'' as any})
 
     useEffect(()=>{
         const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL,process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY)
         const fetchData = async() => {
+            if(!router.isReady) return;
             const { data:journey, error:journeyError } = await supabase
             .from('publicJourneys')
             .select()
@@ -32,20 +28,19 @@ const Journey = () => {
             .select()
             .eq('journey_id', router.query.journey_id)
 
-            try{
-                setData({journey:journey[0], comments:comments})
-            }
-            catch{
-                
-            }
+            
+            setData({journey:journey[0], comments:comments})
+            
+            
         }
         fetchData();
-    },[])
+        console.log('fetching')
+    },[router.query.journey_id, router.isReady])
 
     if (data.journey == '' || data.comments == ''){
         return(
             <div className="isolate bg-white">
-                <Navbar activePage={'index'} onOpenDrawer={onOpenDrawer} onCloseDrawer={onCloseDrawer} isOpenDrawer={isOpenDrawer} onOpenSearch={onOpenSearch} isOpenSearch={isOpenSearch} onCloseSearch={onCloseSearch}/>
+                <Navbar activePage={'index'} username={username}/>
 
                 <div className="grid place-items-center font-DMSans">
                     <Stack className="flex max-w-4xl">
@@ -76,7 +71,7 @@ const Journey = () => {
     else {
         return(
             <div className="isolate bg-white">
-                <Navbar activePage={'index'} onOpenDrawer={onOpenDrawer} onCloseDrawer={onCloseDrawer} isOpenDrawer={isOpenDrawer} onOpenSearch={onOpenSearch} isOpenSearch={isOpenSearch} onCloseSearch={onCloseSearch}/>
+                <Navbar activePage={'index'} username={username}/>
 
                 <div className="grid place-items-center font-DMSans">
                     <Stack className="flex max-w-4xl">
@@ -85,7 +80,7 @@ const Journey = () => {
                                 <BackButton onClick={()=>{router.push('/')}}/>
                             </div>
                             <div className="bg-red-400">
-                                <Image className="object-fill h-[80%] w-[100%]" borderRadius = "lg" src='https://www.timetravelturtle.com/wp-content/uploads/2018/11/Tokyo-2018-280_feat1.jpg' alt='Journey Image'/>
+                                <Image fit="cover" borderRadius = "lg" src='https://www.timetravelturtle.com/wp-content/uploads/2018/11/Tokyo-2018-280_feat1.jpg' alt='Journey Image'/>
                             </div>
                         </div>
                         <Text className="font-bold text-2xl px-5 md:px-0 ">{data.journey.journey_name}</Text>
@@ -110,6 +105,31 @@ const Journey = () => {
                 </div>
             </div>
         ) 
+    }
+}
+
+export const getServerSideProps = async (ctx) => {
+    const supabase = createServerSupabaseClient(ctx);
+
+    const { data: { session } } = await supabase.auth.getSession();
+
+    const fetchUsername = async() => {
+        let result = ""
+
+        const fetchedUsername = await getUsername(session.user.email)
+
+        if (fetchedUsername != undefined ) {
+            return fetchedUsername
+        }
+
+    } 
+  
+    const username = await fetchUsername();
+
+    return {
+        props: {
+        username: username
+        },
     }
 }
 
