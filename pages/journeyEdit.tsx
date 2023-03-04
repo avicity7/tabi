@@ -56,20 +56,20 @@ const JourneyEdit= (props) => {
 
 export const getServerSideProps = async (ctx) => {
     const supabase = createServerSupabaseClient(ctx);
+    let fetchedUsername = '';
 
     const { data: { session } } = await supabase.auth.getSession();
 
     const fetchUsername = async() => {
-        let result = ""
-
-        const fetchedUsername = await getUsername(session.user.email)
-
-        if (fetchedUsername != undefined ) {
+        try {
+            fetchedUsername = await getUsername(session.user.email)
             return fetchedUsername
         }
-
+        catch {
+            return fetchedUsername
+        }
     } 
-  
+
     const username = await fetchUsername();
 
     return {

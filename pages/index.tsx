@@ -112,14 +112,13 @@ export const getServerSideProps = async (ctx) => {
   const { data: { session } } = await supabase.auth.getSession();
 
   const fetchUsername = async() => {
-      let result = ""
       try {
-       fetchedUsername = await getUsername(session.user.email)
+        fetchedUsername = await getUsername(session.user.email)
+        return fetchedUsername
       }
       catch {
+        return fetchedUsername
       }
-      
-      return fetchedUsername
   } 
 
   const username = await fetchUsername();
