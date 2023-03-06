@@ -46,7 +46,7 @@ const Navbar = (props) =>{
       <header className="sticky top-0 z-10 px-2 py-4 bg-white">
         <div className="flex h-[5vh] items-center justify-between px-5">
 
-          <Hide below="md">
+          <Hide below="lg">
             <div className="flex align-middle">
               <Link href="/" className="-m-1.5 p-1.5">
                 <span className="font-DMSans font-bold text-3xl">tabi</span>
@@ -71,7 +71,7 @@ const Navbar = (props) =>{
             </div>
           </Hide>
 
-          <Show below="md">
+          <Show below="lg">
             <button onClick={handleDrawerOpen}>
               <MenuRoundedIcon />
             </button>
@@ -108,7 +108,7 @@ const Navbar = (props) =>{
             </Drawer>
           </Show>
 
-          <Show below="md">
+          <Show below="lg">
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 font-DMSans flex lg:min-w-0 lg:flex-1 align-middle">
               <Link href="/" className="-m-1.5 p-1.5">
                   <span className="font-DMSans font-bold text-3xl">tabi</span>
