@@ -14,7 +14,6 @@ const SearchInput = () => {
     } = usePlacesService({
         apiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_KEY,
     });
-    console.log(placePredictions)
 
     return (
         <div className="font-DMSans">
@@ -29,7 +28,7 @@ const SearchInput = () => {
                 dataSource={placePredictions}
                 renderItem={(item) => (
                     <List.Item className="font-DMSans font-medium ml-2 mr-2">
-                        <List.Item.Meta title={<button onClick={()=>{console.log(item)}}>{item.description}</button>} />
+                        <List.Item.Meta title={<button onClick={()=>{console.log(item);savePlace(item.place_id);}}>{item.description}</button>} />
                     </List.Item>
                 )}
             />)}
