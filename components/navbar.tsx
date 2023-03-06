@@ -24,6 +24,7 @@ import { Dialog, Transition } from '@headlessui/react';
 import Menu from '@mui/joy/Menu';
 import MenuItem from '@mui/joy/MenuItem';
 
+
 const Navbar = (props) =>{
   const activePage = props.activePage;
   const username = props.username;
@@ -36,6 +37,10 @@ const Navbar = (props) =>{
   const [drawerOpen, setDrawerOpen] = useState(false);
   const handleDrawerOpen = () => setSearchOpen(true);
   const handleDrawerClose = () => setSearchOpen(false);
+
+  const [accountOpen, setAccountOpen] = useState(false);
+  const handleAccountOpen = () => setAccountOpen(true);
+  const handleAccountClose = () => setAccountOpen(false);
 
   return(
       <header className="sticky top-0 z-10 px-2 py-4 bg-white">
@@ -175,7 +180,7 @@ const Navbar = (props) =>{
           </Transition>
 
           <div>
-              <button onClick={()=>{router.push('/profile')}}>
+              <button onClick={()=>{handleAccountOpen}}>
                 <span>{<Avatar name = {username} size = "sm" />}</span>
               </button>
           </div>
