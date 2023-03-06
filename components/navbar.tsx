@@ -20,9 +20,9 @@ import {
   ModalFooter,
   ModalBody,
 } from '@chakra-ui/react'
-import { Dialog, Transition } from '@headlessui/react'
-
-import getUsername from "../utils/getUsername";
+import { Dialog, Transition } from '@headlessui/react';
+import Menu from '@mui/joy/Menu';
+import MenuItem from '@mui/joy/MenuItem';
 
 const Navbar = (props) =>{
   const activePage = props.activePage;

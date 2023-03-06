@@ -14,12 +14,12 @@ const getIcon = (iconSize) => {
 
 const Map = () => {
   return (
-    <MapContainer center={[51.505, -0.09]} zoom={13} style={{height: "88.5vh", width: "100%"}} touchZoom={true} attributionControl={false}>
+    <MapContainer center={[35.6812, 139.7671]} zoom={13} style={{height: "91vh", width: "100%"}} touchZoom={true} attributionControl={false}>
       <TileLayer
-        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+        url="https://api.mapbox.com/styles/v1/avicity7/clewhy0yo000901rzkk9xx3bt/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoiYXZpY2l0eTciLCJhIjoiY2xld2h1eWMzMDNrODN5bjB0ZTE3MGZzZCJ9.RLzBR-HXByf0f69benFZyQ"
       />
 
-      <Marker position={[51.505, -0.09]} icon={getIcon(40)} eventHandlers={{
+      <Marker position={[35.6812, 139.7671]} icon={getIcon(40)} eventHandlers={{
         click: (e) => {
           console.log('marker clicked', e)
         },
@@ -31,6 +31,7 @@ const Map = () => {
           </Stack>
         </Popup>
       </Marker>
+
     </MapContainer>
   )
 }
