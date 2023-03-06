@@ -154,7 +154,7 @@ const Navbar = (props) =>{
 
                       <Stack>
                         <div className="mt-5 mb-5">
-                          <Input />
+                          <Input focusBorderColor='#268DC7'/>
                         </div>
 
                         <div className="flex justify-end">
