@@ -12,7 +12,7 @@ const getIcon = (iconSize) => {
   })
 }
 
-const Map = () => {
+const MapView = () => {
   return (
     <MapContainer center={[35.6812, 139.7671]} zoom={13} style={{height: "91vh", width: "100%"}} touchZoom={true} attributionControl={false}>
       <TileLayer
@@ -36,4 +36,4 @@ const Map = () => {
   )
 }
 
-export default Map
+export default MapView

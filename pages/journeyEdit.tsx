@@ -16,8 +16,8 @@ const JourneyEdit= (props) => {
     const username = props.username;
     const [place, savePlace] = useState('');
 
-    const Map = React.useMemo(() => dynamic(
-        () => import('../components/map'),
+    const MapView = React.useMemo(() => dynamic(
+        () => import('../components/mapView'),
         { 
           loading: () => 
             <div className="flex justify-center items-center h-[91.2vh]">
@@ -36,8 +36,8 @@ const JourneyEdit= (props) => {
         <div className="isolate bg-white">
             <Navbar activePage={'journeyedit'} username={username}/>
 
-            <div className="grid grid-cols-3">
-                <div className="col-span-1 ml-4 mt-4">
+            <div className="grid grid-cols-4">
+                <div className="col-span-2 ml-4 mt-4">
                     <div className="flex flex-row items-center">
                         <BackButton onClick={()=>{router.push('/')}}/>
                         <Text className="font-DMSans font-bold text-xl ml-4">Journey Details</Text>
@@ -65,8 +65,8 @@ const JourneyEdit= (props) => {
                 </div>
                 
                 
-                <div className="sticky top-[10vh] max-h-[91vh] col-span-2 rounded-xl overflow-hidden mr-2">
-                    <Map />
+                <div className="sticky top-[10vh] min-h-[91vh] max-h-[91vh] col-span-2 rounded-xl overflow-hidden mr-2">
+                    <MapView />
                 </div>
             </div>
 
