@@ -3,6 +3,7 @@ import { useUser } from '@supabase/auth-helpers-react';
 import { Avatar, Stack, Text, Button, Input } from '@chakra-ui/react'
 import MenuRoundedIcon from '@mui/icons-material/MenuRounded';
 import SearchRoundedIcon from '@mui/icons-material/SearchRounded';
+import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 import { Icon } from '@iconify-icon/react';
 import Link from 'next/link';
 import { Fragment, useState, useEffect } from 'react';
@@ -21,8 +22,9 @@ import {
   ModalBody,
 } from '@chakra-ui/react'
 import { Dialog, Transition } from '@headlessui/react';
-import Menu from '@mui/joy/Menu';
-import MenuItem from '@mui/joy/MenuItem';
+
+
+import NavbarAvatar from "./navbarAvatar";
 
 
 const Navbar = (props) =>{
@@ -37,10 +39,6 @@ const Navbar = (props) =>{
   const [drawerOpen, setDrawerOpen] = useState(false);
   const handleDrawerOpen = () => setSearchOpen(true);
   const handleDrawerClose = () => setSearchOpen(false);
-
-  const [accountOpen, setAccountOpen] = useState(false);
-  const handleAccountOpen = () => setAccountOpen(true);
-  const handleAccountClose = () => setAccountOpen(false);
 
   return(
       <header className="sticky top-0 z-10 px-2 py-4 bg-white">
@@ -149,13 +147,19 @@ const Navbar = (props) =>{
                     leaveTo="opacity-0 scale-95"
                   >
                     <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
-
-                      <Dialog.Title
-                        as="h3"
-                        className="text-lg font-bold font-DMSans"
-                      >
-                        Search
-                      </Dialog.Title>
+                      <div className="flex justify-between items-center">
+                        <Dialog.Title
+                          as="h3"
+                          className="text-lg font-bold font-DMSans"
+                        >
+                          Search
+                        </Dialog.Title>
+                        <div className="mb-1">
+                          <button onClick={handleSearchClose}>
+                            <CloseRoundedIcon style={{color:'#CBCBCB'}} />
+                          </button>
+                        </div>
+                      </div>
 
                       <Stack>
                         <div className="mt-5 mb-5">
@@ -179,11 +183,7 @@ const Navbar = (props) =>{
             </Dialog>
           </Transition>
 
-          <div>
-              <button onClick={()=>{handleAccountOpen}}>
-                <span>{<Avatar name = {username} size = "sm" />}</span>
-              </button>
-          </div>
+          <NavbarAvatar username={username}/>
 
         </div>
     </header>

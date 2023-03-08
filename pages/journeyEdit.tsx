@@ -9,7 +9,6 @@ import Navbar from '../components/navbar';
 import BackButton from '../components/backButton';
 import getUsername from '../utils/getUsername';
 import SearchInput from '../components/searchInput';
-import Search from 'antd/es/transfer/search';
 
 const JourneyEdit= (props) => { 
     const router = useRouter();
@@ -65,7 +64,7 @@ const JourneyEdit= (props) => {
                 </div>
                 
                 
-                <div className="sticky top-[10vh] min-h-[91vh] max-h-[91vh] col-span-2 rounded-xl overflow-hidden mr-2">
+                <div className="sticky top-[10vh] min-h-[90vh] max-h-[90vh] col-span-2 rounded-xl overflow-hidden mr-2">
                     <MapView />
                 </div>
             </div>

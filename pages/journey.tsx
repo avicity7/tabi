@@ -3,6 +3,7 @@ import { useRouter } from "next/router";
 import { Stack, Image, Text, Skeleton, SkeletonText} from '@chakra-ui/react'
 import { createClient } from '@supabase/supabase-js';
 import { createServerSupabaseClient } from '@supabase/auth-helpers-nextjs';
+import { Avatar } from "@chakra-ui/react";
 
 import Navbar from '../components/navbar';
 import BackButton from '../components/backButton';
@@ -48,7 +49,9 @@ const Journey = (props) => {
                             <div className="absolute top-0 mx-5">
                                 <BackButton onClick={()=>{router.push('/')}}/>
                             </div>
-                            <Image className="object-cover min-w-160" borderRadius = {{base:"0",md:"lg"}} src='https://www.timetravelturtle.com/wp-content/uploads/2018/11/Tokyo-2018-280_feat1.jpg' alt='tokyo'/>
+                            <div>
+                                <Skeleton height="25vh" width="58vw"/>
+                            </div>
                         </div>
                         <div className="px-5"> 
                             <Skeleton height='40px'/>
@@ -79,8 +82,8 @@ const Journey = (props) => {
                             <div className="absolute top-0 mx-5">
                                 <BackButton onClick={()=>{router.push('/')}}/>
                             </div>
-                            <div className="bg-red-400">
-                                <Image fit="cover" borderRadius = "lg" src='https://www.timetravelturtle.com/wp-content/uploads/2018/11/Tokyo-2018-280_feat1.jpg' alt='Journey Image'/>
+                            <div>
+                                <Image className="min-w-full max-h-[25vh]" objectFit="cover" overflow="hidden" borderRadius = "lg" src='https://www.timetravelturtle.com/wp-content/uploads/2018/11/Tokyo-2018-280_feat1.jpg' alt='Journey Image'/>
                             </div>
                         </div>
                         <Text className="font-bold text-2xl px-5 md:px-0 ">{data.journey.journey_name}</Text>
@@ -90,13 +93,18 @@ const Journey = (props) => {
                         <div className ="px-5 md:px-0">
                             <Skeleton height="200" />
                         </div>
-                        <Text className="font-bold text-lg pt-5 justify-start px-5 md:px-0">Comments</Text>
+                        <Text className="font-bold text-lg pt-5 justify-start px-5 md:px-0 py-2">Comments</Text>
                         <ul className="pb-20">
                             {data.comments.map((comment) => (
                                 <li key="{comment}">
-                                    <div className="font-DMSans px-5 md:px-0">
-                                        <Text className='font-medium text-md'>{comment.author_id}</Text>
-                                        <Text>{comment.comment_body}</Text>
+                                    <div className="flex items-center font-DMSans px-5 md:px-0">
+                                        <div className='mr-2 mb-1'>
+                                            <Avatar name = {comment.author_id} size = "xs" />
+                                        </div>
+                                        <div>
+                                            <Text className='font-semibold text-sm ml-1 mb-0.5'>{comment.author_id}</Text>
+                                            <Text className="ml-1">{comment.comment_body}</Text>
+                                        </div>
                                     </div>
                                 </li>
                             ))}

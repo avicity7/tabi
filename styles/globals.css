@@ -30,3 +30,7 @@
 .request-popup .leaflet-popup-content-wrapper {
   border-radius: 0px;
 }
+
+.mapboxgl-ctrl-logo {
+  display: none !important;
+}
