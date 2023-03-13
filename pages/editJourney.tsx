@@ -1,7 +1,6 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { useRouter } from "next/router";
 import { useDisclosure, Input, Stack, Spinner, Text, Textarea } from '@chakra-ui/react';
-import React from 'react'
 import dynamic from 'next/dynamic'
 import { createServerSupabaseClient } from '@supabase/auth-helpers-nextjs';
 import { ArrowLeft } from "phosphor-react";
@@ -21,7 +20,7 @@ const JourneyEdit= (props) => {
         zoom: 14
       });
 
-    const MapView = React.useMemo(() => dynamic(
+    const MapView = useMemo(() => dynamic(
         () => import('../components/mapView'),
         { 
           loading: () => 
