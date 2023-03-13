@@ -3,8 +3,18 @@ import { useEffect, useState } from 'react';
 import { Input } from "@chakra-ui/react";
 import { List } from "antd";
 
-const SearchInput = () => {
-    const [place, savePlace] = useState('')
+const retrievePlaceLatLng = async(placeID) => {
+    const response = await fetch('api/searchPlaceID',{
+        method: "POST",
+        body:JSON.stringify(placeID)
+    })
+    
+    const data = await response.json()
+    
+    return data.result.geometry.location
+}
+
+const SearchInput = ({viewState,setViewState}) => {
 
     const {
         placesService,
@@ -28,7 +38,14 @@ const SearchInput = () => {
                 dataSource={placePredictions}
                 renderItem={(item) => (
                     <List.Item className="font-DMSans font-medium ml-4 mr-4">
-                        <List.Item.Meta title={<button onClick={()=>{console.log(item);savePlace(item.place_id);}}><span className="font-bold">{item.structured_formatting.main_text}</span>, {item.structured_formatting.secondary_text}</button>} />
+                        <List.Item.Meta title={<button onClick={async()=>{
+                            let data = await retrievePlaceLatLng(item.place_id);
+                            setViewState({
+                                latitude: data.lat,
+                                longitude: data.lng,
+                                zoom: viewState.zoom
+                            })
+                        }}><span className="font-bold">{item.structured_formatting.main_text}</span>, {item.structured_formatting.secondary_text}</button>} />
                     </List.Item>
                 )}
             />)}

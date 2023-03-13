@@ -291,28 +291,37 @@ const Profile = (props) => {
 }
 
 export const getServerSideProps = async (ctx) => {
-    const supabase = createServerSupabaseClient(ctx);
-    let fetchedUsername = '';
+  const supabase = createServerSupabaseClient(ctx);
+  let fetchedUsername = '';
+  let user = "";
 
-    const { data: { session } } = await supabase.auth.getSession();
+  const { data: { session } } = await supabase.auth.getSession();
 
-    const fetchUsername = async() => {
-        try {
-            fetchedUsername = await getUsername(session.user.email)
-            return fetchedUsername
-        }
-        catch {
-            return fetchedUsername
-        }
-    } 
+  const fetchUsername = async() => {
+      try {
+        fetchedUsername = await getUsername(session.user.id)
+        return fetchedUsername
+      }
+      catch {
+        return fetchedUsername
+      }
+  } 
 
-    const username = await fetchUsername();
+  const username = await fetchUsername();
 
-    return {
-        props: {
-        username: username
-        },
-    }
+  try { 
+    user = session.user.id
+  }
+  catch {
+    
+  }
+
+  return {
+      props: {
+      username: username,
+      user: user
+      },
+  }
 }
 
 export default Profile

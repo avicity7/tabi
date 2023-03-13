@@ -4,6 +4,8 @@ import { useDisclosure, Input, Stack, Spinner, Text, Textarea } from '@chakra-ui
 import React from 'react'
 import dynamic from 'next/dynamic'
 import { createServerSupabaseClient } from '@supabase/auth-helpers-nextjs';
+import { ArrowLeft } from "phosphor-react";
+import AddRoundedIcon from '@mui/icons-material/AddRounded';
 
 import Navbar from '../components/navbar';
 import BackButton from '../components/backButton';
@@ -13,7 +15,11 @@ import SearchInput from '../components/searchInput';
 const JourneyEdit= (props) => { 
     const router = useRouter();
     const username = props.username;
-    const [place, savePlace] = useState('');
+    const [viewState, setViewState] = React.useState({
+        latitude:35.6812,
+        longitude:139.7671,
+        zoom: 14
+      });
 
     const MapView = React.useMemo(() => dynamic(
         () => import('../components/mapView'),
@@ -38,9 +44,11 @@ const JourneyEdit= (props) => {
             <div className="grid grid-cols-4">
                 <div className="col-span-2 ml-4 mt-4">
                     <div className="flex flex-row items-center">
-                        <BackButton onClick={()=>{router.push('/')}}/>
-                        <Text className="font-DMSans font-bold text-xl ml-4">Journey Details</Text>
-                        
+                        <button className="my-5" onClick={()=>{router.push('/')}}>
+                            <ArrowLeft color="black" size="18" className = "mx-auto" strokeWidth="5"/>
+                        </button>
+
+                        <Text className="font-DMSans font-bold text-xl ml-3.5">Journey Details</Text>
                     </div>
 
                     <Text className="font-DMSans font-medium text-lg px-8 mb-2">Journey Name</Text>
@@ -53,19 +61,26 @@ const JourneyEdit= (props) => {
                         <Textarea focusBorderColor='#268DC7' resize={'vertical'}/>
                     </div>
 
-                    <div className="flex justify-center mb-6">
-                        <Text className="font-DMSans font-bold text-sm text-gray-400">Destinations in this Journey</Text>
-                    </div>
-                
-                    <Text className="font-DMSans font-medium text-lg px-8 mb-2">Destination Name</Text>
-                    <div className="px-8 pb-5">
-                        <SearchInput />
+                    <div className="grid grid-cols-9 gap-0">
+                        <div className='col-span-2 flex justify-center'>
+
+                            <button className='text-[#CBCBCB] hover:text-[#268DC7]'>
+                                <Text className="font-DMSans font-semibold text-md">+ Add Day</Text>
+                            </button>
+                            
+                        </div>
+                        <div className='col-span-7'>
+                            <Text className="font-DMSans font-medium text-lg px-8 mb-2">Destination Name</Text>
+                            <div className="px-8 pb-5">
+                                <SearchInput viewState={viewState} setViewState={setViewState}/>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 
                 
                 <div className="sticky top-[10vh] min-h-[90vh] max-h-[90vh] col-span-2 rounded-xl overflow-hidden mr-2">
-                    <MapView />
+                    <MapView viewState={viewState} setViewState={setViewState}/>
                 </div>
             </div>
 
@@ -74,28 +89,37 @@ const JourneyEdit= (props) => {
 }
 
 export const getServerSideProps = async (ctx) => {
-    const supabase = createServerSupabaseClient(ctx);
-    let fetchedUsername = '';
+  const supabase = createServerSupabaseClient(ctx);
+  let fetchedUsername = '';
+  let user = "";
 
-    const { data: { session } } = await supabase.auth.getSession();
+  const { data: { session } } = await supabase.auth.getSession();
 
-    const fetchUsername = async() => {
-        try {
-            fetchedUsername = await getUsername(session.user.email)
-            return fetchedUsername
-        }
-        catch {
-            return fetchedUsername
-        }
-    } 
+  const fetchUsername = async() => {
+      try {
+        fetchedUsername = await getUsername(session.user.id)
+        return fetchedUsername
+      }
+      catch {
+        return fetchedUsername
+      }
+  } 
 
-    const username = await fetchUsername();
+  const username = await fetchUsername();
 
-    return {
-        props: {
-        username: username
-        },
-    }
+  try { 
+    user = session.user.id
+  }
+  catch {
+    
+  }
+
+  return {
+      props: {
+      username: username,
+      user: user
+      },
+  }
 }
 
 export default JourneyEdit

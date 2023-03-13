@@ -4,14 +4,12 @@ import Image from 'next/image';
 
 import 'mapbox-gl/dist/mapbox-gl.css';
 
-const MapView = () => {
+const MapView = ({viewState,setViewState}) => {
+
   return (
     <Map
-      initialViewState={{
-        latitude: 35.6812,
-        longitude: 139.7671,
-        zoom: 14
-      }}
+      {...viewState}
+      onMove={(e) => {setViewState(e.viewState)}}
       style={{height: "91vh", width: "100%"}}
       mapStyle="mapbox://styles/avicity7/clewhy0yo000901rzkk9xx3bt"
       mapboxAccessToken={process.env.NEXT_PUBLIC_MAPBOX_KEY}
