@@ -15,7 +15,7 @@ import SearchInput from '../components/searchInput';
 const JourneyEdit= (props) => { 
     const router = useRouter();
     const username = props.username;
-    const [viewState, setViewState] = React.useState({
+    const [viewState, setViewState] = useState({
         latitude:35.6812,
         longitude:139.7671,
         zoom: 14
