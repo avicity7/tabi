@@ -19,7 +19,8 @@ const JourneyEdit= (props) => {
         longitude:139.7671,
         zoom: 14
       });
-
+    const privateJourneyID = router.query.privateJourneyID
+    console.log(privateJourneyID)
     const MapView = useMemo(() => dynamic(
         () => import('../components/mapView'),
         { 

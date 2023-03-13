@@ -7,15 +7,32 @@ import getUsername from '../utils/getUsername'
 
 
 const createJourney = async (user,router,journeyName) => { 
-    let username = await getUsername(user.email);
+    let username = await getUsername(user.id);
     const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL,process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY);
 
-    const {status, error}= await supabase
+    const {data: journeyInsertData, error: journeyInsertError}= await supabase
         .from('privateJourneys')
-        .insert({'journey_name':journeyName,'author_username':username})
+        .insert({'journey_name':journeyName,'author_username':username,'user_id':user.id})
+        .select()
     
-    if (!error) {
-        router.push('/')
+    if (!journeyInsertError) {
+        const {data, error}= await supabase
+        .from('privateDestinations')
+        .insert({'destination_id':journeyInsertData[0].id,'user_id':user.id})
+        .select()
+        
+        if (!error) {
+            router.push({
+                pathname: "/editJourney",
+                query: {'privateJourneyID': data[0].id}
+            })
+        }
+        else {
+            console.log(error)
+        }
+    }
+    else {
+        console.log(journeyInsertError)
     }
 }
 
