@@ -1,6 +1,6 @@
 import { useEffect, useState, useMemo } from 'react';
 import { useRouter } from "next/router";
-import { useDisclosure, Input, Stack, Spinner, Text, Textarea } from '@chakra-ui/react';
+import { useDisclosure, Input, Stack, Spinner, Text, Textarea, Card, CardBody } from '@chakra-ui/react';
 import dynamic from 'next/dynamic'
 import { createServerSupabaseClient } from '@supabase/auth-helpers-nextjs';
 import { ArrowLeft } from "phosphor-react";
@@ -11,6 +11,7 @@ import Navbar from '../components/navbar';
 import BackButton from '../components/backButton';
 import getUsername from '../utils/getUsername';
 import SearchInput from '../components/searchInput';
+import getPlaceIDDetails from '../utils/getPlaceIDDetails';
 
 const JourneyEdit= (props) => { 
     const router = useRouter();
@@ -57,13 +58,28 @@ const JourneyEdit= (props) => {
             .from('privateJourneys')
             .select()
             .eq('id', router.query.privateJourneyID)
+            
 
             setServerDestinationData(data[0].destinations.days)
             setServerJourneyName(data[0].journey_name)
             setServerJourneyBody(data[0].journey_body)
+
+            const getDetails = async() => { 
+                let tempCompleteArray = [];
+                for (let i = 0; i < data[0].destinations.days.length; i++) {
+                    let tempDayArray = [];
+                    for (let x = 0; x < data[0].destinations.days[i]?.destinations.length; x++){
+                        let placeData = await getPlaceIDDetails(data[0].destinations.days[i]?.destinations[i]);
+                        tempDayArray.push(placeData);
+                    }
+                    tempCompleteArray.push({"day": i+1, "destinations": tempDayArray})
+                }
+                console.log(tempCompleteArray)
+                setUserDestinationData(tempCompleteArray)
+            }
             
             if (userDestinationData.length == 0) {
-                setUserDestinationData(data[0].destinations.days)
+                getDetails()
                 setUserJourneyName(data[0].journey_name)
                 setUserJourneyBody(data[0].journey_body)
             }
@@ -75,7 +91,8 @@ const JourneyEdit= (props) => {
             console.log("refreshing")
         }
 
-    },[router.query.privateJourneyID, router.isReady, userDestinationData.length, refresh, serverDestinationData.length])
+
+    },[router.query.privateJourneyID, router.isReady, userDestinationData.length, refresh, serverDestinationData.length,currentDay,userDestinationData])
 
     if (userDestinationData.length == 0){ //Return loading Spinner
         return (
@@ -132,9 +149,12 @@ const JourneyEdit= (props) => {
                                 <Textarea focusBorderColor='#268DC7' resize={'vertical'}/>
                             </div>
                         }
+                        <div className="ml-4 mb-4 mt-6">
+                            <Text className="font-bold text-lg ml-3.5">Destinations</Text>
+                        </div>
 
                         <div className="grid grid-cols-9 gap-0">
-                            <Stack className='col-span-2 justify-center'>
+                            <Stack className='col-span-2 place-items-center'>
                                 <ul>
                                     {userDestinationData.map((day) => (
                                         <li key={day.day}>
@@ -142,7 +162,7 @@ const JourneyEdit= (props) => {
                                                 {/* Set day button to Blue, no hover effect */}
                                                 { day.day == currentDay &&
                                                     <button className='text-[#268DC7] transition-none'>
-                                                        <p className="font-medium text-lg">
+                                                        <p className="font-medium text-lg py-2">
                                                             Day {day.day}
                                                         </p>
                                                     </button>
@@ -156,7 +176,7 @@ const JourneyEdit= (props) => {
                                                             setCurrentDay(day.day)
                                                         }}
                                                     >
-                                                        <p className="font-medium text-lg">
+                                                        <p className="font-medium text-lg py-2">
                                                             Day {day.day}
                                                         </p>
                                                     </button>
@@ -177,8 +197,34 @@ const JourneyEdit= (props) => {
                             </Stack>
 
                             <div className='col-span-7'>
-                                <Text className="font-DMSans font-medium text-lg px-8 mb-2">Destination Name</Text>
-                                <div className="px-8 pb-5">
+                                <ul>
+                                {userDestinationData[currentDay - 1].destinations.map((destination)=>(
+                                    <li key={destination}>
+                                        <button onClick={()=>{
+                                            setViewState({
+                                                latitude:destination.geometry.location.lat,
+                                                longitude:destination.geometry.location.lng,
+                                                zoom: 14
+                                            })
+                                        }}>
+                                            <Card className="mr-5 flex">
+                                                <CardBody>
+                                                    <Stack>
+                                                        <Text className="text-md font-medium text-left">{destination.name}</Text>
+                                                        <Text className="text-sm font-regular">{destination.editorial_summary.overview}</Text>
+                                                    </Stack>
+                                                </CardBody>
+                                            </Card>
+                                        </button>
+                                    </li>
+                                ))}
+                                </ul>
+
+                                {userDestinationData[currentDay - 1].destinations.length == 0 &&
+                                    <Text className="flex text-sm text-gray-400 font-medium justify-center mr-4">No Destinations in this Day.</Text>
+                                }
+
+                                <div className="pr-10 pb-5 mt-8">
                                     <SearchInput viewState={viewState} setViewState={setViewState}/>
                                 </div>
                             </div>
@@ -197,37 +243,44 @@ const JourneyEdit= (props) => {
 }
 
 export const getServerSideProps = async (ctx) => {
-  const supabase = createServerSupabaseClient(ctx);
-  let fetchedUsername = '';
-  let user = "";
+    const supabase = createServerSupabaseClient(ctx);
+    let fetchedUsername = '';
+    let user = "";
+    let journeyid = ctx.query?.privateJourneyID
 
-  const { data: { session } } = await supabase.auth.getSession();
+    if (journeyid == null) {
+        return {
+            notFound: true
+        }
+    }
 
-  const fetchUsername = async() => {
-      try {
+    const { data: { session } } = await supabase.auth.getSession();
+
+    const fetchUsername = async() => {
+        try {
         fetchedUsername = await getUsername(session.user.id)
         return fetchedUsername
-      }
-      catch {
+        }
+        catch {
         return fetchedUsername
-      }
-  } 
+        }
+    } 
 
-  const username = await fetchUsername();
+    const username = await fetchUsername();
 
-  try { 
+    try { 
     user = session.user.id
-  }
-  catch {
-    
-  }
+    }
+    catch {
 
-  return {
-      props: {
-      username: username,
-      user: user
-      },
-  }
+    }
+
+    return {
+        props: {
+        username: username,
+        user: user
+        },
+    }
 }
 
 export default JourneyEdit

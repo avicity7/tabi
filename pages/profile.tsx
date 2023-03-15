@@ -267,7 +267,7 @@ const Profile = (props) => {
             <div className="isolate bg-white flex flex-col h-screen justify-between">
                 <Navbar activePage={'profile'} username={username}/>
 
-                <div className="grid place-items-center">
+                <div className="grid place-items-center mb-5">
                     <Stack>
                         <div className="justify-center px-auto mx-auto mb-5">
                             <p className='font-DMSans font-bold text-sm mb-5' style = {{color: '#268DC7'}}>Your Account</p>
@@ -282,7 +282,7 @@ const Profile = (props) => {
                 <JourneyCreateButton />
 
                 { privateJourneys.length != 0 &&
-                    <div className="font-DMSans px-10 my-5">
+                    <div className="font-DMSans px-10 my-3">
                         <Text className="font-medium text-lg">Your Private Journeys</Text>
                         <ul>
                             { privateJourneys.map((privateJourney) => (
@@ -293,7 +293,7 @@ const Profile = (props) => {
                                             query: {journey_id: privateJourney.id}
                                         })
                                     }}>
-                                        <Card minW='xs' maxW='xs' className = "my-5" overflow="hidden">
+                                        <Card borderRadius="lg" minW='xs' maxW='xs' className = "my-5 shadow-md" overflow="hidden">
                                         <Image objectFit='fill' src='https://www.timetravelturtle.com/wp-content/uploads/2018/11/Tokyo-2018-280_feat1.jpg' alt='tokyo'/>
                                         <CardBody>
                                             <Stack spacing='3'>
@@ -321,7 +321,7 @@ const Profile = (props) => {
                 }
 
                 { publicJourneys.length != 0 &&
-                    <div className="font-DMSans px-10 my-5">
+                    <div className="font-DMSans px-10 my-3">
                         <Text className="font-medium text-lg">Your Public Journeys</Text>
                         <ul>
                             { publicJourneys.map((publicJourneys) => (
@@ -332,7 +332,7 @@ const Profile = (props) => {
                                             query: {journey_id: publicJourneys.id}
                                         })
                                     }}>
-                                        <Card minW='xs' maxW='xs' className = "my-5" overflow="hidden">
+                                        <Card borderRadius="lg" minW='xs' maxW='xs' className = "my-5 shadow-md" overflow="hidden">
                                         <Image objectFit='fill' src='https://www.timetravelturtle.com/wp-content/uploads/2018/11/Tokyo-2018-280_feat1.jpg' alt='tokyo'/>
                                         <CardBody>
                                             <Stack spacing='3'>

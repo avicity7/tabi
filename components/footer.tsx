@@ -1,18 +1,12 @@
 const Footer = () => {
     return(
         <footer className="bg-white">
-          <div className="font-DMSans grid grid-cols-2 gap-8 px-6 py-8 md:grid-cols-4">
+          <div className="font-DMSans grid grid-cols-2 gap-8 px-6 py-8 md:grid-cols-4 justify-items-center">
               <div>
-                  <h2 className="mb-6 text-sm font-semibold text-gray-500 uppercase ">Company</h2>
+                  <h2 className="mb-6 text-sm font-semibold text-gray-500 uppercase ">TABI</h2>
                   <ul className="text-gray-500 ">
                       <li className="mb-4">
                           <a href="#" className=" hover:underline">About</a>
-                      </li>
-                      <li className="mb-4">
-                          <a href="#" className="hover:underline">Careers</a>
-                      </li>
-                      <li className="mb-4">
-                          <a href="#" className="hover:underline">Brand Center</a>
                       </li>
                       <li className="mb-4">
                           <a href="#" className="hover:underline">Blog</a>

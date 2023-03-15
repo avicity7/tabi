@@ -8,6 +8,7 @@ import { Avatar } from "@chakra-ui/react";
 import Navbar from '../components/navbar';
 import BackButton from '../components/backButton';
 import getUsername from '../utils/getUsername';
+import Footer from '../components/footer';
 
 const Journey = (props) => {
     const router = useRouter();
@@ -107,6 +108,8 @@ const Journey = (props) => {
                         </ul>
                     </Stack>
                 </div>
+
+                <Footer />
             </div>
         ) 
     }

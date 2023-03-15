@@ -28,7 +28,7 @@ const SearchInput = ({viewState,setViewState}) => {
     return (
         <div className="font-DMSans">
             <Input
-                placeholder="Enter Destination Name"
+                placeholder="Add Destination"
                 onChange={(evt) => {
                 getPlacePredictions({ input: evt.target.value });
                 }}
@@ -44,7 +44,8 @@ const SearchInput = ({viewState,setViewState}) => {
                                 latitude: data.lat,
                                 longitude: data.lng,
                                 zoom: viewState.zoom
-                            })
+                            });
+                            console.log(item.place_id)
                         }}><span className="font-bold">{item.structured_formatting.main_text}</span>, {item.structured_formatting.secondary_text}</button>} />
                     </List.Item>
                 )}
