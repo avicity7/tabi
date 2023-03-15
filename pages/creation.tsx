@@ -18,7 +18,7 @@ const createJourney = async (user,router,journeyName) => {
     if (!journeyInsertError) {
         const {data, error}= await supabase
         .from('privateDestinations')
-        .insert({'destination_id':journeyInsertData[0].id,'user_id':user.id})
+        .insert({'privateJourney_id':journeyInsertData[0].id,'user_id':user.id})
         .select()
         
         if (!error) {

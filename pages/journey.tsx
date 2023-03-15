@@ -49,7 +49,7 @@ const Journey = (props) => {
                                 <BackButton onClick={()=>{router.push('/')}}/>
                             </div>
                             <div>
-                                <Skeleton height="25vh" width="58vw"/>
+                                <Skeleton height="25vh" width="55rem"/>
                             </div>
                         </div>
                         <div className="px-5"> 
