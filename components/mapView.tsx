@@ -10,7 +10,7 @@ const MapView = ({viewState,setViewState}) => {
     <Map
       {...viewState}
       onMove={(e) => {setViewState(e.viewState)}}
-      style={{height: "91vh", width: "100%"}}
+      style={{height: "48rem", width: "100%"}}
       mapStyle="mapbox://styles/avicity7/clewhy0yo000901rzkk9xx3bt"
       mapboxAccessToken={process.env.NEXT_PUBLIC_MAPBOX_KEY}
       attributionControl={false}

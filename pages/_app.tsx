@@ -14,24 +14,15 @@ export default function App({ Component, pageProps }: AppProps<{
   const [supabaseClient] = useState(() => createBrowserSupabaseClient())
 
   return (
-    <>
-      <Script 
-      id="Adesense-id" 
-      data-ad-client="ca-pub-5888321340977192" 
-      async strategy="afterInteractive" 
-      onError={ (e) => { console.error('Script failed to load', e) }}
-      src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"
-      />
-      <SessionContextProvider
-        supabaseClient={supabaseClient}
-        initialSession={pageProps.initialSession}
-      >
-        <CssVarsProvider>
-          <ChakraProvider>
-            <Component {...pageProps} />
-          </ChakraProvider>
-        </CssVarsProvider>
-      </SessionContextProvider>
-    </>
+    <SessionContextProvider
+      supabaseClient={supabaseClient}
+      initialSession={pageProps.initialSession}
+    >
+      <CssVarsProvider>
+        <ChakraProvider>
+          <Component {...pageProps} />
+        </ChakraProvider>
+      </CssVarsProvider>
+    </SessionContextProvider>
   )
 }

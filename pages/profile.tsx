@@ -2,31 +2,42 @@ import { useEffect, useState, useRef } from 'react'
 import { useRouter } from "next/router";
 import { PencilSimple } from "phosphor-react";
 import { useUser, useSupabaseClient } from '@supabase/auth-helpers-react';
+import { createClient } from '@supabase/supabase-js';
 import { createServerSupabaseClient } from '@supabase/auth-helpers-nextjs';
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import { Icon } from '@iconify-icon/react';
 import { 
     Text,
     Avatar,
     useDisclosure, 
-    Stack
+    Stack,
+    Spinner,
+    Card,
+    CardBody,
+    Image
 } from '@chakra-ui/react';
 
 import Navbar from '../components/navbar';
 import JourneyCreateButton from '../components/journeyCreateButton';
 import getUsername from '../utils/getUsername';
+import Footer from '../components/footer';
 
 const Profile = (props) => {
-    const supabase = useSupabaseClient()
+    const supabase = useSupabaseClient();
     const router = useRouter();
-    const username = props.username
+    const username = props.username;
 
     const [email, setEmail] = useState(''); 
     const [password, setPassword] = useState(''); 
 
-    const [method, setMethod] = useState('signup')
+    const [method, setMethod] = useState('signup');
 
-    const { isOpen: isOpenDrawer, onOpen: onOpenDrawer, onClose: onCloseDrawer } = useDisclosure()
-    const { isOpen: isOpenSearch, onOpen: onOpenSearch, onClose: onCloseSearch } = useDisclosure()
+    const { isOpen: isOpenDrawer, onOpen: onOpenDrawer, onClose: onCloseDrawer } = useDisclosure();
+    const { isOpen: isOpenSearch, onOpen: onOpenSearch, onClose: onCloseSearch } = useDisclosure();
+
+    const [ publicJourneys, setPublicJourneys ] = useState([]);
+    const [ privateJourneys, setPrivateJourneys ] = useState([]);
+    const [ loaded, setLoaded ] = useState(false);
 
     const logout = async (e: React.MouseEvent<HTMLElement>) => {    
         e.preventDefault();
@@ -61,6 +72,30 @@ const Profile = (props) => {
             console.log("Error")
         }
     };
+
+    useEffect(()=>{
+        const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL,process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY);
+
+        const fetchData = async() => {
+            const {data: publicJourneys, error: publicJourneyError}= await supabase
+            .from('publicJourneys')
+            .select()
+            .eq('author_username',username)
+
+            const {data: privateJourneys, error: privateJourneyError}= await supabase
+            .from('privateJourneys')
+            .select()
+            .eq('author_username',username)
+
+            setPublicJourneys(publicJourneys);
+            setPrivateJourneys(privateJourneys);
+            setLoaded(!loaded)
+        }
+        
+        if (loaded == false){
+            fetchData()
+        }
+    },[username,loaded])
 
     if (!username && method == 'signup'){//signup
         return (
@@ -193,101 +228,150 @@ const Profile = (props) => {
         )
     }
 
-    return ( //Logged in user page
-    <div className="isolate bg-white flex flex-col h-screen justify-between">
-        <Navbar activePage={'profile'} username={username}/>
+    if (loaded == false) {
+        return (
+            <div className="isolate bg-white flex flex-col h-screen justify-between">
+                <Navbar activePage={'profile'} username={username}/>
 
-        <div className="grid place-items-center">
-            <Stack>
-                <div className="justify-center px-auto mx-auto mb-5">
-                    <p className='font-DMSans font-bold text-sm mb-5' style = {{color: '#268DC7'}}>Your Account</p>
-                    <Avatar name = {username} size = "xl" />
+                <div className="grid place-items-center">
+                    <Stack>
+                        <div className="justify-center px-auto mx-auto mb-5">
+                            <p className='font-DMSans font-bold text-sm mb-5' style = {{color: '#268DC7'}}>Your Account</p>
+                            <Avatar name = {username} size = "xl" />
+                        </div>
+                        <div className="flex justify-center">
+                            <span className='font-DMSans text-2xl'>{username}</span>
+                        </div>
+                    </Stack>
                 </div>
-                <div className="flex justify-center">
-                    <span className='font-DMSans text-2xl'>{username}</span>
-                </div>
-                {/* <button className="bg-tabiBlue hover:bg-tabiBlueDark text-white p-2 rounded-lg" onClick={logout}>Sign out</button> */}
-            </Stack>
-        </div>
 
-        <JourneyCreateButton />
+                <JourneyCreateButton />
 
-        <div className="justify-center px-auto mx-auto mb-5">
-            <span className='font-DMSans font-regular text-sm mb-5' style = {{color: 'gray'}}>You haven&apos;t created any Journeys yet. </span>
-            <button onClick={()=>{router.push('/creation')}}className='font-DMSans font-regular text-sm mb-5' style = {{color: '#268DC7'}}>Create one now</button>
-        </div>
+                <div className="flex justify-center items-center h-[91.2vh]">
+                    <Stack>
+                        <div className="flex justify-center">
+                            <Spinner thickness='4px' speed='0.65s' emptyColor='gray.200' color='#268DC7' size='xl'/>
+                        </div>
+                        <p className="font-DMSans font-medium">Loading...</p>
+                    </Stack>
+                </div>
 
 
-        <footer className="bg-white">
-            <div className="font-DMSans grid grid-cols-2 gap-8 px-6 py-8 md:grid-cols-4">
-                <div>
-                    <h2 className="mb-6 text-sm font-semibold text-gray-500 uppercase ">Company</h2>
-                    <ul className="text-gray-500 ">
-                        <li className="mb-4">
-                            <a href="#" className=" hover:underline">About</a>
-                        </li>
-                        <li className="mb-4">
-                            <a href="#" className="hover:underline">Careers</a>
-                        </li>
-                        <li className="mb-4">
-                            <a href="#" className="hover:underline">Brand Center</a>
-                        </li>
-                        <li className="mb-4">
-                            <a href="#" className="hover:underline">Blog</a>
-                        </li>
-                    </ul>
-                </div>
-                <div>
-                    <h2 className="mb-6 text-sm font-semibold text-gray-500 uppercase ">Help center</h2>
-                    <ul className="text-gray-500 ">
-                        <li className="mb-4">
-                            <a href="#" className="hover:underline">Twitter</a>
-                        </li>
-                        <li className="mb-4">
-                            <a href="#" className="hover:underline">Contact Us</a>
-                        </li>
-                    </ul>
-                </div>
-                <div>
-                    <h2 className="mb-6 text-sm font-semibold text-gray-500 uppercase ">Legal</h2>
-                    <ul className="text-gray-500 ">
-                        <li className="mb-4">
-                            <a href="#" className="hover:underline">Privacy Policy</a>
-                        </li>
-                        <li className="mb-4">
-                            <a href="#" className="hover:underline">Terms &amp; Conditions</a>
-                        </li>
-                    </ul>
-                </div>
-                <div>
-                    <h2 className="mb-6 text-sm font-semibold text-gray-500 uppercase ">Download</h2>
-                    <ul className="text-gray-500 ">
-                        <li className="mb-4">
-                            <a href="#" className="hover:underline">iOS</a>
-                        </li>
-                        <li className="mb-4">
-                            <a href="#" className="hover:underline">Android</a>
-                        </li>
-                    </ul>
-                </div>
+                <Footer />
             </div>
-            <div className="font-DMSans px-4 py-6 bg-gray-100  md:flex md:items-center md:justify-between">
-                <span className="text-sm text-gray-500 sm:text-center">© 2023 <a href="#">tabi™</a>. All Rights Reserved.
-                </span>
-                <div className="flex mt-4 space-x-6 sm:justify-center md:mt-0">
-                    <a href="#" className="text-gray-400 hover:text-gray-900 ">
-                        <span className="sr-only">Instagram page</span>
-                    </a>
-                    <a href="#" className="text-gray-400 hover:text-gray-900 ">
-                        <span className="sr-only">Twitter page</span>
-                    </a>
+        )
+    }
+
+    else {
+        return ( //Logged in user page
+            <div className="isolate bg-white flex flex-col h-screen justify-between">
+                <Navbar activePage={'profile'} username={username}/>
+
+                <div className="grid place-items-center">
+                    <Stack>
+                        <div className="justify-center px-auto mx-auto mb-5">
+                            <p className='font-DMSans font-bold text-sm mb-5' style = {{color: '#268DC7'}}>Your Account</p>
+                            <Avatar name = {username} size = "xl" />
+                        </div>
+                        <div className="flex justify-center">
+                            <span className='font-DMSans text-2xl'>{username}</span>
+                        </div>
+                    </Stack>
                 </div>
+
+                <JourneyCreateButton />
+
+                { privateJourneys.length != 0 &&
+                    <div className="font-DMSans px-10 my-5">
+                        <Text className="font-medium text-lg">Your Private Journeys</Text>
+                        <ul>
+                            { privateJourneys.map((privateJourney) => (
+                                <li key={privateJourney.id}>
+                                    <button onClick={() => {
+                                        router.push({
+                                            pathname: '/journey',
+                                            query: {journey_id: privateJourney.id}
+                                        })
+                                    }}>
+                                        <Card minW='xs' maxW='xs' className = "my-5" overflow="hidden">
+                                        <Image objectFit='fill' src='https://www.timetravelturtle.com/wp-content/uploads/2018/11/Tokyo-2018-280_feat1.jpg' alt='tokyo'/>
+                                        <CardBody>
+                                            <Stack spacing='3'>
+                                            <div className="flex flex-row justify-between">
+                                                <Text fontSize='2xl' className="font-bold text-left">{privateJourney.journey_name}</Text>
+                                                <div className="flex flex-row items-center">
+                                                <FavoriteBorderIcon fontSize="small" style={{ color: '#268DC7'}}/>
+                                                <Text fontSize='xl' className="font-bold text-left pl-1">{privateJourney.journey_upvotes}</Text>
+                                                </div>
+                                            </div>
+                                            <div className="flex flex-row items-center">
+                                                <Icon icon="charm:person" style={{color:'#CBCBCB'}} />
+                                                <Text fontSize='sm' className="font-normal text-left pl-0.5 pt-0.3" style={{color:'#CBCBCB'}}>{privateJourney.author_username}</Text>
+                                            </div>
+                                            <Text fontSize='md' className="font-regular text-left" color="black">{privateJourney.journey_summary}</Text>
+                                            </Stack>
+                                        </CardBody>
+                                        
+                                        </Card>
+                                    </button>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                }
+
+                { publicJourneys.length != 0 &&
+                    <div className="font-DMSans px-10 my-5">
+                        <Text className="font-medium text-lg">Your Public Journeys</Text>
+                        <ul>
+                            { publicJourneys.map((publicJourneys) => (
+                                <li key={publicJourneys.id}>
+                                    <button onClick={() => {
+                                        router.push({
+                                            pathname: '/journey',
+                                            query: {journey_id: publicJourneys.id}
+                                        })
+                                    }}>
+                                        <Card minW='xs' maxW='xs' className = "my-5" overflow="hidden">
+                                        <Image objectFit='fill' src='https://www.timetravelturtle.com/wp-content/uploads/2018/11/Tokyo-2018-280_feat1.jpg' alt='tokyo'/>
+                                        <CardBody>
+                                            <Stack spacing='3'>
+                                            <div className="flex flex-row justify-between">
+                                                <Text fontSize='2xl' className="font-bold text-left">{publicJourneys.journey_name}</Text>
+                                                <div className="flex flex-row items-center">
+                                                <FavoriteBorderIcon fontSize="small" style={{ color: '#268DC7'}}/>
+                                                <Text fontSize='xl' className="font-bold text-left pl-1">{publicJourneys.journey_upvotes}</Text>
+                                                </div>
+                                            </div>
+                                            <div className="flex flex-row items-center">
+                                                <Icon icon="charm:person" style={{color:'#CBCBCB'}} />
+                                                <Text fontSize='sm' className="font-normal text-left pl-0.5 pt-0.3" style={{color:'#CBCBCB'}}>{publicJourneys.author_username}</Text>
+                                            </div>
+                                            <Text fontSize='md' className="font-regular text-left" color="black">{publicJourneys.journey_summary}</Text>
+                                            </Stack>
+                                        </CardBody>
+                                        
+                                        </Card>
+                                    </button>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                }
+
+                
+                { privateJourneys.length == 0 && publicJourneys.length == 0 &&
+                    <div className="justify-center px-auto mx-auto mb-5">
+                        <span className='font-DMSans font-regular text-sm mb-5' style = {{color: 'gray'}}>You haven&apos;t created any Journeys yet. </span>
+                        <button onClick={()=>{router.push('/creation')}}className='font-DMSans font-regular text-sm mb-5' style = {{color: '#268DC7'}}>Create one now</button>
+                    </div>
+                }
+
+
+                <Footer />
             </div>
-        </footer>
-
-
-    </div>
-    )
+        )
+    }
 }
 
 export const getServerSideProps = async (ctx) => {

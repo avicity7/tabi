@@ -1,38 +1,35 @@
-import { useState } from "react";
-import { Avatar } from "@chakra-ui/react";
-import Menu from '@mui/joy/Menu';
-import MenuItem from '@mui/joy/MenuItem';
-import ListDivider from '@mui/joy/ListDivider';
+import { Avatar, Stack } from "@chakra-ui/react";
+import { Menu } from '@headlessui/react';
 import { useRouter } from "next/router";
+import { ListDivider } from "@mui/joy";
 
 const NavbarAvatar = ({username}) => {
     const router = useRouter();
 
-    const [accountOpen, setAccountOpen] = useState(false);
-    const [anchorEl, setAnchorEl] = useState(null)
-    const handleAccountClose = () => setAccountOpen(false);
-
     return(
-        <div>
-            <button onClick={(e)=>{setAnchorEl(e.currentTarget);setAccountOpen(true);}}>
-            <span>{<Avatar name = {username} size = "sm" />}</span>
-            </button>
-            <Menu
-            anchorEl={anchorEl}
-            keepMounted={true}
-            open={accountOpen}
-            onClose={()=>{handleAccountClose();setAnchorEl(null)}}
-            placement="bottom-end"
-            >
-            <MenuItem className="font-medium text-sm px-5 font-DMSans" onClick={()=>{router.push('/profile')}}>
-                Account
-            </MenuItem>
-            <ListDivider />
-            <MenuItem className="font-semibold text-sm px-5 text-red-400 font-DMSans" onClick={handleAccountClose}>
-                Sign Out
-            </MenuItem>
-            </Menu>
-        </div>
+        <Menu as="div" className="relative inline-block text-left">
+            <Menu.Button><Avatar name = {username} size = "sm" /></Menu.Button>
+            
+            <Menu.Items className="absolute right-0 mt-2 origin-top-right rounded-md bg-white shadow-md">
+                <Stack className="flex px-6">
+                    <Menu.Item>
+                        <button className="font-medium text-sm font-DMSans w-max py-3" onClick={()=>{router.push('/profile')}}>
+                            Account
+                        </button>
+                    </Menu.Item>
+
+                    <Menu.Item>
+                        <ListDivider />
+                    </Menu.Item>
+
+                    <Menu.Item>
+                        <button onClick={()=>{router.push('/profile')}}>
+                            <p className="font-bold text-sm text-red-500 font-DMSans w-max py-2">Sign Out</p>
+                        </button>
+                    </Menu.Item>
+                </Stack>
+            </Menu.Items>
+        </Menu>
     )
 }
 

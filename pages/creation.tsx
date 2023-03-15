@@ -16,20 +16,10 @@ const createJourney = async (user,router,journeyName) => {
         .select()
     
     if (!journeyInsertError) {
-        const {data, error}= await supabase
-        .from('privateDestinations')
-        .insert({'privateJourney_id':journeyInsertData[0].id,'user_id':user.id})
-        .select()
-        
-        if (!error) {
-            router.push({
-                pathname: "/editJourney",
-                query: {'privateJourneyID': data[0].id}
-            })
-        }
-        else {
-            console.log(error)
-        }
+        router.push({
+            pathname: "/editJourney",
+            query: {'privateJourneyID': journeyInsertData[0].id}
+        })
     }
     else {
         console.log(journeyInsertError)

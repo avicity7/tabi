@@ -35,6 +35,7 @@ const Journey = (props) => {
             
         }
         fetchData();
+        console.log("refreshing")
     },[router.query.journey_id, router.isReady])
 
     if (data.journey == '' || data.comments == ''){
@@ -52,13 +53,9 @@ const Journey = (props) => {
                                 <Skeleton height="25vh" width="55rem"/>
                             </div>
                         </div>
-                        <div className="px-5"> 
-                            <Skeleton height='40px'/>
-                        </div>
+                        <Skeleton height='40px'/>
                         <Text className="font-bold text-lg pt-5 px-5 md:px-0">About this Journey</Text>
-                        <div className="px-5">
-                            <SkeletonText mt='4' noOfLines={4} spacing='4' skeletonHeight='2' />
-                        </div>
+                        <SkeletonText mt='4' noOfLines={4} spacing='4' skeletonHeight='2' />
                         <Text className="font-bold text-lg pt-5 justify-start px-5 md:px-0">Destinations in this Journey</Text>
                         <div className ="px-5 md:px-0">
                             <Skeleton height="200" />

@@ -20,10 +20,17 @@ const JourneyEdit= (props) => {
         longitude:139.7671,
         zoom: 14
     });
-    const [serverData, setServerData] = useState([])
-    const [userData, setUserData] = useState([])
-    const [currentDay, setCurrentDay] = useState(1)
-    const [refresh, setRefresh] = useState(false)
+    const [ serverDestinationData, setServerDestinationData ] = useState([])
+    const [ userDestinationData, setUserDestinationData ] = useState([])
+    const [ serverJourneyName, setServerJourneyName ] = useState("")
+    const [ userJourneyName, setUserJourneyName ] = useState("")
+    const [ serverJourneyBody, setServerJourneyBody ] = useState("")
+    const [ userJourneyBody, setUserJourneyBody ] = useState("")
+    const [ currentDay, setCurrentDay ] = useState(1)
+    const [ refresh, setRefresh ] = useState(false)
+    const [ editingJourneyName, setEditingJourneyName ] = useState(false)
+    const [ editingJourneyBody, setEditingJourneyBody ] = useState(false)
+
 
     const MapView = useMemo(() => dynamic(
         () => import('../components/mapView'),
@@ -47,20 +54,30 @@ const JourneyEdit= (props) => {
             if(!router.isReady) return;
 
             const { data, error } = await supabase
-            .from('privateDestinations')
+            .from('privateJourneys')
             .select()
             .eq('id', router.query.privateJourneyID)
 
-            setServerData(data[0].destinations.days)
-            if (userData.length == 0) {
-                setUserData(data[0].destinations.days)
+            setServerDestinationData(data[0].destinations.days)
+            setServerJourneyName(data[0].journey_name)
+            setServerJourneyBody(data[0].journey_body)
+            
+            if (userDestinationData.length == 0) {
+                setUserDestinationData(data[0].destinations.days)
+                setUserJourneyName(data[0].journey_name)
+                setUserJourneyBody(data[0].journey_body)
             }
             
         }
-        fetchData();
-    },[router.query.privateJourneyID, router.isReady, userData.length, refresh])
 
-    if (userData.length == 0){ //Return loading Spinner
+        if (serverDestinationData.length == 0) {
+            fetchData();
+            console.log("refreshing")
+        }
+
+    },[router.query.privateJourneyID, router.isReady, userDestinationData.length, refresh, serverDestinationData.length])
+
+    if (userDestinationData.length == 0){ //Return loading Spinner
         return (
             <div className="isolate bg-white">
                 <Navbar activePage={'index'} username={username}/>
@@ -70,7 +87,7 @@ const JourneyEdit= (props) => {
                         <div className="flex justify-center">
                             <Spinner thickness='4px' speed='0.65s' emptyColor='gray.200' color='#268DC7' size='xl'/>
                         </div>
-                        <p className="font-DMSans font-medium">Loading Journeys...</p>
+                        <p className="font-DMSans font-medium">Loading your Journey...</p>
                     </Stack>
                 </div>
             </div>
@@ -82,30 +99,44 @@ const JourneyEdit= (props) => {
             <div className="isolate bg-white">
                 <Navbar activePage={'journeyedit'} username={username}/>
 
-                <div className="grid grid-cols-4">
+                <div className="grid grid-cols-4 font-DMSans">
                     <div className="col-span-2 ml-4 mt-4">
                         <div className="flex flex-row items-center">
                             <button className="my-5" onClick={()=>{router.push('/')}}>
                                 <ArrowLeft color="black" size="18" className = "mx-auto" strokeWidth="5"/>
                             </button>
 
-                            <Text className="font-DMSans font-bold text-xl ml-3.5">Journey Details</Text>
+                            <Text className="font-bold text-lg ml-3.5">Journey Details</Text>
                         </div>
 
-                        <Text className="font-DMSans font-medium text-lg px-8 mb-2">Journey Name</Text>
-                        <div className="px-8 pb-5">
-                            <Input focusBorderColor='#268DC7'/>
-                        </div>
+                        <Text className="font-regular text-md px-8 mb-2">Journey Name</Text>
+                        { editingJourneyName == false &&
+                            <div className="px-8 pb-5">
+                                <Text className="font-medium text-lg">{userJourneyName}</Text>
+                            </div>
+                        }  
+                        { editingJourneyName &&
+                            <div className="px-8 pb-5">
+                                <Input focusBorderColor='#268DC7'/>
+                            </div>
+                        }   
 
-                        <Text className="font-DMSans font-medium text-lg px-8 mb-2">Journey Description</Text>
-                        <div className="px-8 pb-8">
-                            <Textarea focusBorderColor='#268DC7' resize={'vertical'}/>
-                        </div>
+                        <Text className="font-regular text-md px-8 mb-2">Journey Description</Text>
+                        { editingJourneyBody == false &&
+                            <div className="px-8 pb-5">
+                                <Text className="font-medium text-sm display-linebreak truncate">{userJourneyBody}</Text>
+                            </div>
+                        }
+                        { editingJourneyBody &&
+                            <div className="px-8 pb-8">
+                                <Textarea focusBorderColor='#268DC7' resize={'vertical'}/>
+                            </div>
+                        }
 
                         <div className="grid grid-cols-9 gap-0">
                             <Stack className='col-span-2 justify-center'>
                                 <ul>
-                                    {userData.map((day) => (
+                                    {userDestinationData.map((day) => (
                                         <li key={day.day}>
                                             <div className="grid place-items-center font-DMSans">
                                                 {/* Set day button to Blue, no hover effect */}
@@ -119,7 +150,12 @@ const JourneyEdit= (props) => {
 
                                                 {/* NOT the current day to display, hover effect added */}
                                                 { day.day != currentDay &&
-                                                    <button className='text-[#CBCBCB] hover:text-[#268DC7] transition-none'>
+                                                    <button 
+                                                        className='text-[#CBCBCB] hover:text-tabiBlueDark transition-none' 
+                                                        onClick={()=>{
+                                                            setCurrentDay(day.day)
+                                                        }}
+                                                    >
                                                         <p className="font-medium text-lg">
                                                             Day {day.day}
                                                         </p>
@@ -130,10 +166,10 @@ const JourneyEdit= (props) => {
                                     ))}
                                 </ul>
 
-                                <button className='text-[#CBCBCB] hover:text-[#268DC7] transition-none' onClick={()=>{
-                                    let data = userData
-                                    data.push({"day": userData[userData.length - 1].day + 1, "destinations": []})
-                                    setUserData(data)
+                                <button className='text-[#CBCBCB] hover:text-tabiBlueDark transition-none' onClick={()=>{
+                                    let data = userDestinationData
+                                    data.push({"day": userDestinationData[userDestinationData.length - 1].day + 1, "destinations": []})
+                                    setUserDestinationData(data)
                                     setRefresh(!refresh)
                                 }}>
                                     <p className="font-bold text-xl">+</p>
