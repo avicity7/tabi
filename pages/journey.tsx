@@ -1,46 +1,42 @@
 import { useState, useEffect } from 'react'
-import { useRouter } from "next/router";
-import { Stack, Image, Text, Skeleton, SkeletonText} from '@chakra-ui/react'
-import { createClient } from '@supabase/supabase-js';
-import { createServerSupabaseClient } from '@supabase/auth-helpers-nextjs';
-import { Avatar } from "@chakra-ui/react";
+import { useRouter } from 'next/router'
+import { Stack, Image, Text, Skeleton, SkeletonText, Avatar } from '@chakra-ui/react'
+import { createClient } from '@supabase/supabase-js'
+import { createServerSupabaseClient } from '@supabase/auth-helpers-nextjs'
 
-import Navbar from '../components/navbar';
-import BackButton from '../components/backButton';
-import getUsername from '../utils/getUsername';
-import Footer from '../components/footer';
+import Navbar from '../components/navbar'
+import BackButton from '../components/backButton'
+import getUsername from '../utils/getUsername'
+import Footer from '../components/footer'
 
 const Journey = (props) => {
-    const router = useRouter();
-    const username = props.username;
-    const [data, setData] = useState({journey:'' as any,comments:'' as any})
+  const router = useRouter()
+  const username = props.username
+  const [data, setData] = useState({ journey: '' as any, comments: '' as any })
 
-    useEffect(()=>{
-        const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL,process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY)
-        const fetchData = async() => {
-            if(!router.isReady) return;
-            const { data:journey, error:journeyError } = await supabase
-            .from('publicJourneys')
-            .select()
-            .eq('id', router.query.journey_id)
+  useEffect(() => {
+    const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY)
+    const fetchData = async () => {
+      if (!router.isReady) return
+      const { data: journey, error: journeyError } = await supabase
+        .from('publicJourneys')
+        .select()
+        .eq('id', router.query.journey_id)
 
-            //Get comments of the journey
-            const { data:comments, error:commentsError } = await supabase
-            .from('comments')
-            .select()
-            .eq('journey_id', router.query.journey_id)
+      // Get comments of the journey
+      const { data: comments, error: commentsError } = await supabase
+        .from('comments')
+        .select()
+        .eq('journey_id', router.query.journey_id)
 
-            
-            setData({journey:journey[0], comments:comments})
-            
-            
-        }
-        fetchData();
-        console.log("refreshing")
-    },[router.query.journey_id, router.isReady])
+      setData({ journey: journey[0], comments })
+    }
+    fetchData()
+    console.log('refreshing')
+  }, [router.query.journey_id, router.isReady])
 
-    if (data.journey == '' || data.comments == ''){
-        return(
+  if (data.journey == '' || data.comments == '') {
+    return (
             <div className="isolate bg-white">
                 <Navbar activePage={'index'} username={username}/>
 
@@ -48,7 +44,7 @@ const Journey = (props) => {
                     <Stack className="flex max-w-4xl">
                         <div className = "relative mb-5">
                             <div className="absolute top-0 mx-5">
-                                <BackButton onClick={()=>{router.push('/')}}/>
+                                <BackButton onClick={() => { router.push('/') }}/>
                             </div>
                             <div>
                                 <Skeleton height="25vh" width="55rem"/>
@@ -66,10 +62,9 @@ const Journey = (props) => {
                     </Stack>
                 </div>
             </div>
-        )
-    }
-    else {
-        return(
+    )
+  } else {
+    return (
             <div className="isolate bg-white">
                 <Navbar activePage={'index'} username={username}/>
 
@@ -77,7 +72,7 @@ const Journey = (props) => {
                     <Stack className="flex max-w-4xl">
                         <div className = "relative mb-5">
                             <div className="absolute top-0 mx-5">
-                                <BackButton onClick={()=>{router.push('/')}}/>
+                                <BackButton onClick={() => { router.push('/') }}/>
                             </div>
                             <div>
                                 <Image className="min-w-full max-h-[25vh]" objectFit="cover" overflow="hidden" borderRadius = "lg" src='https://www.timetravelturtle.com/wp-content/uploads/2018/11/Tokyo-2018-280_feat1.jpg' alt='Journey Image'/>
@@ -111,41 +106,39 @@ const Journey = (props) => {
 
                 <Footer />
             </div>
-        ) 
-    }
+    )
+  }
 }
 
 export const getServerSideProps = async (ctx) => {
-  const supabase = createServerSupabaseClient(ctx);
-  let fetchedUsername = '';
-  let user = "";
+  const supabase = createServerSupabaseClient(ctx)
+  let fetchedUsername = ''
+  let user = ''
 
-  const { data: { session } } = await supabase.auth.getSession();
+  const { data: { session } } = await supabase.auth.getSession()
 
-  const fetchUsername = async() => {
-      try {
-        fetchedUsername = await getUsername(session.user.id)
-        return fetchedUsername
-      }
-      catch {
-        return fetchedUsername
-      }
-  } 
-
-  const username = await fetchUsername();
-
-  try { 
-    user = session.user.id
+  const fetchUsername = async () => {
+    try {
+      fetchedUsername = await getUsername(session.user.id)
+      return fetchedUsername
+    } catch {
+      return fetchedUsername
+    }
   }
-  catch {
-    
+
+  const username = await fetchUsername()
+
+  try {
+    user = session.user.id
+  } catch {
+
   }
 
   return {
-      props: {
-      username: username,
-      user: user
-      },
+    props: {
+      username,
+      user
+    }
   }
 }
 export default Journey

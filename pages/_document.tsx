@@ -1,6 +1,6 @@
-import Document, { Html, Head, Main, NextScript } from "next/document";
+import { Html, Head, Main, NextScript } from 'next/document'
 
-function MyDocument() {
+function MyDocument () {
   return (
     <Html>
       <Head>
@@ -14,7 +14,7 @@ function MyDocument() {
         <NextScript />
       </body>
     </Html>
-  );
+  )
 }
 
-export default MyDocument;
+export default MyDocument

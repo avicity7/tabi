@@ -1,38 +1,35 @@
 import { useState } from 'react'
-import { useRouter } from "next/router";
-import { useUser } from '@supabase/auth-helpers-react';
-import { createClient } from '@supabase/supabase-js';
+import { useRouter } from 'next/router'
+import { useUser } from '@supabase/auth-helpers-react'
+import { createClient } from '@supabase/supabase-js'
 
 import getUsername from '../utils/getUsername'
 
+const createJourney = async (user, router, journeyName) => {
+  const username = await getUsername(user.id)
+  const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL ?? 'error', process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? 'error')
 
-const createJourney = async (user,router,journeyName) => { 
-    let username = await getUsername(user.id);
-    const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL,process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY);
+  const { data: journeyInsertData, error: journeyInsertError } = await supabase
+    .from('privateJourneys')
+    .insert({ journey_name: journeyName, author_username: username, user_id: user.id })
+    .select()
 
-    const {data: journeyInsertData, error: journeyInsertError}= await supabase
-        .from('privateJourneys')
-        .insert({'journey_name':journeyName,'author_username':username,'user_id':user.id})
-        .select()
-    
-    if (!journeyInsertError) {
-        router.push({
-            pathname: "/editJourney",
-            query: {'privateJourneyID': journeyInsertData[0].id}
-        })
-    }
-    else {
-        console.log(journeyInsertError)
-    }
+  if (journeyInsertError == null) {
+    router.push({
+      pathname: '/editJourney',
+      query: { privateJourneyID: journeyInsertData[0].id }
+    })
+  } else {
+    console.log(journeyInsertError)
+  }
 }
 
+const Creation = async () => {
+  const router = useRouter()
+  const [journeyName, setJourneyName] = useState('')
+  const user = useUser()
 
-const Creation = () => {
-    const router = useRouter();
-    const [journeyName, setJourneyName] = useState('');
-    const user = useUser();
-
-    return(
+  return (
         <div className="flex h-[80vh] items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
             <div className="m-auto w-full max-w-md space-y-8">
                 <div>
@@ -47,7 +44,7 @@ const Creation = () => {
                 <div className="-space-y-px rounded-md">
                     <div className = "font-DMSans">
                     <input
-                        onChange={(e) => setJourneyName(e.target.value)}
+                        onChange={(e) => { setJourneyName(e.target.value) }}
                         id="journeyName"
                         name="journeyName"
                         type="text"
@@ -60,7 +57,7 @@ const Creation = () => {
 
                 <div>
                     <button
-                    onClick={()=>{createJourney(user,router,journeyName)}}
+                    onClick={async () => { await createJourney(user, router, journeyName) }}
                     type="submit"
                     className="group relative flex w-full justify-center rounded-md border border-transparent bg-tabiBlue py-2 px-4 text-sm font-DMSans font-medium text-white hover:bg-tabiBlueDark focus:outline-none focus:ring-2 focus:ring-tabiBlue focus:ring-offset-2"
                     >
@@ -70,7 +67,7 @@ const Creation = () => {
 
             </div>
         </div>
-    ) 
+  )
 }
 
 export default Creation

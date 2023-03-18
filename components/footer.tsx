@@ -1,5 +1,5 @@
 const Footer = () => {
-    return(
+  return (
         <footer className="bg-white">
           <div className="font-DMSans grid grid-cols-2 gap-8 px-6 py-8 md:grid-cols-4 justify-items-center">
               <div>
@@ -60,7 +60,7 @@ const Footer = () => {
               </div>
           </div>
       </footer>
-    )
+  )
 }
 
 export default Footer
