@@ -1,26 +1,20 @@
 import { useRouter } from 'next/router'
-import { useUser } from '@supabase/auth-helpers-react'
 import {
-  Avatar, Stack, Text, Button, Input,
+  Stack, Text, Input,
   Show,
   Hide,
   Drawer,
   DrawerBody,
   DrawerHeader,
   DrawerOverlay,
-  DrawerContent,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalFooter,
-  ModalBody
+  DrawerContent
 } from '@chakra-ui/react'
 import MenuRoundedIcon from '@mui/icons-material/MenuRounded'
 import SearchRoundedIcon from '@mui/icons-material/SearchRounded'
 import CloseRoundedIcon from '@mui/icons-material/CloseRounded'
 import { Icon } from '@iconify-icon/react'
 import Link from 'next/link'
-import { Fragment, useState, useEffect } from 'react'
+import { Fragment, useState } from 'react'
 
 import { Dialog, Transition } from '@headlessui/react'
 
@@ -36,8 +30,8 @@ const Navbar = (props) => {
   const handleSearchClose = () => { setSearchOpen(false) }
 
   const [drawerOpen, setDrawerOpen] = useState(false)
-  const handleDrawerOpen = () => { setSearchOpen(true) }
-  const handleDrawerClose = () => { setSearchOpen(false) }
+  const handleDrawerOpen = () => { setDrawerOpen(true) }
+  const handleDrawerClose = () => { setDrawerOpen(false) }
 
   return (
       <header className="sticky top-0 z-10 px-2 py-4 bg-white">
@@ -52,8 +46,8 @@ const Navbar = (props) => {
               <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 font-DMSans">
                 <button onClick={() => { router.push('/') }}>
                   <div className="flex flex-row items-center">
-                    <Icon height="18" icon="akar-icons:map" style={{ color: activePage == 'index' ? '#268DC7' : '#CBCBCB' }} />
-                    <Text fontSize='md' className="font-medium text-left pl-2" style={{ color: activePage == 'index' ? '#268DC7' : '#CBCBCB' }}>Journeys</Text>
+                    <Icon height="18" icon="akar-icons:map" style={{ color: activePage === 'index' ? '#268DC7' : '#CBCBCB' }} />
+                    <Text fontSize='md' className="font-medium text-left pl-2" style={{ color: activePage === 'index' ? '#268DC7' : '#CBCBCB' }}>Journeys</Text>
                     <Text></Text>
                   </div>
                 </button>
@@ -87,8 +81,8 @@ const Navbar = (props) => {
                   <Stack>
                     <button onClick={() => { router.push('/') }}>
                       <div className="flex flex-row items-center font-DMSans">
-                        <Icon height="24" icon="akar-icons:map" style={{ color: activePage == 'index' ? '#268DC7' : '#CBCBCB' }} />
-                        <Text fontSize='md' className="font-medium text-left pl-2" style={{ color: activePage == 'index' ? '#268DC7' : '#CBCBCB' }}>Journeys</Text>
+                        <Icon height="24" icon="akar-icons:map" style={{ color: activePage === 'index' ? '#268DC7' : '#CBCBCB' }} />
+                        <Text fontSize='md' className="font-medium text-left pl-2" style={{ color: activePage === 'index' ? '#268DC7' : '#CBCBCB' }}>Journeys</Text>
                         <Text></Text>
                       </div>
                     </button>

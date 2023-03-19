@@ -61,9 +61,9 @@ const JourneyEdit = (props) => {
         .select()
         .eq('id', router.query.privateJourneyID)
 
-      setServerDestinationData(data[0]?.destinations.days)
-      setServerJourneyName(data[0]?.journey_name)
-      setServerJourneyBody(data[0]?.journey_body)
+      setServerDestinationData(data[0].destinations.days)
+      setServerJourneyName(data[0].journey_name)
+      setServerJourneyBody(data[0].journey_body)
 
       const getDetails = async () => {
         const tempCompleteArray = []
@@ -76,7 +76,7 @@ const JourneyEdit = (props) => {
           tempCompleteArray.push({ day: i + 1, destinations: tempDayArray })
         }
         setUserDestinationData(tempCompleteArray)
-        if (tempCompleteArray.length != 0) {
+        if (tempCompleteArray.length !== 0) {
           setViewState({
             latitude: tempCompleteArray[0].destinations[0].geometry.location.lat,
             longitude: tempCompleteArray[0].destinations[0].geometry.location.lng,
@@ -85,20 +85,20 @@ const JourneyEdit = (props) => {
         }
       }
 
-      if (userDestinationData.length == 0) {
+      if (userDestinationData.length === 0) {
         getDetails()
         setUserJourneyName(data[0].journey_name)
         setUserJourneyBody(data[0].journey_body)
       }
     }
 
-    if (serverDestinationData.length == 0) {
+    if (serverDestinationData.length === 0) {
       fetchData()
       console.log('refreshing')
     }
   }, [router.query.privateJourneyID, router.isReady, userDestinationData.length, refresh, serverDestinationData.length, currentDay, userDestinationData])
 
-  if (userDestinationData.length == 0) { // Return loading Spinner
+  if (userDestinationData.length === 0) { // Return loading Spinner
     return (
             <div className="isolate bg-white">
                 <Navbar activePage={'index'} username={username}/>
@@ -162,7 +162,7 @@ const JourneyEdit = (props) => {
                                         <li key={day.day}>
                                             <div className="grid place-items-center font-DMSans">
                                                 {/* Set day button to Blue, no hover effect */}
-                                                { day.day == currentDay &&
+                                                { day.day === currentDay &&
                                                     <button className='text-[#268DC7] transition-none'>
                                                         <p className="font-medium text-lg py-2">
                                                             Day {day.day}
@@ -171,7 +171,7 @@ const JourneyEdit = (props) => {
                                                 }
 
                                                 {/* NOT the current day to display, hover effect added */}
-                                                { day.day != currentDay &&
+                                                { day.day !== currentDay &&
                                                     <button
                                                         className='text-[#CBCBCB] hover:text-tabiBlueDark transition-none'
                                                         onClick={() => {
@@ -190,7 +190,7 @@ const JourneyEdit = (props) => {
 
                                 <button className='text-[#CBCBCB] hover:text-tabiBlueDark transition-none' onClick={() => {
                                   const data = userDestinationData
-                                  data.push({ day: userDestinationData[userDestinationData.length - 1].day + 1, destinations: [] })
+                                  data.push({ day: parseInt(userDestinationData[userDestinationData.length - 1].day) + 1, destinations: [] })
                                   setUserDestinationData(data)
                                   setRefresh(!refresh)
                                 }}>
@@ -213,7 +213,7 @@ const JourneyEdit = (props) => {
                                                 <CardBody>
                                                     <div className="flex flex-row items-center">
 
-                                                        <Text className="text-tabiBlue text-md text-center font-bold mr-5">{userDestinationData[currentDay - 1].destinations.indexOf(destination) + 1}</Text>
+                                                        <Text className="text-tabiBlue text-md text-center font-bold mr-5">{parseInt(userDestinationData[currentDay - 1].destinations.indexOf(destination)) + 1}</Text>
 
                                                         <Stack>
                                                             <Text className="text-md font-medium text-left">{destination.name}</Text>
@@ -227,7 +227,7 @@ const JourneyEdit = (props) => {
                                 ))}
                                 </ul>
 
-                                {userDestinationData[currentDay - 1].destinations.length == 0 &&
+                                {userDestinationData[currentDay - 1].destinations.length === 0 &&
                                     <Text className="flex text-sm text-gray-400 font-medium justify-center mr-4">No Destinations in this Day.</Text>
                                 }
 
@@ -240,7 +240,7 @@ const JourneyEdit = (props) => {
 
                     <div className="sticky top-[10vh] min-h-[90vh] max-h-[90vh] col-span-2 rounded-xl overflow-hidden mr-2">
                         <MapView viewState={viewState} setViewState={setViewState} userDestinationData={userDestinationData}/>
-                        { Object.keys(searchInputData).length != 1 &&
+                        { Object.keys(searchInputData).length !== 1 &&
                             <Text className="absolute inset-x-10 bottom-5 right-10 rounded-md bg-white shadow-md">{searchInputData.name}</Text>
                         }
                     </div>

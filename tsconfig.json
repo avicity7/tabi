@@ -14,9 +14,9 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "incremental": true,
-    "strictNullChecks": true,
-    "noImplicitAny": false
+    "noImplicitAny": false,
+    "strictNullChecks": false
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx","./.eslintrc.js"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx","**/*.js"],
   "exclude": ["node_modules"],
 }

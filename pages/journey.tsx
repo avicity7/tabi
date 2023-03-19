@@ -18,13 +18,13 @@ const Journey = (props) => {
     const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY)
     const fetchData = async () => {
       if (!router.isReady) return
-      const { data: journey, error: journeyError } = await supabase
+      const { data: journey } = await supabase
         .from('publicJourneys')
         .select()
         .eq('id', router.query.journey_id)
 
       // Get comments of the journey
-      const { data: comments, error: commentsError } = await supabase
+      const { data: comments } = await supabase
         .from('comments')
         .select()
         .eq('journey_id', router.query.journey_id)
@@ -35,7 +35,7 @@ const Journey = (props) => {
     console.log('refreshing')
   }, [router.query.journey_id, router.isReady])
 
-  if (data.journey == '' || data.comments == '') {
+  if (data.journey === '' || data.comments === '') {
     return (
             <div className="isolate bg-white">
                 <Navbar activePage={'index'} username={username}/>

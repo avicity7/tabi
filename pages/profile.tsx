@@ -39,12 +39,6 @@ const Profile = (props) => {
   const [privateJourneys, setPrivateJourneys] = useState([])
   const [loaded, setLoaded] = useState(false)
 
-  const logout = async (e: React.MouseEvent<HTMLElement>) => {
-    e.preventDefault()
-    const { error } = await supabase.auth.signOut()
-    router.push('/')
-  }
-
   const loginAction = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     const { data, error } = await supabase.auth.signInWithPassword({
@@ -94,7 +88,7 @@ const Profile = (props) => {
     }
   }, [username, loaded])
 
-  if (!username && method == 'signup') { // signup
+  if (!username && method === 'signup') { // signup
     return (
         <div className="flex h-[80vh] items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
             <div className="m-auto w-full max-w-md space-y-8">
@@ -159,7 +153,7 @@ const Profile = (props) => {
             </div>
             </div>
     )
-  } else if (!username && method == 'login') { // login
+  } else if (!username && method === 'login') { // login
     return (
             <div className="flex h-[80vh] items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
                 <div className="m-auto w-full max-w-md space-y-8">
@@ -273,7 +267,7 @@ const Profile = (props) => {
 
                 <JourneyCreateButton />
 
-                { privateJourneys.length != 0 &&
+                { privateJourneys.length !== 0 &&
                     <div className="font-DMSans px-10 my-3">
                         <Text className="font-medium text-lg">Your Private Journeys</Text>
                         <ul>
@@ -312,7 +306,7 @@ const Profile = (props) => {
                     </div>
                 }
 
-                { publicJourneys.length != 0 &&
+                { publicJourneys.length !== 0 &&
                     <div className="font-DMSans px-10 my-3">
                         <Text className="font-medium text-lg">Your Public Journeys</Text>
                         <ul>
@@ -351,7 +345,7 @@ const Profile = (props) => {
                     </div>
                 }
 
-                { privateJourneys.length == 0 && publicJourneys.length == 0 &&
+                { privateJourneys.length === 0 && publicJourneys.length === 0 &&
                     <div className="justify-center px-auto mx-auto mb-5">
                         <span className='font-DMSans font-regular text-sm mb-5' style = {{ color: 'gray' }}>You haven&apos;t created any Journeys yet. </span>
                         <button onClick={() => { router.push('/creation') }}className='font-DMSans font-regular text-sm mb-5' style = {{ color: '#268DC7' }}>Create one now</button>

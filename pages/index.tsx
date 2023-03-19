@@ -16,17 +16,17 @@ const Home = (props) => {
   const username = props.username
   const [data, setData] = useState([])
 
-  const pushToJourney = (journey_id) => {
+  const pushToJourney = (journeyId) => {
     router.push({
       pathname: '/journey',
-      query: { journey_id }
+      query: { journeyId }
     })
   }
 
   useEffect(() => {
     const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY)
     const fetchData = async () => {
-      const { data: journeys, error: journeyError } = await supabase
+      const { data: journeys } = await supabase
         .from('publicJourneys')
         .select()
 
@@ -40,7 +40,7 @@ const Home = (props) => {
     console.log('refreshing')
   }, [])
 
-  if (data.length == 0) { // Return loading Spinner
+  if (data.length === 0) { // Return loading Spinner
     return (
       <div className="isolate bg-white">
         <Navbar activePage={'index'} username={username}/>

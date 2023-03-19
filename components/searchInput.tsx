@@ -1,5 +1,4 @@
 import usePlacesService from 'react-google-autocomplete/lib/usePlacesAutocompleteService'
-import { useEffect, useState } from 'react'
 import { Input } from '@chakra-ui/react'
 import { List } from 'antd'
 
@@ -16,10 +15,8 @@ const retrievePlaceLatLng = async (placeID) => {
 
 const SearchInput = ({ viewState, setViewState, setSearchInputData }) => {
   const {
-    placesService,
     placePredictions,
-    getPlacePredictions,
-    isPlacePredictionsLoading
+    getPlacePredictions
   } = usePlacesService({
     apiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_KEY
   })
@@ -33,7 +30,7 @@ const SearchInput = ({ viewState, setViewState, setSearchInputData }) => {
                 }}
             />
 
-            {placePredictions.length != 0 && (<List
+            {placePredictions.length !== 0 && (<List
                 dataSource={placePredictions}
                 renderItem={(item) => (
                     <List.Item className="font-DMSans font-medium ml-4 mr-4">
