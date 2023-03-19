@@ -31,6 +31,9 @@ module.exports = {
       }
     ],
     'react/prop-types': 'off',
-    '@typescript-eslint/no-floating-promises': ['off']
+    '@typescript-eslint/no-floating-promises': ['off'],
+    '@typescript-eslint/strict-null-chekcs': 'off',
+    '@typescript-eslint/strict-boolean-expressions': 0,
+    '@typescript-eslint/prefer-nullish-coalescing': 'off'
   }
 }
