@@ -8,7 +8,6 @@ import { createClient } from '@supabase/supabase-js'
 import { createServerSupabaseClient } from '@supabase/auth-helpers-nextjs'
 
 import Navbar from '../components/navbar'
-import JourneyCreateButton from '../components/journeyCreateButton'
 import getUsername from '../utils/getUsername'
 
 const Home = (props) => {
@@ -53,9 +52,6 @@ const Home = (props) => {
                 <p className="font-DMSans font-medium">Loading Journeys...</p>
             </Stack>
         </div>
-
-        <JourneyCreateButton />
-
     </div>
     )
   } else { // Show Journeys
