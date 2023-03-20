@@ -139,10 +139,17 @@ const JourneyEdit = (props) => {
                   }
                   { editingJourneyName &&
                       <div className="px-8 pb-5">
-                          <Input focusBorderColor='#268DC7' value={userJourneyName}/>
-                          <button onClick={() => { setEditingJourneyName(!editingJourneyName) }}>
-                            <Text className="font-light text-sm text-tabiBlue">Save</Text>
-                          </button>
+                          <Input focusBorderColor='#268DC7' value={userJourneyName} onChange={(e) => { setUserJourneyName(e.target.value) }}/>
+                          { userJourneyName === serverJourneyName &&
+                            <button onClick={() => { setEditingJourneyName(!editingJourneyName) }}>
+                              <Text className="font-light text-sm text-tabiBlue">Exit</Text>
+                            </button>
+                          }
+                          { userJourneyName !== serverJourneyName &&
+                            <button onClick={() => { setEditingJourneyName(!editingJourneyName) }}>
+                              <Text className="font-medium text-sm text-tabiBlue">Save</Text>
+                            </button>
+                          }
                       </div>
                   }
 
@@ -157,10 +164,17 @@ const JourneyEdit = (props) => {
                   }
                   { editingJourneyBody &&
                       <div className="px-8 pb-8">
-                          <Textarea focusBorderColor='#268DC7' resize={'vertical'} value={userJourneyBody}/>
-                          <button onClick={() => { setEditingJourneyBody(!editingJourneyBody) }}>
-                            <Text className="font-light text-sm text-tabiBlue">Save</Text>
-                          </button>
+                          <Textarea focusBorderColor='#268DC7' value={userJourneyBody} onChange={(e) => { setUserJourneyBody(e.target.value) }}/>
+                          { userJourneyBody === serverJourneyBody &&
+                            <button onClick={() => { setEditingJourneyBody(!editingJourneyBody) }}>
+                              <Text className="font-light text-sm text-tabiBlue">Exit</Text>
+                            </button>
+                          }
+                          { userJourneyBody !== serverJourneyBody &&
+                            <button onClick={() => { setEditingJourneyBody(!editingJourneyBody) }}>
+                              <Text className="font-medium text-sm text-tabiBlue">Save</Text>
+                            </button>
+                          }
                       </div>
                   }
                   <div className="ml-4 mb-4 mt-6">
@@ -277,7 +291,6 @@ const JourneyEdit = (props) => {
 export const getServerSideProps = async (ctx) => {
   const supabase = createServerSupabaseClient(ctx)
   let fetchedUsername = ''
-  let user = ''
   const journeyid = ctx.query?.privateJourneyID
 
   if (journeyid == null) {
@@ -299,16 +312,9 @@ export const getServerSideProps = async (ctx) => {
 
   const username = await fetchUsername()
 
-  try {
-    user = session.user.id
-  } catch {
-
-  }
-
   return {
     props: {
-      username,
-      user
+      username
     }
   }
 }

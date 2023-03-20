@@ -32,11 +32,22 @@ const NavbarAvatar = ({ username }) => {
                     <ListDivider />
                 </Menu.Item>
 
-                <Menu.Item>
-                    <button onClick={logout}>
-                        <p className="font-bold text-sm text-red-500 font-DMSans w-max py-2">Sign Out</p>
-                    </button>
-                </Menu.Item>
+                { username !== '' &&
+                  <Menu.Item>
+                      <button onClick={logout}>
+                          <p className="font-bold mx-auto text-sm text-red-500 font-DMSans w-max py-2">Sign Out</p>
+                      </button>
+                  </Menu.Item>
+                }
+
+                { username === '' &&
+                  <Menu.Item>
+                      <button onClick={() => { router.push('/login') }}>
+                          <p className="font-bold mx-auto text-sm text-tabiBlue hover:text-tabiBlueDark font-DMSans w-max py-2">Sign In</p>
+                      </button>
+                  </Menu.Item>
+                }
+
             </Stack>
         </Menu.Items>
     </Menu>

@@ -101,7 +101,6 @@ const Home = (props) => {
 export const getServerSideProps = async (ctx) => {
   const supabase = createServerSupabaseClient(ctx)
   let fetchedUsername = ''
-  let user = ''
 
   const { data: { session } } = await supabase.auth.getSession()
 
@@ -116,16 +115,9 @@ export const getServerSideProps = async (ctx) => {
 
   const username = await fetchUsername()
 
-  try {
-    user = session.user.id
-  } catch {
-
-  }
-
   return {
     props: {
-      username,
-      user
+      username
     }
   }
 }
