@@ -13,12 +13,12 @@ const Creation = async () => {
   const createJourney = async (user, router, journeyName) => {
     const username = await getUsername(user.id)
     const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL ?? 'error', process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? 'error')
-  
+
     const { data: journeyInsertData, error: journeyInsertError } = await supabase
       .from('privateJourneys')
       .insert({ journey_name: journeyName, author_username: username, user_id: user.id })
       .select()
-  
+
     if (journeyInsertError == null) {
       router.push({
         pathname: '/editJourney',
