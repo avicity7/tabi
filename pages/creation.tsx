@@ -5,29 +5,29 @@ import { createClient } from '@supabase/supabase-js'
 
 import getUsername from '../utils/getUsername'
 
-const createJourney = async (user, router, journeyName) => {
-  const username = await getUsername(user.id)
-  const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL ?? 'error', process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? 'error')
-
-  const { data: journeyInsertData, error: journeyInsertError } = await supabase
-    .from('privateJourneys')
-    .insert({ journey_name: journeyName, author_username: username, user_id: user.id })
-    .select()
-
-  if (journeyInsertError == null) {
-    router.push({
-      pathname: '/editJourney',
-      query: { privateJourneyID: journeyInsertData[0].id }
-    })
-  } else {
-    console.log(journeyInsertError)
-  }
-}
-
 const Creation = async () => {
   const router = useRouter()
   const [journeyName, setJourneyName] = useState('')
   const user = useUser()
+
+  const createJourney = async (user, router, journeyName) => {
+    const username = await getUsername(user.id)
+    const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL ?? 'error', process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? 'error')
+  
+    const { data: journeyInsertData, error: journeyInsertError } = await supabase
+      .from('privateJourneys')
+      .insert({ journey_name: journeyName, author_username: username, user_id: user.id })
+      .select()
+  
+    if (journeyInsertError == null) {
+      router.push({
+        pathname: '/editJourney',
+        query: { privateJourneyID: journeyInsertData[0].id }
+      })
+    } else {
+      console.log(journeyInsertError)
+    }
+  }
 
   return (
         <div className="flex h-[80vh] items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
