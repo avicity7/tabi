@@ -21,13 +21,13 @@ const Journey = (props) => {
       const { data: journey } = await supabase
         .from('publicJourneys')
         .select()
-        .eq('id', router.query.journey_id)
+        .eq('id', router.query.journeyId)
 
       // Get comments of the journey
       const { data: comments } = await supabase
         .from('comments')
         .select()
-        .eq('journey_id', router.query.journey_id)
+        .eq('journey_id', router.query.journeyId)
 
       setData({ journey: journey[0], comments })
     }
@@ -37,7 +37,7 @@ const Journey = (props) => {
 
   if (data.journey === '' || data.comments === '') {
     return (
-            <div className="isolate bg-white">
+            <div className="bg-white">
                 <Navbar activePage={'index'} username={username}/>
 
                 <div className="grid place-items-center font-DMSans">

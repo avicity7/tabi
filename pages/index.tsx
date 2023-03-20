@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router'
-import { Card, CardBody, Stack, Image, Text, Spinner, useDisclosure } from '@chakra-ui/react'
+import { Card, CardBody, Stack, Image, Text, Spinner } from '@chakra-ui/react'
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder'
 import { Icon } from '@iconify-icon/react'
 
@@ -42,7 +42,7 @@ const Home = (props) => {
 
   if (data.length === 0) { // Return loading Spinner
     return (
-      <div className="isolate bg-white">
+      <div className="scrollbar">
         <Navbar activePage={'index'} username={username}/>
 
         <div className="flex justify-center items-center h-[91.2vh]">
@@ -60,7 +60,7 @@ const Home = (props) => {
     )
   } else { // Show Journeys
     return (
-      <div className="isolate bg-white">
+      <div className="scrollbar">
         <Navbar activePage={'index'} username={username}/>
 
         <ul>

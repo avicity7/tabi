@@ -27,19 +27,19 @@ const JourneyEdit = (props) => {
   const [serverJourneyBody, setServerJourneyBody] = useState('')
   const [userJourneyBody, setUserJourneyBody] = useState('')
 
-  const [currentDay, setCurrentDay] = useState(1)
+  const [currentDay, setCurrentDay] = useState(0)
 
   const [refresh, setRefresh] = useState(false)
   const [editingJourneyName, setEditingJourneyName] = useState(false)
   const [editingJourneyBody, setEditingJourneyBody] = useState(false)
 
-  const [searchInputData, setSearchInputData] = useState({ name: null })
+  const [searchInputData, setSearchInputData] = useState({ name: null, editorial_summary: { overview: null } })
 
   const MapView = useMemo(() => dynamic(
     async () => await import('../components/mapView'),
     {
       loading: () =>
-            <div className="flex justify-center items-center h-[91.2vh]">
+            <div className="flex justify-center items-center w-[50vw] h-[91.2vh] bg-white">
                 <Stack>
                     <div className="flex justify-center">
                         <Spinner thickness='4px' speed='0.65s' emptyColor='gray.200' color='#268DC7' size='xl'/>
@@ -100,153 +100,176 @@ const JourneyEdit = (props) => {
 
   if (userDestinationData.length === 0) { // Return loading Spinner
     return (
-            <div className="isolate bg-white">
-                <Navbar activePage={'index'} username={username}/>
+      <>
+          <Navbar activePage={'index'} username={username}/>
 
-                <div className="flex justify-center items-center h-[91.2vh]">
-                    <Stack>
-                        <div className="flex justify-center">
-                            <Spinner thickness='4px' speed='0.65s' emptyColor='gray.200' color='#268DC7' size='xl'/>
-                        </div>
-                        <p className="font-DMSans font-medium">Loading your Journey...</p>
-                    </Stack>
-                </div>
-            </div>
+          <div className="flex justify-center items-center h-[91.2vh]">
+              <Stack>
+                  <div className="flex justify-center">
+                      <Spinner thickness='4px' speed='0.65s' emptyColor='gray.200' color='#268DC7' size='xl'/>
+                  </div>
+                  <p className="font-DMSans font-medium">Loading your Journey...</p>
+              </Stack>
+          </div>
+      </>
     )
   } else {
     return (
-            <div className="isolate bg-white">
-                <Navbar activePage={'journeyedit'} username={username}/>
+      <>
+          <Navbar activePage={'journeyedit'} username={username}/>
 
-                <div className="grid grid-cols-4 font-DMSans">
-                    <div className="col-span-2 ml-4 mt-4">
-                        <div className="flex flex-row items-center">
-                            <button className="my-5" onClick={() => { router.push('/') }}>
-                                <ArrowLeft color="black" size="18" className = "mx-auto" strokeWidth="5"/>
-                            </button>
+          <div className="grid grid-cols-4 font-DMSans">
+              <div className="col-span-2 ml-4 mt-4 scrollbar mr-0">
+                  <div className="flex flex-row items-center">
+                      <button className="my-5" onClick={() => { router.push('/') }}>
+                          <ArrowLeft color="black" size="18" className = "mx-auto" strokeWidth="5"/>
+                      </button>
 
-                            <Text className="font-bold text-lg ml-3.5">Journey Details</Text>
-                        </div>
+                      <Text className="font-bold text-lg ml-3.5">Journey Details</Text>
+                  </div>
 
-                        <Text className="font-regular text-md px-8 mb-2">Journey Name</Text>
-                        { !editingJourneyName &&
-                            <div className="px-8 pb-5">
-                                <Text className="font-medium text-lg">{userJourneyName}</Text>
-                            </div>
+                  <Text className="font-regular text-md px-8 mb-2">Journey Name</Text>
+                  { !editingJourneyName &&
+                      <div className="px-8 pb-5">
+                        <Text className="font-medium text-lg">{userJourneyName}</Text>
+                        <button onClick={() => { setEditingJourneyName(!editingJourneyName) }}>
+                          <Text className="font-light text-sm text-tabiBlue">Edit</Text>
+                        </button>
+                      </div>
+                  }
+                  { editingJourneyName &&
+                      <div className="px-8 pb-5">
+                          <Input focusBorderColor='#268DC7' value={userJourneyName}/>
+                          <button onClick={() => { setEditingJourneyName(!editingJourneyName) }}>
+                            <Text className="font-light text-sm text-tabiBlue">Save</Text>
+                          </button>
+                      </div>
+                  }
+
+                  <Text className="font-regular text-md px-8 mb-2">Journey Description</Text>
+                  { !editingJourneyBody &&
+                      <div className="px-8 pb-5">
+                          <Text className="font-medium text-sm display-linebreak truncate">{userJourneyBody}</Text>
+                          <button onClick={() => { setEditingJourneyBody(!editingJourneyBody) }}>
+                            <Text className="font-light text-sm text-tabiBlue">Edit</Text>
+                          </button>
+                      </div>
+                  }
+                  { editingJourneyBody &&
+                      <div className="px-8 pb-8">
+                          <Textarea focusBorderColor='#268DC7' resize={'vertical'} value={userJourneyBody}/>
+                          <button onClick={() => { setEditingJourneyBody(!editingJourneyBody) }}>
+                            <Text className="font-light text-sm text-tabiBlue">Save</Text>
+                          </button>
+                      </div>
+                  }
+                  <div className="ml-4 mb-4 mt-6">
+                      <Text className="font-bold text-lg ml-3.5">Destinations</Text>
+                  </div>
+
+                  <div className="grid grid-cols-10 gap-0">
+                      <Stack className='col-span-2 place-items-center'>
+                          <ul>
+                              {userDestinationData.map((day, index) => (
+                                  <li key={index}>
+                                      <div className="grid place-items-center font-DMSans">
+                                          {/* Set day button to Blue, no hover effect */}
+                                          { index === currentDay &&
+                                              <button className='text-[#268DC7] transition-none'>
+                                                  <p className="font-medium text-lg py-2">
+                                                      Day {index + 1}
+                                                  </p>
+                                              </button>
+                                          }
+
+                                          {/* NOT the current day to display, hover effect added */}
+                                          { index !== currentDay &&
+                                              <button
+                                                  className='text-[#CBCBCB] hover:text-tabiBlueDark transition-none'
+                                                  onClick={() => {
+                                                    setCurrentDay(index)
+                                                  }}
+                                              >
+                                                  <p className="font-medium text-lg py-2">
+                                                      Day {index + 1}
+                                                  </p>
+                                              </button>
+                                          }
+                                      </div>
+                                  </li>
+                              ))}
+                          </ul>
+
+                          <button className='text-[#CBCBCB] hover:text-tabiBlueDark transition-none' onClick={() => {
+                            const data = userDestinationData
+                            data.push({ destinations: [] })
+                            setUserDestinationData(data)
+                            setRefresh(!refresh)
+                          }}>
+                              <p className="font-bold text-xl">+</p>
+                          </button>
+                      </Stack>
+
+                      <Stack className='col-span-8 flex justify-center px-5'>
+                          <ul>
+                          {userDestinationData[currentDay].destinations.map((destination, index) => (
+                              <li key={destination}>
+                                  <button onClick={() => {
+                                    setViewState({
+                                      latitude: destination.geometry.location.lat,
+                                      longitude: destination.geometry.location.lng,
+                                      zoom: 14
+                                    })
+                                  }}>
+                                      <Card>
+                                          <CardBody>
+                                              <div className="flex flex-row items-center">
+
+                                                  <Text className="text-tabiBlue text-md text-center font-bold mr-5">{parseInt(index) + 1}</Text>
+
+                                                  <Stack>
+                                                      <Text className="text-md font-medium text-left">{destination.name}</Text>
+                                                      {destination.editorial_summary !== undefined &&
+                                                        <Text className="text-sm font-regular text-left">{destination.editorial_summary.overview}</Text>
+                                                      }
+                                                  </Stack>
+                                              </div>
+                                          </CardBody>
+                                      </Card>
+                                  </button>
+                              </li>
+                          ))}
+                          </ul>
+
+                          {userDestinationData[currentDay].destinations.length === 0 &&
+                              <Text className="flex text-sm text-gray-400 font-medium justify-center mr-4">No Destinations in this Day.</Text>
+                          }
+
+                          <div className="mt-8 min-w-[70%]">
+                              <SearchInput viewState={viewState} setViewState={setViewState} setSearchInputData={setSearchInputData}/>
+                          </div>
+                      </Stack>
+                  </div>
+              </div>
+
+              <div className="fixed top-13 right-0 bg-white col-span-2 max-w-[50vw] overflow-hidden">
+                  <MapView viewState={viewState} setViewState={setViewState} userDestinationData={userDestinationData}/>
+                  { Object.keys(searchInputData).length !== 2 &&
+                      <Stack className="absolute inset-x-10 bottom-5 right-10 rounded-md bg-white shadow-md">
+                        { searchInputData.editorial_summary === undefined &&
+                            <Text className="py-5 px-5 font-medium text-left">{searchInputData.name}</Text>
                         }
-                        { editingJourneyName &&
-                            <div className="px-8 pb-5">
-                                <Input focusBorderColor='#268DC7'/>
-                            </div>
+                        { searchInputData.editorial_summary !== undefined &&
+                          <>
+                            <Text className="pt-5 px-5 font-medium text-left">{searchInputData.name}</Text>
+                            <Text className="text-sm font-regular text-left px-5 pb-5">{searchInputData.editorial_summary.overview}</Text>
+                          </>
                         }
-
-                        <Text className="font-regular text-md px-8 mb-2">Journey Description</Text>
-                        { !editingJourneyBody &&
-                            <div className="px-8 pb-5">
-                                <Text className="font-medium text-sm display-linebreak truncate">{userJourneyBody}</Text>
-                            </div>
-                        }
-                        { editingJourneyBody &&
-                            <div className="px-8 pb-8">
-                                <Textarea focusBorderColor='#268DC7' resize={'vertical'}/>
-                            </div>
-                        }
-                        <div className="ml-4 mb-4 mt-6">
-                            <Text className="font-bold text-lg ml-3.5">Destinations</Text>
-                        </div>
-
-                        <div className="grid grid-cols-9 gap-0">
-                            <Stack className='col-span-2 place-items-center'>
-                                <ul>
-                                    {userDestinationData.map((day) => (
-                                        <li key={day.day}>
-                                            <div className="grid place-items-center font-DMSans">
-                                                {/* Set day button to Blue, no hover effect */}
-                                                { day.day === currentDay &&
-                                                    <button className='text-[#268DC7] transition-none'>
-                                                        <p className="font-medium text-lg py-2">
-                                                            Day {day.day}
-                                                        </p>
-                                                    </button>
-                                                }
-
-                                                {/* NOT the current day to display, hover effect added */}
-                                                { day.day !== currentDay &&
-                                                    <button
-                                                        className='text-[#CBCBCB] hover:text-tabiBlueDark transition-none'
-                                                        onClick={() => {
-                                                          setCurrentDay(day.day)
-                                                        }}
-                                                    >
-                                                        <p className="font-medium text-lg py-2">
-                                                            Day {day.day}
-                                                        </p>
-                                                    </button>
-                                                }
-                                            </div>
-                                        </li>
-                                    ))}
-                                </ul>
-
-                                <button className='text-[#CBCBCB] hover:text-tabiBlueDark transition-none' onClick={() => {
-                                  const data = userDestinationData
-                                  data.push({ day: parseInt(userDestinationData[userDestinationData.length - 1].day) + 1, destinations: [] })
-                                  setUserDestinationData(data)
-                                  setRefresh(!refresh)
-                                }}>
-                                    <p className="font-bold text-xl">+</p>
-                                </button>
-                            </Stack>
-
-                            <div className='col-span-7 grid place-items-center'>
-                                <ul>
-                                {userDestinationData[currentDay - 1].destinations.map((destination) => (
-                                    <li key={destination}>
-                                        <button onClick={() => {
-                                          setViewState({
-                                            latitude: destination.geometry.location.lat,
-                                            longitude: destination.geometry.location.lng,
-                                            zoom: 14
-                                          })
-                                        }}>
-                                            <Card>
-                                                <CardBody>
-                                                    <div className="flex flex-row items-center">
-
-                                                        <Text className="text-tabiBlue text-md text-center font-bold mr-5">{parseInt(userDestinationData[currentDay - 1].destinations.indexOf(destination)) + 1}</Text>
-
-                                                        <Stack>
-                                                            <Text className="text-md font-medium text-left">{destination.name}</Text>
-                                                            <Text className="text-sm font-regular text-left">{destination.editorial_summary.overview}</Text>
-                                                        </Stack>
-                                                    </div>
-                                                </CardBody>
-                                            </Card>
-                                        </button>
-                                    </li>
-                                ))}
-                                </ul>
-
-                                {userDestinationData[currentDay - 1].destinations.length === 0 &&
-                                    <Text className="flex text-sm text-gray-400 font-medium justify-center mr-4">No Destinations in this Day.</Text>
-                                }
-
-                                <div className="mt-8 min-w-[70%]">
-                                    <SearchInput viewState={viewState} setViewState={setViewState} setSearchInputData={setSearchInputData}/>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="sticky top-[10vh] min-h-[90vh] max-h-[90vh] col-span-2 rounded-xl overflow-hidden mr-2">
-                        <MapView viewState={viewState} setViewState={setViewState} userDestinationData={userDestinationData}/>
-                        { Object.keys(searchInputData).length !== 1 &&
-                            <Text className="absolute inset-x-10 bottom-5 right-10 rounded-md bg-white shadow-md">{searchInputData.name}</Text>
-                        }
-                    </div>
-                </div>
-
-            </div>
+                      </Stack>
+                  }
+              </div>
+          </div>
+      </>
     )
   }
 }

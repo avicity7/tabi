@@ -1,7 +1,6 @@
-import { useEffect, useState, useRef } from 'react'
+import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
-import { PencilSimple } from 'phosphor-react'
-import { useUser, useSupabaseClient } from '@supabase/auth-helpers-react'
+import { useSupabaseClient } from '@supabase/auth-helpers-react'
 import { createClient } from '@supabase/supabase-js'
 import { createServerSupabaseClient } from '@supabase/auth-helpers-nextjs'
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder'
@@ -9,7 +8,6 @@ import { Icon } from '@iconify-icon/react'
 import {
   Text,
   Avatar,
-  useDisclosure,
   Stack,
   Spinner,
   Card,
@@ -32,16 +30,13 @@ const Profile = (props) => {
 
   const [method, setMethod] = useState('signup')
 
-  const { isOpen: isOpenDrawer, onOpen: onOpenDrawer, onClose: onCloseDrawer } = useDisclosure()
-  const { isOpen: isOpenSearch, onOpen: onOpenSearch, onClose: onCloseSearch } = useDisclosure()
-
   const [publicJourneys, setPublicJourneys] = useState([])
   const [privateJourneys, setPrivateJourneys] = useState([])
   const [loaded, setLoaded] = useState(false)
 
   const loginAction = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    const { data, error } = await supabase.auth.signInWithPassword({
+    const { error } = await supabase.auth.signInWithPassword({
       email,
       password
     })
@@ -52,9 +47,9 @@ const Profile = (props) => {
     const registerEmail = (document.querySelector('#email-address')).value
     const registerPassword = (document.querySelector('#password')).value
     try {
-      const { data, error } = await supabase.auth.signUp({
-        email,
-        password
+      const { error } = await supabase.auth.signUp({
+        registerEmail,
+        registerPassword
       })
       if (error == null) {
         router.replace('/')
@@ -68,12 +63,12 @@ const Profile = (props) => {
     const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY)
 
     const fetchData = async () => {
-      const { data: publicJourneys, error: publicJourneyError } = await supabase
+      const { data: publicJourneys } = await supabase
         .from('publicJourneys')
         .select()
         .eq('author_username', username)
 
-      const { data: privateJourneys, error: privateJourneyError } = await supabase
+      const { data: privateJourneys } = await supabase
         .from('privateJourneys')
         .select()
         .eq('author_username', username)

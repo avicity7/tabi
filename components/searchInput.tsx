@@ -1,6 +1,7 @@
 import usePlacesService from 'react-google-autocomplete/lib/usePlacesAutocompleteService'
 import { Input } from '@chakra-ui/react'
 import { List } from 'antd'
+import getPlaceIDDetails from '../utils/getPlaceIDDetails'
 
 const retrievePlaceLatLng = async (placeID) => {
   const response = await fetch('api/searchPlaceID', {
@@ -39,9 +40,11 @@ const SearchInput = ({ viewState, setViewState, setSearchInputData }) => {
                           setViewState({
                             latitude: data.geometry.location.lat,
                             longitude: data.geometry.location.lng,
-                            zoom: viewState.zoom
+                            zoom: 15
                           })
-                          setSearchInputData(data)
+                          const placeData = await getPlaceIDDetails(data.place_id)
+                          console.log(placeData)
+                          setSearchInputData(placeData)
                         }}><span className="font-bold">{item.structured_formatting.main_text}</span>, {item.structured_formatting.secondary_text}</button>} />
                     </List.Item>
                 )}
