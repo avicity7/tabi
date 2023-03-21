@@ -33,7 +33,8 @@ const MapPreview = ({ journeyDays }) => {
         mapStyle="mapbox://styles/avicity7/clewhy0yo000901rzkk9xx3bt"
         mapboxAccessToken={process.env.NEXT_PUBLIC_MAPBOX_KEY}
         attributionControl={false}
-        maxZoom={16}
+        cursor={'default'}
+        scrollZoom={false}
         >
           {destinations.map((destination, index) => {
             return (
