@@ -8,6 +8,7 @@ import Navbar from '../components/navbar'
 import BackButton from '../components/backButton'
 import getUsername from '../utils/getUsername'
 import Footer from '../components/footer'
+import MapPreview from '../components/mapPreview'
 
 const Journey = (props) => {
   const router = useRouter()
@@ -32,7 +33,6 @@ const Journey = (props) => {
       setData({ journey: journey[0], comments })
     }
     fetchData()
-    console.log('refreshing')
   }, [router.query.journey_id, router.isReady])
 
   if (data.journey === '' || data.comments === '') {
@@ -81,9 +81,9 @@ const Journey = (props) => {
                         <Text className="font-bold text-2xl px-5 md:px-0 ">{data.journey.journey_name}</Text>
                         <Text className="font-bold text-lg pt-5 px-5 md:px-0">About this Journey</Text>
                         <Text className="font-sm md:font-regular text-regular pt-2 justify-start display-linebreak px-5 md:px-0">{data.journey.journey_body.replace('<br/>', '\n')}</Text>
-                        <Text className="font-bold text-lg pt-5 justify-start px-5 md:px-0">Destinations in this Journey</Text>
-                        <div className ="px-5 md:px-0">
-                            <Skeleton height="200" />
+                        <Text className="font-bold text-lg pt-5 justify-start px-5 md:px-0 pb-2">Destinations in this Journey</Text>
+                        <div className ="px-5 md:px-0 rounded-lg overflow-hidden">
+                            <MapPreview journeyDays={data.journey.destinations.days}/>
                         </div>
                         <Text className="font-bold text-lg pt-5 justify-start px-5 md:px-0 py-2">Comments</Text>
                         <ul className="pb-20">

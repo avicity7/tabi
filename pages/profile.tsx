@@ -149,7 +149,7 @@ const Profile = (props) => {
                                     <button onClick={() => {
                                       router.push({
                                         pathname: '/journey',
-                                        query: { journey_id: publicJourneys.id }
+                                        query: { journeyId: publicJourneys.id }
                                       })
                                     }}>
                                         <Card borderRadius="lg" minW='xs' maxW='xs' className = "my-5 shadow-md" overflow="hidden">

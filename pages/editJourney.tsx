@@ -1,10 +1,11 @@
 import { useEffect, useState, useMemo } from 'react'
 import { useRouter } from 'next/router'
-import { Input, Stack, Spinner, Text, Textarea, Card, CardBody } from '@chakra-ui/react'
+import { Input, Stack, Spinner, Text, Textarea, Card, CardBody, Image } from '@chakra-ui/react'
 import dynamic from 'next/dynamic'
 import { createServerSupabaseClient } from '@supabase/auth-helpers-nextjs'
 import { ArrowLeft } from 'phosphor-react'
 import { createClient } from '@supabase/supabase-js'
+import { Icon } from '@iconify-icon/react'
 
 import Navbar from '../components/navbar'
 import getUsername from '../utils/getUsername'
@@ -33,10 +34,14 @@ const JourneyEdit = (props) => {
   const [editingJourneyName, setEditingJourneyName] = useState(false)
   const [editingJourneyBody, setEditingJourneyBody] = useState(false)
 
-  const [searchInputData, setSearchInputData] = useState({ name: null, editorial_summary: { overview: null } })
+  const [searchInputData, setSearchInputData] = useState({ name: undefined, editorial_summary: { overview: undefined }, website: undefined, icon: undefined })
 
-  const MapView = useMemo(() => dynamic(
-    async () => await import('../components/mapView'),
+  const resetMapPopup = () => {
+    setSearchInputData({ name: undefined, editorial_summary: { overview: undefined }, website: undefined, icon: undefined })
+  }
+
+  const LargeMapView = useMemo(() => dynamic(
+    async () => await import('../components/largeMapView'),
     {
       loading: () =>
             <div className="flex justify-center items-center w-[50vw] h-[91.2vh] bg-white">
@@ -73,7 +78,7 @@ const JourneyEdit = (props) => {
             const placeData = await getPlaceIDDetails(data[0].destinations.days[i]?.destinations[i])
             tempDayArray.push(placeData)
           }
-          tempCompleteArray.push({ day: i + 1, destinations: tempDayArray })
+          tempCompleteArray.push({ destinations: tempDayArray })
         }
         setUserDestinationData(tempCompleteArray)
         if (tempCompleteArray.length !== 0) {
@@ -94,7 +99,6 @@ const JourneyEdit = (props) => {
 
     if (serverDestinationData.length === 0) {
       fetchData()
-      console.log('refreshing')
     }
   }, [router.query.privateJourneyID, router.isReady, userDestinationData.length, refresh, serverDestinationData.length, currentDay, userDestinationData])
 
@@ -156,7 +160,7 @@ const JourneyEdit = (props) => {
                   <Text className="font-regular text-md px-8 mb-2">Journey Description</Text>
                   { !editingJourneyBody &&
                       <div className="px-8 pb-5">
-                          <Text className="font-medium text-sm display-linebreak truncate">{userJourneyBody}</Text>
+                          <Text className="font-medium text-sm display-linebreak" noOfLines={2}>{userJourneyBody}</Text>
                           <button onClick={() => { setEditingJourneyBody(!editingJourneyBody) }}>
                             <Text className="font-light text-sm text-tabiBlue">Edit</Text>
                           </button>
@@ -164,7 +168,7 @@ const JourneyEdit = (props) => {
                   }
                   { editingJourneyBody &&
                       <div className="px-8 pb-8">
-                          <Textarea focusBorderColor='#268DC7' value={userJourneyBody} onChange={(e) => { setUserJourneyBody(e.target.value) }}/>
+                          <Textarea className="scrollbar" focusBorderColor='#268DC7' value={userJourneyBody} onChange={(e) => { setUserJourneyBody(e.target.value) }}/>
                           { userJourneyBody === serverJourneyBody &&
                             <button onClick={() => { setEditingJourneyBody(!editingJourneyBody) }}>
                               <Text className="font-light text-sm text-tabiBlue">Exit</Text>
@@ -181,6 +185,7 @@ const JourneyEdit = (props) => {
                       <Text className="font-bold text-lg ml-3.5">Destinations</Text>
                   </div>
 
+                  {/* Day buttons */}
                   <div className="grid grid-cols-10 gap-0">
                       <Stack className='col-span-2 place-items-center'>
                           <ul>
@@ -201,7 +206,21 @@ const JourneyEdit = (props) => {
                                               <button
                                                   className='text-[#CBCBCB] hover:text-tabiBlueDark transition-none'
                                                   onClick={() => {
+                                                    try {
+                                                      setViewState({
+                                                        latitude: userDestinationData[index].destinations[0].geometry.location.lat,
+                                                        longitude: userDestinationData[index].destinations[0].geometry.location.lng,
+                                                        zoom: 10
+                                                      })
+                                                    } catch {
+                                                      setViewState({
+                                                        latitude: viewState.latitude,
+                                                        longitude: viewState.longitude,
+                                                        zoom: 10
+                                                      })
+                                                    }
                                                     setCurrentDay(index)
+                                                    resetMapPopup()
                                                   }}
                                               >
                                                   <p className="font-medium text-lg py-2">
@@ -224,26 +243,30 @@ const JourneyEdit = (props) => {
                           </button>
                       </Stack>
 
-                      <Stack className='col-span-8 flex justify-center px-5'>
+                      {/* Destination Cards */}
+                      <Stack className='col-span-8 flex justify-center items-center mx-5'>
                           <ul>
                           {userDestinationData[currentDay].destinations.map((destination, index) => (
-                              <li key={destination}>
+                              <li key={destination.place_id}>
                                   <button onClick={() => {
                                     setViewState({
                                       latitude: destination.geometry.location.lat,
                                       longitude: destination.geometry.location.lng,
                                       zoom: 14
                                     })
+                                    setSearchInputData(destination)
                                   }}>
-                                      <Card>
+                                      <Card className="my-2" minW="xl" maxW="xl">
                                           <CardBody>
-                                              <div className="flex flex-row items-center">
-
+                                              <div className="flex flex-row items-center px-1">
                                                   <Text className="text-tabiBlue text-md text-center font-bold mr-5">{parseInt(index) + 1}</Text>
 
                                                   <Stack>
-                                                      <Text className="text-md font-medium text-left">{destination.name}</Text>
-                                                      {destination.editorial_summary !== undefined &&
+                                                      <div className="flex items-center">
+                                                        <Text className="text-md font-medium text-left mr-2">{destination.name}</Text>
+                                                        <Image src={destination.icon} alt="icon" boxSize='12px'></Image>
+                                                      </div>
+                                                      { destination.editorial_summary !== undefined &&
                                                         <Text className="text-sm font-regular text-left">{destination.editorial_summary.overview}</Text>
                                                       }
                                                   </Stack>
@@ -256,7 +279,7 @@ const JourneyEdit = (props) => {
                           </ul>
 
                           {userDestinationData[currentDay].destinations.length === 0 &&
-                              <Text className="flex text-sm text-gray-400 font-medium justify-center mr-4">No Destinations in this Day.</Text>
+                              <Text className="flex text-sm text-gray-400 font-medium justify-center mr-4 py-8">No Destinations in this Day.</Text>
                           }
 
                           <div className="mt-8 min-w-[70%]">
@@ -266,19 +289,45 @@ const JourneyEdit = (props) => {
                   </div>
               </div>
 
+              {/* Map Destination Popup */}
               <div className="fixed top-13 right-0 bg-white col-span-2 max-w-[50vw] overflow-hidden">
-                  <MapView viewState={viewState} setViewState={setViewState} userDestinationData={userDestinationData}/>
-                  { Object.keys(searchInputData).length !== 2 &&
-                      <Stack className="absolute inset-x-10 bottom-5 right-10 rounded-md bg-white shadow-md">
-                        { searchInputData.editorial_summary === undefined &&
-                            <Text className="py-5 px-5 font-medium text-left">{searchInputData.name}</Text>
-                        }
+                  <LargeMapView viewState={viewState} setViewState={setViewState} userDestinationData={userDestinationData} currentDay={currentDay} setSearchInputData={setSearchInputData} resetMapPopup={resetMapPopup} searchInputData={searchInputData} />
+                  { Object.keys(searchInputData).length !== 4 &&
+                      <Stack className="absolute inset-x-10 bottom-5 right-10 rounded-md bg-white shadow-md py-5 px-5 shadow-xl">
+                        <div className="flex justify-between">
+                          <div className="flex items-center">
+                            <Text className="font-medium text-left mr-2">{searchInputData.name}</Text>
+                            { searchInputData.icon !== undefined &&
+                              <Image src={searchInputData.icon} alt="icon" boxSize='12px'></Image>
+                            }
+                          </div>
+                          <button onClick={resetMapPopup}>
+                            <Icon icon="ic:round-close"/>
+                          </button>
+                        </div>
                         { searchInputData.editorial_summary !== undefined &&
-                          <>
-                            <Text className="pt-5 px-5 font-medium text-left">{searchInputData.name}</Text>
-                            <Text className="text-sm font-regular text-left px-5 pb-5">{searchInputData.editorial_summary.overview}</Text>
-                          </>
+                          <Text className="text-sm font-regular text-left">{searchInputData.editorial_summary.overview}</Text>
                         }
+                        <div className="flex flex-row items-center min-w-full pt-2">
+                          { searchInputData.website !== undefined &&
+                            <a href={searchInputData.website} rel="noopener noreferrer" target="_blank">
+                              <div className="flex items-center text-tabiBlue hover:text-tabiBlueDark">
+                                <Icon icon="material-symbols:web-asset" />
+                                <Text className="ml-1 text-sm font-medium text-left">Website</Text>
+                              </div>
+                            </a>
+                          }
+                          <div className="flex grow justify-end">
+                            <button onClick={() => {
+                              const temp = userDestinationData
+                              temp[currentDay].destinations.push(searchInputData)
+                              setUserDestinationData(temp)
+                              setRefresh(!refresh)
+                            }}>
+                              <Text className="text-sm text-white font-regular text-left bg-tabiBlue hover:bg-tabiBlueDark px-4 py-1 rounded-full">Add Destination</Text>
+                            </button>
+                          </div>
+                        </div>
                       </Stack>
                   }
               </div>

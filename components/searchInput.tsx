@@ -43,8 +43,8 @@ const SearchInput = ({ viewState, setViewState, setSearchInputData }) => {
                             zoom: 15
                           })
                           const placeData = await getPlaceIDDetails(data.place_id)
-                          console.log(placeData)
                           setSearchInputData(placeData)
+                          console.log(data.place_id)
                         }}><span className="font-bold">{item.structured_formatting.main_text}</span>, {item.structured_formatting.secondary_text}</button>} />
                     </List.Item>
                 )}
