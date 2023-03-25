@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useSupabaseClient } from '@supabase/auth-helpers-react'
 import { useRouter } from 'next/router'
+import { Image } from '@chakra-ui/react'
 
 const Login = () => {
   const supabase = useSupabaseClient()
@@ -24,10 +25,12 @@ const Login = () => {
     <div className="flex h-[80vh] items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
         <div className="m-auto w-full max-w-md space-y-8">
             <div>
-            <h1 className="mx-auto text-center font-DMSans font-bold text-4xl">tabi</h1>
-            <h2 className="font-DMSans mt-6 text-center text-3xl font-bold tracking-tight text-gray-900">
-                Sign in to your account
-            </h2>
+              <div className='flex justify-center'>
+                <Image src="img/Tabi.png" maxW='12'/>
+              </div>
+              <h2 className="font-DMSans mt-6 text-center text-3xl font-bold tracking-tight text-gray-900">
+                  Sign in to your account
+              </h2>
             </div>
             <form className="mt-8 space-y-6" onSubmit={loginAction}>
                 <div className="-space-y-px rounded-md">
@@ -66,6 +69,14 @@ const Login = () => {
                 <div className="flex items-center justify-center">
                     <div className="text-sm">
                             Forgot your password?
+                    </div>
+                </div>
+
+                <div className="flex items-center justify-center">
+                    <div className="text-sm">
+                    <button onClick={() => { router.push('/signup') }}className="font-DMSans font-medium text-tabiBlue hover:text-tabiBlueDark">
+                        Don&apos;t have an account yet?
+                    </button>
                     </div>
                 </div>
 

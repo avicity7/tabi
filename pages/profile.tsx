@@ -22,6 +22,7 @@ import Footer from '../components/footer'
 const Profile = (props) => {
   const router = useRouter()
   const username = props.username
+  const id = props.id
 
   const [publicJourneys, setPublicJourneys] = useState([])
   const [privateJourneys, setPrivateJourneys] = useState([])
@@ -32,14 +33,14 @@ const Profile = (props) => {
 
     const fetchData = async () => {
       const { data: publicJourneys } = await supabase
-        .from('publicJourneys')
+        .from('journeys')
         .select()
-        .eq('author_username', username)
+        .match({ user_id: id, public: true })
 
       const { data: privateJourneys } = await supabase
-        .from('privateJourneys')
+        .from('journeys')
         .select()
-        .eq('author_username', username)
+        .match({ user_id: id, public: false })
 
       setPublicJourneys(publicJourneys)
       setPrivateJourneys(privateJourneys)
@@ -198,6 +199,12 @@ export const getServerSideProps = async (ctx) => {
 
   const { data: { session } } = await supabase.auth.getSession()
 
+  if (session == null) {
+    return {
+      notFound: true
+    }
+  }
+
   const fetchUsername = async () => {
     try {
       fetchedUsername = await getUsername(session.user.id)
@@ -208,10 +215,12 @@ export const getServerSideProps = async (ctx) => {
   }
 
   const username = await fetchUsername()
+  const id = session.user.id
 
   return {
     props: {
-      username
+      username,
+      id
     }
   }
 }

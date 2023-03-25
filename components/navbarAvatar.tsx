@@ -16,7 +16,7 @@ const logout = async (e: React.MouseEvent<HTMLElement>) => {
 
 const NavbarAvatar = ({ username }) => {
   const router = useRouter()
-
+  console.log(username)
   return (
     <Menu as="div" className="relative inline-block text-left">
         <Menu.Button><Avatar name={username} size="sm" /></Menu.Button>
@@ -32,7 +32,7 @@ const NavbarAvatar = ({ username }) => {
                     <ListDivider />
                 </Menu.Item>
 
-                { username !== '' &&
+                { username !== '' && username !== undefined &&
                   <Menu.Item>
                       <button onClick={logout}>
                           <p className="font-bold mx-auto text-sm text-red-500 font-DMSans w-max py-2">Sign Out</p>
@@ -40,7 +40,7 @@ const NavbarAvatar = ({ username }) => {
                   </Menu.Item>
                 }
 
-                { username === '' &&
+                { (username === '' || username === undefined) &&
                   <Menu.Item>
                       <button onClick={() => { router.push('/login') }}>
                           <p className="font-bold mx-auto text-sm text-tabiBlue hover:text-tabiBlueDark font-DMSans w-max py-2">Sign In</p>

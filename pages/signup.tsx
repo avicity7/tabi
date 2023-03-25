@@ -2,6 +2,8 @@ import { useState } from 'react'
 import { useSupabaseClient } from '@supabase/auth-helpers-react'
 import { useRouter } from 'next/router'
 
+import { Image } from '@chakra-ui/react'
+
 const Signup = () => {
   const supabase = useSupabaseClient()
   const router = useRouter()
@@ -30,7 +32,9 @@ const Signup = () => {
     <div className="flex h-[80vh] items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
         <div className="m-auto w-full max-w-md space-y-8">
             <div>
-              <h1 className="mx-auto text-center font-DMSans font-bold text-4xl">tabi</h1>
+              <div className='flex justify-center'>
+                <Image src="img/Tabi.png" maxW='12'/>
+              </div>
               <h2 className="font-DMSans mt-6 text-center text-3xl font-bold tracking-tight text-gray-900">
                   Create a tabi account
               </h2>
@@ -72,12 +76,12 @@ const Signup = () => {
 
             <div className="flex items-center justify-center">
                 <div className="text-sm">
-                <button onClick={() => { router.push('/login') }}className="font-DMSans font-medium text-tabiBlue hover:text-tabiBlueDark">
-                    Already have an account?
-                </button>
+                  <button onClick={() => { router.push('/login') }}className="font-DMSans font-medium text-tabiBlue hover:text-tabiBlueDark">
+                      Already have an account?
+                  </button>
                 </div>
-
             </div>
+
             <div>
                 <button
                 className="group relative flex w-full justify-center rounded-md border border-transparent bg-tabiBlue py-2 px-4 text-sm font-DMSans font-medium text-white hover:bg-tabiBlueDark focus:outline-none focus:ring-2 focus:ring-tabiBlue focus:ring-offset-2"
