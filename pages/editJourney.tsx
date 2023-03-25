@@ -354,13 +354,13 @@ export const getServerSideProps = async (ctx) => {
   let fetchedUsername = ''
   const journeyid = ctx.query?.journeyId
 
-  if (journeyid == null) {
+  const { data: { session } } = await supabase.auth.getSession()
+
+  if (journeyid == null || session == null) {
     return {
       notFound: true
     }
   }
-
-  const { data: { session } } = await supabase.auth.getSession()
 
   const fetchUsername = async () => {
     try {
