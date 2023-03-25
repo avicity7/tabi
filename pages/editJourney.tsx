@@ -62,9 +62,9 @@ const JourneyEdit = (props) => {
       if (!router.isReady) return
 
       const { data } = await supabase
-        .from('privateJourneys')
+        .from('journeys')
         .select()
-        .eq('id', router.query.privateJourneyID)
+        .eq('id', router.query.journeyId)
 
       setServerDestinationData(data[0].destinations.days)
       setServerJourneyName(data[0].journey_name)
@@ -256,7 +256,7 @@ const JourneyEdit = (props) => {
                                     })
                                     setSearchInputData(destination)
                                   }}>
-                                      <Card className="my-2" minW="xl" maxW="xl">
+                                      <Card className="my-2" minW="lg" maxW="lg">
                                           <CardBody>
                                               <div className="flex flex-row items-center px-1">
                                                   <Text className="text-tabiBlue text-md text-center font-bold mr-5">{parseInt(index) + 1}</Text>
@@ -318,14 +318,26 @@ const JourneyEdit = (props) => {
                             </a>
                           }
                           <div className="flex grow justify-end">
+                            { userDestinationData[currentDay].destinations.includes(searchInputData) === false &&
                             <button onClick={() => {
                               const temp = userDestinationData
                               temp[currentDay].destinations.push(searchInputData)
+                              console.log(searchInputData)
                               setUserDestinationData(temp)
                               setRefresh(!refresh)
                             }}>
                               <Text className="text-sm text-white font-regular text-left bg-tabiBlue hover:bg-tabiBlueDark px-4 py-1 rounded-full">Add Destination</Text>
                             </button>
+                            }
+
+                            { userDestinationData[currentDay].destinations.includes(searchInputData) === true &&
+                            <button onClick={() => {
+                              userDestinationData[currentDay].destinations.splice(userDestinationData[currentDay].destinations.indexOf(searchInputData), 1)
+                              setRefresh(!refresh)
+                            }}>
+                              <Text className="text-sm text-white font-regular text-left bg-red-600 hover:bg-red-700 px-4 py-1 rounded-full">Remove Destination</Text>
+                            </button>
+                            }
                           </div>
                         </div>
                       </Stack>
@@ -340,7 +352,7 @@ const JourneyEdit = (props) => {
 export const getServerSideProps = async (ctx) => {
   const supabase = createServerSupabaseClient(ctx)
   let fetchedUsername = ''
-  const journeyid = ctx.query?.privateJourneyID
+  const journeyid = ctx.query?.journeyId
 
   if (journeyid == null) {
     return {

@@ -20,7 +20,7 @@ const Journey = (props) => {
     const fetchData = async () => {
       if (!router.isReady) return
       const { data: journey } = await supabase
-        .from('publicJourneys')
+        .from('journeys')
         .select()
         .eq('id', router.query.journeyId)
 

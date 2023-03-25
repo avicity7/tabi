@@ -26,8 +26,9 @@ const Home = (props) => {
     const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY)
     const fetchData = async () => {
       const { data: journeys } = await supabase
-        .from('publicJourneys')
+        .from('journeys')
         .select()
+        .eq('public', true)
 
       try {
         setData(journeys)
