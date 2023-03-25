@@ -5,18 +5,17 @@ import { ListDivider } from '@mui/joy'
 import { createClient } from '@supabase/supabase-js'
 
 const logout = async (e: React.MouseEvent<HTMLElement>) => {
-  const router = useRouter()
   const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL ?? 'error', process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? 'error')
   e.preventDefault()
   const { error } = await supabase.auth.signOut()
-  if (!error) {
-    router.push('/')
+  if (error) {
+    console.log(error)
   }
 }
 
 const NavbarAvatar = ({ username }) => {
   const router = useRouter()
-  console.log(username)
+
   return (
     <Menu as="div" className="relative inline-block text-left">
         <Menu.Button><Avatar name={username} size="sm" /></Menu.Button>
