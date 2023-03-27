@@ -10,11 +10,24 @@ import { Icon } from '@iconify-icon/react'
 import Navbar from '../components/navbar'
 import getUsername from '../utils/getUsername'
 import SearchInput from '../components/searchInput'
-import getPlaceIDDetails from '../utils/getPlaceIDDetails'
 
-const JourneyEdit = (props) => {
+const updateDestinations = async (userDestinations, journeyId, userId) => {
+  const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL ?? 'error', process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? 'error')
+
+  const { error } = await supabase
+    .from('journeys')
+    .update({ destinations: userDestinations })
+    .match({ id: journeyId, user_id: userId })
+
+  if (error) {
+    console.log(error)
+  }
+}
+
+const EditJourney = (props) => {
   const router = useRouter()
   const username = props.username
+  const userId = props.userId
   const [viewState, setViewState] = useState({
     latitude: 35.6812,
     longitude: 139.7671,
@@ -65,42 +78,30 @@ const JourneyEdit = (props) => {
         .from('journeys')
         .select()
         .eq('id', router.query.journeyId)
+        .single()
 
-      setServerDestinationData(data[0].destinations.days)
-      setServerJourneyName(data[0].journey_name)
-      setServerJourneyBody(data[0].journey_body)
+      setServerDestinationData(data.destinations)
+      setServerJourneyName(data.journey_name)
+      setServerJourneyBody(data.journey_body)
 
-      const getDetails = async () => {
-        const tempCompleteArray = []
-        for (let i = 0; i < data[0].destinations.days.length; i++) {
-          const tempDayArray = []
-          for (let x = 0; x < data[0].destinations.days[i]?.destinations.length; x++) {
-            const placeData = await getPlaceIDDetails(data[0].destinations.days[i]?.destinations[i])
-            tempDayArray.push(placeData)
-          }
-          tempCompleteArray.push({ destinations: tempDayArray })
-        }
-        setUserDestinationData(tempCompleteArray)
-        if (tempCompleteArray.length !== 0) {
+      if (userDestinationData.length === 0) {
+        setUserDestinationData(data.destinations)
+        setUserJourneyName(data.journey_name)
+        setUserJourneyBody(data.journey_body)
+        if (data.destinations[0].destinations.length !== 0) {
           setViewState({
-            latitude: tempCompleteArray[0].destinations[0].geometry.location.lat,
-            longitude: tempCompleteArray[0].destinations[0].geometry.location.lng,
+            latitude: data.destinations[0].destinations[0].geometry.location.lat,
+            longitude: data.destinations[0].destinations[0].geometry.location.lng,
             zoom: 14
           })
         }
-      }
-
-      if (userDestinationData.length === 0) {
-        getDetails()
-        setUserJourneyName(data[0].journey_name)
-        setUserJourneyBody(data[0].journey_body)
       }
     }
 
     if (serverDestinationData.length === 0) {
       fetchData()
     }
-  }, [router.query.privateJourneyID, router.isReady, userDestinationData.length, refresh, serverDestinationData.length, currentDay, userDestinationData])
+  }, [router.query.privateJourneyID, router.isReady, refresh, currentDay, userDestinationData])
 
   if (userDestinationData.length === 0) { // Return loading Spinner
     return (
@@ -322,8 +323,8 @@ const JourneyEdit = (props) => {
                             <button onClick={() => {
                               const temp = userDestinationData
                               temp[currentDay].destinations.push(searchInputData)
-                              console.log(searchInputData)
                               setUserDestinationData(temp)
+                              updateDestinations(temp, router.query.journeyId, userId)
                               setRefresh(!refresh)
                             }}>
                               <Text className="text-sm text-white font-regular text-left bg-tabiBlue hover:bg-tabiBlueDark px-4 py-1 rounded-full">Add Destination</Text>
@@ -333,6 +334,7 @@ const JourneyEdit = (props) => {
                             { userDestinationData[currentDay].destinations.includes(searchInputData) === true &&
                             <button onClick={() => {
                               userDestinationData[currentDay].destinations.splice(userDestinationData[currentDay].destinations.indexOf(searchInputData), 1)
+                              updateDestinations(userDestinationData, router.query.journeyId, userId)
                               setRefresh(!refresh)
                             }}>
                               <Text className="text-sm text-white font-regular text-left bg-red-600 hover:bg-red-700 px-4 py-1 rounded-full">Remove Destination</Text>
@@ -372,12 +374,14 @@ export const getServerSideProps = async (ctx) => {
   }
 
   const username = await fetchUsername()
+  const userId = session.user.id
 
   return {
     props: {
-      username
+      username,
+      userId
     }
   }
 }
 
-export default JourneyEdit
+export default EditJourney

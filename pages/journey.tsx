@@ -83,7 +83,7 @@ const Journey = (props) => {
                   <Text className="font-sm md:font-regular text-regular pt-2 justify-start display-linebreak px-5 md:px-0">{data.journey.journey_body.replace('<br/>', '\n')}</Text>
                   <Text className="font-bold text-lg pt-5 justify-start px-5 md:px-0 pb-2">Destinations in this Journey</Text>
                   <div className ="px-5 md:px-0 rounded-lg overflow-hidden">
-                      <MapPreview journeyDays={data.journey.destinations.days}/>
+                      <MapPreview journeyDays={data.journey.destinations}/>
                   </div>
                   <Text className="font-bold text-lg pt-5 justify-start px-5 md:px-0 py-2">Comments</Text>
                   <ul className="pb-20">
