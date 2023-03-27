@@ -19,7 +19,6 @@ const MapView = ({ viewState, setViewState, userDestinationData, currentDay, set
       mapStyle="mapbox://styles/avicity7/clewhy0yo000901rzkk9xx3bt"
       mapboxAccessToken={process.env.NEXT_PUBLIC_MAPBOX_KEY}
       attributionControl={false}
-      maxZoom={16}
       >
         {userDestinationData[currentDay].destinations.map((destination, index) => {
           return (
