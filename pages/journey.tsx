@@ -10,6 +10,7 @@ import getUsername from '../utils/getUsername'
 import Footer from '../components/footer'
 import MapPreview from '../components/mapPreview'
 import EditButton from '../components/editButton'
+import HeartButton from '../components/heartButton'
 
 const Journey = (props) => {
   const router = useRouter()
@@ -79,16 +80,17 @@ const Journey = (props) => {
                       <div>
                           <Image className="min-w-full max-h-[25vh]" objectFit="cover" overflow="hidden" borderRadius = "lg" src='https://www.timetravelturtle.com/wp-content/uploads/2018/11/Tokyo-2018-280_feat1.jpg' alt='Journey Image'/>
                       </div>
-                      { data.journey.user_id === userId &&
-                        <div className="absolute top-0 right-0 mx-5">
-                            <EditButton onClick={() => {
-                              router.push({
-                                pathname: '/editJourney',
-                                query: { journeyId: data.journey.id }
-                              })
-                            }}/>
-                        </div>
-                      }
+                      <div className="flex flex-row absolute top-0 right-0 mx-5">
+                        <HeartButton onClick={() => {}}/>
+                        { data.journey.user_id === userId &&
+                          <EditButton onClick={() => {
+                            router.push({
+                              pathname: '/editJourney',
+                              query: { journeyId: data.journey.id }
+                            })
+                          }}/>
+                        }
+                      </div>
                   </div>
                   <Text className="font-bold text-2xl px-5 md:px-0 ">{data.journey.journey_name}</Text>
                   <Text className="font-bold text-lg pt-5 px-5 md:px-0">About this Journey</Text>
@@ -141,6 +143,7 @@ const Journey = (props) => {
 export const getServerSideProps = async (ctx) => {
   const supabase = createServerSupabaseClient(ctx)
   let fetchedUsername = ''
+  let userId = ''
 
   const { data: { session } } = await supabase.auth.getSession()
 
@@ -154,7 +157,9 @@ export const getServerSideProps = async (ctx) => {
   }
 
   const username = await fetchUsername()
-  const userId = session.user.id
+  if (session !== null) {
+    userId = session.user.id
+  }
   return {
     props: {
       username,
