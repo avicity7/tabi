@@ -117,7 +117,7 @@ const JourneyDetails = (props) => {
                           <ArrowLeft color="black" size="18" className = "mx-auto" strokeWidth="5"/>
                       </button>
 
-                      <Text className="font-bold text-lg ml-3.5">Destinations in this Journey</Text>
+                      <Text className="font-bold text-lg ml-3.5">Destinations</Text>
                   </div>
 
                   {/* Day buttons */}

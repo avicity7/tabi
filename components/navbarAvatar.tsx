@@ -21,15 +21,19 @@ const NavbarAvatar = ({ username }) => {
         <Menu.Button><Avatar name={username} size="sm" /></Menu.Button>
         <Menu.Items className="absolute right-0 mt-2 origin-top-right rounded-md bg-white shadow-md">
             <Stack className="flex px-6">
-                <Menu.Item>
-                    <button className="font-medium text-sm font-DMSans w-max py-3" onClick={() => { router.push('/profile') }}>
-                        Account
-                    </button>
-                </Menu.Item>
+                {username !== '' &&
+                  <>
+                    <Menu.Item>
+                        <button className="font-medium text-sm font-DMSans w-max py-3" onClick={() => { router.push('/profile') }}>
+                            Account
+                        </button>
+                    </Menu.Item>
 
-                <Menu.Item>
-                    <ListDivider />
-                </Menu.Item>
+                    <Menu.Item>
+                        <ListDivider />
+                    </Menu.Item>
+                  </>
+                }
 
                 { username !== '' && username !== undefined &&
                   <Menu.Item>

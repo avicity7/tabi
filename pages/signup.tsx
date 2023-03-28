@@ -20,7 +20,7 @@ const Signup = () => {
         email: registerEmail,
         password: registerPassword
       })
-      if (error == null) {
+      if (!error) {
         router.replace('/')
       }
     } catch {

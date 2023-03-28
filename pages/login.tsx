@@ -74,7 +74,7 @@ const Login = () => {
 
                 <div className="flex items-center justify-center">
                     <div className="text-sm">
-                    <button onClick={() => { router.push('/signup') }}className="font-DMSans font-medium text-tabiBlue hover:text-tabiBlueDark">
+                    <button onClick={(e) => { e.preventDefault(); router.push('/signup') }}className="font-DMSans font-medium text-tabiBlue hover:text-tabiBlueDark">
                         Don&apos;t have an account yet?
                     </button>
                     </div>

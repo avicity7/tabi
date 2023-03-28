@@ -80,6 +80,7 @@ const EditJourney = (props) => {
         .eq('id', router.query.journeyId)
         .single()
 
+      console.log(data.destinations)
       setServerDestinationData(data.destinations)
       setServerJourneyName(data.journey_name)
       setServerJourneyBody(data.journey_body)
@@ -101,7 +102,7 @@ const EditJourney = (props) => {
     if (serverDestinationData.length === 0) {
       fetchData()
     }
-  }, [router.query.privateJourneyID, router.isReady, refresh, currentDay, userDestinationData])
+  }, [router.query.privateJourneyID, router.isReady, refresh, currentDay])
 
   if (userDestinationData.length === 0) { // Return loading Spinner
     return (
