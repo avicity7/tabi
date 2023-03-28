@@ -85,6 +85,17 @@ const Journey = (props) => {
                   <div className ="px-5 md:px-0 rounded-lg overflow-hidden">
                       <MapPreview journeyDays={data.journey.destinations}/>
                   </div>
+                  <button
+                    onClick={ () => {
+                      router.push({
+                        pathname: '/journeyDetails',
+                        query: { journeyId: data.journey.id }
+                      })
+                    }}
+                    className="flex justify-center pt-3"
+                  >
+                    <Text className="font-medium text-tabiBlue hover:text-tabiBlueDark text-sm ">See All Destinations</Text>
+                  </button>
                   <Text className="font-bold text-lg pt-5 justify-start px-5 md:px-0 py-2">Comments</Text>
                   <ul className="pb-20">
                       {data.comments.map((comment) => (
