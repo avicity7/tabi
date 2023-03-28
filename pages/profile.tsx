@@ -111,7 +111,7 @@ const Profile = (props) => {
                                     <button onClick={() => {
                                       router.push({
                                         pathname: '/journey',
-                                        query: { journey_id: privateJourney.id }
+                                        query: { journeyId: privateJourney.id }
                                       })
                                     }}>
                                         <Card borderRadius="lg" minW='xs' maxW='xs' className = "my-5 shadow-md" overflow="hidden">
@@ -145,12 +145,12 @@ const Profile = (props) => {
                     <div className="font-DMSans px-10 my-3">
                         <Text className="font-medium text-lg">Your Public Journeys</Text>
                         <ul>
-                            { publicJourneys.map((publicJourneys) => (
-                                <li key={publicJourneys.id}>
+                            { publicJourneys.map((publicJourney) => (
+                                <li key={publicJourney.id}>
                                     <button onClick={() => {
                                       router.push({
                                         pathname: '/journey',
-                                        query: { journeyId: publicJourneys.id }
+                                        query: { journeyId: publicJourney.id }
                                       })
                                     }}>
                                         <Card borderRadius="lg" minW='xs' maxW='xs' className = "my-5 shadow-md" overflow="hidden">
@@ -158,17 +158,17 @@ const Profile = (props) => {
                                         <CardBody>
                                             <Stack spacing='3'>
                                             <div className="flex flex-row justify-between">
-                                                <Text fontSize='2xl' className="font-bold text-left">{publicJourneys.journey_name}</Text>
+                                                <Text fontSize='2xl' className="font-bold text-left">{publicJourney.journey_name}</Text>
                                                 <div className="flex flex-row items-center">
                                                 <FavoriteBorderIcon fontSize="small" style={{ color: '#268DC7' }}/>
-                                                <Text fontSize='xl' className="font-bold text-left pl-1">{publicJourneys.journey_upvotes}</Text>
+                                                <Text fontSize='xl' className="font-bold text-left pl-1">{publicJourney.journey_upvotes}</Text>
                                                 </div>
                                             </div>
                                             <div className="flex flex-row items-center">
                                                 <Icon icon="charm:person" style={{ color: '#CBCBCB' }} />
-                                                <Text fontSize='sm' className="font-normal text-left pl-0.5 pt-0.3" style={{ color: '#CBCBCB' }}>{publicJourneys.author_username}</Text>
+                                                <Text fontSize='sm' className="font-normal text-left pl-0.5 pt-0.3" style={{ color: '#CBCBCB' }}>{publicJourney.author_username}</Text>
                                             </div>
-                                            <Text fontSize='md' className="font-regular text-left" color="black">{publicJourneys.journey_summary}</Text>
+                                            <Text fontSize='md' className="font-regular text-left" color="black">{publicJourney.journey_summary}</Text>
                                             </Stack>
                                         </CardBody>
 
