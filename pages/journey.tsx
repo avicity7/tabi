@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
-import { Stack, Image, Text, Skeleton, SkeletonText, Avatar } from '@chakra-ui/react'
+import { Stack, Image, Text, Skeleton, SkeletonText, Avatar, Input } from '@chakra-ui/react'
 import { createClient } from '@supabase/supabase-js'
 import { createServerSupabaseClient } from '@supabase/auth-helpers-nextjs'
 
@@ -12,15 +12,28 @@ import MapPreview from '../components/mapPreview'
 import EditButton from '../components/editButton'
 import HeartButton from '../components/heartButton'
 
+const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL ?? 'error', process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? 'error')
+
+const createComment = async (commentBody, username, journeyId) => {
+  const { error } = await supabase
+    .from('comments')
+    .insert({ comment_body: commentBody, journey_id: journeyId, author_username: username })
+  if (error) {
+    console.log(error)
+  }
+}
+
 const Journey = (props) => {
   const router = useRouter()
   const username = props.username
   const userId = props.userId
   const [data, setData] = useState({ journey: '' as any, comments: '' as any })
+  const [comment, setComment] = useState('')
+  const [refresh, setRefresh] = useState(false)
 
   useEffect(() => {
     const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY)
-    const fetchData = async () => {
+    const fetchJourney = async () => {
       if (!router.isReady) return
       const { data: journey } = await supabase
         .from('journeys')
@@ -35,8 +48,9 @@ const Journey = (props) => {
 
       setData({ journey: journey[0], comments })
     }
-    fetchData()
-  }, [router.query.journey_id, router.isReady])
+
+    fetchJourney()
+  }, [router.query.journey_id, router.isReady, refresh])
 
   if (data.journey === '' || data.comments === '') {
     return (
@@ -116,21 +130,30 @@ const Journey = (props) => {
                     <Text className="font-medium text-tabiBlue hover:text-tabiBlueDark text-sm ">See All Destinations</Text>
                   </button>
                   <Text className="font-bold text-lg pt-5 justify-start px-5 md:px-0 py-2">Comments</Text>
-                  <ul className="pb-20">
+                  <ul className="pb-10">
                       {data.comments.map((comment) => (
                           <li key="{comment}">
-                              <div className="flex items-center font-DMSans px-5 md:px-0">
+                              <div className="flex items-center font-DMSans px-5 md:px-0 mb-2">
                                   <div className='mr-2 mb-1'>
-                                      <Avatar name = {comment.author_id} size = "xs" />
+                                      <Avatar name = {comment.author_username} size = "xs" />
                                   </div>
                                   <div>
-                                      <Text className='font-semibold text-sm ml-1 mb-0.5'>{comment.author_id}</Text>
+                                      <Text className='font-semibold text-sm ml-1 mb-0.5'>{comment.author_username}</Text>
                                       <Text className="ml-1">{comment.comment_body}</Text>
                                   </div>
                               </div>
                           </li>
                       ))}
                   </ul>
+                  <div className="flex flex-row pb-20">
+                   <Input placeholder="Enter a comment" onChange={(e) => { setComment(e.target.value) }}/>
+                   <button onClick={ () => {
+                     createComment(comment, username, data.journey.id)
+                     setRefresh(!refresh)
+                   }}>
+                    <Text className="bg-tabiBlue hover:bg-tabiBlueDark rounded-full mx-4 px-5 py-0.5 text-white text-md font-medium">Post</Text>
+                   </button>
+                  </div>
               </Stack>
           </div>
 

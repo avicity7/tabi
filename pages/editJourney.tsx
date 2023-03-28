@@ -166,7 +166,7 @@ const EditJourney = (props) => {
           <div className="grid grid-cols-4 font-DMSans">
               <div className="col-span-2 ml-4 mt-4 scrollbar mr-0">
                   <div className="flex flex-row items-center">
-                      <button className="my-5" onClick={() => { router.push('/') }}>
+                      <button className="my-5" onClick={() => { router.back() }}>
                           <ArrowLeft color="black" size="18" className = "mx-auto" strokeWidth="5"/>
                       </button>
 
