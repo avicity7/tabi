@@ -1,6 +1,6 @@
 import { useEffect, useState, useMemo } from 'react'
 import { useRouter } from 'next/router'
-import { Input, Stack, Spinner, Text, Textarea, Card, CardBody, Image } from '@chakra-ui/react'
+import { Input, Stack, Spinner, Text, Textarea, Card, CardBody, Image, Radio, RadioGroup } from '@chakra-ui/react'
 import dynamic from 'next/dynamic'
 import { createServerSupabaseClient } from '@supabase/auth-helpers-nextjs'
 import { ArrowLeft } from 'phosphor-react'
@@ -11,12 +11,23 @@ import Navbar from '../components/navbar'
 import getUsername from '../utils/getUsername'
 import SearchInput from '../components/searchInput'
 
-const updateDestinations = async (userDestinations, journeyId, userId) => {
-  const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL ?? 'error', process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? 'error')
+const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL ?? 'error', process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? 'error')
 
+const updateDestinations = async (userDestinations, journeyId, userId) => {
   const { error } = await supabase
     .from('journeys')
     .update({ destinations: userDestinations })
+    .match({ id: journeyId, user_id: userId })
+
+  if (error) {
+    console.log(error)
+  }
+}
+
+const updateVisibility = async (isPublic, journeyId, userId) => {
+  const { error } = await supabase
+    .from('journeys')
+    .update({ public: isPublic === 'public' })
     .match({ id: journeyId, user_id: userId })
 
   if (error) {
@@ -40,6 +51,8 @@ const EditJourney = (props) => {
   const [userJourneyName, setUserJourneyName] = useState('')
   const [serverJourneyBody, setServerJourneyBody] = useState('')
   const [userJourneyBody, setUserJourneyBody] = useState('')
+  const [isPublic, setPublic] = useState('')
+  const [journeyId, setJourneyId] = useState()
 
   const [currentDay, setCurrentDay] = useState(0)
 
@@ -85,6 +98,8 @@ const EditJourney = (props) => {
       setServerJourneyName(data.journey_name)
       setServerJourneyBody(data.journey_body)
 
+      setPublic(data.public === true ? 'public' : 'private')
+
       if (userDestinationData.length === 0) {
         setUserDestinationData(data.destinations)
         setUserJourneyName(data.journey_name)
@@ -96,13 +111,15 @@ const EditJourney = (props) => {
             zoom: 14
           })
         }
+        setJourneyId(data.id)
       }
     }
 
     if (serverDestinationData.length === 0) {
       fetchData()
     }
-  }, [router.query.privateJourneyID, router.isReady, refresh, currentDay])
+    updateVisibility(isPublic, journeyId, userId)
+  }, [router.query.privateJourneyID, router.isReady, refresh, currentDay, isPublic])
 
   if (userDestinationData.length === 0) { // Return loading Spinner
     return (
@@ -183,6 +200,15 @@ const EditJourney = (props) => {
                           }
                       </div>
                   }
+                  <Text className="font-regular text-md px-8 mb-2">Visibility</Text>
+                  <div className="px-8 pb-8">
+                    <RadioGroup onChange={setPublic} value={isPublic}>
+                      <Stack className="text-sm font-medium">
+                        <Radio borderWidth="4px" _checked={{ bg: 'white', color: 'white', borderColor: '#268DC7' }} value={'public'}>Public</Radio>
+                        <Radio borderWidth="4px" _checked={{ bg: 'white', color: 'white', borderColor: '#268DC7' }} value={'private'}>Private</Radio>
+                      </Stack>
+                    </RadioGroup>
+                  </div>
                   <div className="ml-4 mb-4 mt-6">
                       <Text className="font-bold text-lg ml-3.5">Destinations</Text>
                   </div>
