@@ -253,16 +253,6 @@ const JourneyDetails = (props) => {
                               <Text className="text-sm text-white font-regular text-left bg-tabiBlue hover:bg-tabiBlueDark px-4 py-1 rounded-full">Add Destination</Text>
                             </button>
                             }
-
-                            { serverDestinationData[currentDay].destinations.includes(searchInputData) === true &&
-                            <button onClick={() => {
-                              serverDestinationData[currentDay].destinations.splice(serverDestinationData[currentDay].destinations.indexOf(searchInputData), 1)
-                              updateDestinations(serverDestinationData, router.query.journeyId, userId)
-                              setRefresh(!refresh)
-                            }}>
-                              <Text className="text-sm text-white font-regular text-left bg-red-600 hover:bg-red-700 px-4 py-1 rounded-full">Remove Destination</Text>
-                            </button>
-                            }
                           </div>
                         </div>
                       </Stack>
