@@ -35,6 +35,28 @@ const updateVisibility = async (isPublic, journeyId, userId) => {
   }
 }
 
+const updateJourneyName = async (journeyName, journeyId, userId) => {
+  const { error } = await supabase
+    .from('journeys')
+    .update({ journey_name: journeyName })
+    .match({ id: journeyId, user_id: userId })
+
+  if (error) {
+    console.log(error)
+  }
+}
+
+const updateJourneyBody = async (journeyBody, journeyId, userId) => {
+  const { error } = await supabase
+    .from('journeys')
+    .update({ journey_body: journeyBody })
+    .match({ id: journeyId, user_id: userId })
+
+  if (error) {
+    console.log(error)
+  }
+}
+
 const EditJourney = (props) => {
   const router = useRouter()
   const username = props.username
@@ -169,7 +191,7 @@ const EditJourney = (props) => {
                             </button>
                           }
                           { userJourneyName !== serverJourneyName &&
-                            <button onClick={() => { setEditingJourneyName(!editingJourneyName) }}>
+                            <button onClick={() => { updateJourneyName(userJourneyName, journeyId, userId); setEditingJourneyName(!editingJourneyName) }}>
                               <Text className="font-medium text-sm text-tabiBlue">Save</Text>
                             </button>
                           }
@@ -194,7 +216,7 @@ const EditJourney = (props) => {
                             </button>
                           }
                           { userJourneyBody !== serverJourneyBody &&
-                            <button onClick={() => { setEditingJourneyBody(!editingJourneyBody) }}>
+                            <button onClick={() => { updateJourneyBody(userJourneyBody, journeyId, userId); setEditingJourneyBody(!editingJourneyBody) }}>
                               <Text className="font-medium text-sm text-tabiBlue">Save</Text>
                             </button>
                           }
@@ -310,7 +332,7 @@ const EditJourney = (props) => {
                               <Text className="flex text-sm text-gray-400 font-medium justify-center mr-4 py-8">No Destinations in this Day.</Text>
                           }
 
-                          <div className="mt-8 min-w-[70%]">
+                          <div className="mt-8 min-w-[70%] pb-16">
                               <SearchInput viewState={viewState} setViewState={setViewState} setSearchInputData={setSearchInputData}/>
                           </div>
                       </Stack>

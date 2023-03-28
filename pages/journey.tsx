@@ -43,13 +43,13 @@ const Journey = (props) => {
           <Navbar activePage={'index'} username={username}/>
 
           <div className="grid place-items-center font-DMSans">
-              <Stack className="flex max-w-6xl">
+              <Stack className="w-5/6">
                   <div className = "relative mb-5">
                       <div className="absolute top-0 mx-5">
                           <BackButton onClick={() => { router.push('/') }}/>
                       </div>
                       <div>
-                          <Skeleton height="25vh" width="70rem"/>
+                          <Skeleton height="25vh" width="80rem"/>
                       </div>
                   </div>
                   <Skeleton height='40px'/>
@@ -71,7 +71,7 @@ const Journey = (props) => {
           <Navbar activePage={'index'} username={username}/>
 
           <div className="grid place-items-center font-DMSans">
-              <Stack className="flex w-screen px-[10vw]">
+              <Stack className="w-5/6">
                   <div className = "relative mb-5">
                       <div className="absolute top-0 mx-5">
                           <BackButton onClick={() => { router.push('/') }}/>
