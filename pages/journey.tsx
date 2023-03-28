@@ -96,7 +96,7 @@ const Journey = (props) => {
                     <Text className="font-sm font-regular text-gray-400 pt-2 justify-start display-linebreak px-5 md:px-0">The author of this Journey has yet to add a description.</Text>
                   }
                   { data.journey.journey_body !== null &&
-                    <Text className="font-sm md:text-regular text-regular pt-2 justify-start display-linebreak px-5 md:px-0">{data.journey.journey_body.replace('<br/>', '\n')}</Text>
+                    <Text className="font-sm font-regular pt-2 justify-start display-linebreak px-5 md:px-0">{data.journey.journey_body.replace('<br/>', '\n')}</Text>
                   }
                   <Text className="font-bold text-lg pt-5 justify-start px-5 md:px-0 pb-2">Destinations in this Journey</Text>
                   <div className ="px-5 md:px-0 rounded-lg overflow-hidden">
