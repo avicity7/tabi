@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useRouter } from 'next/router'
 import { useUser } from '@supabase/auth-helpers-react'
 import { createClient } from '@supabase/supabase-js'
+import { Spinner } from '@chakra-ui/react'
 
 import getUsername from '../utils/getUsername'
 
@@ -27,6 +28,7 @@ const createJourney = async (user, router, journeyName) => {
 const Creation = () => {
   const router = useRouter()
   const [journeyName, setJourneyName] = useState('')
+  const [creating, setCreating] = useState(false)
   const user = useUser()
 
   return (
@@ -56,13 +58,18 @@ const Creation = () => {
             </div>
 
             <div>
-                <button
-                onClick={async () => { await createJourney(user, router, journeyName) }}
-                type="submit"
-                className="group relative flex w-full justify-center rounded-md border border-transparent bg-tabiBlue py-2 px-4 text-sm font-DMSans font-medium text-white hover:bg-tabiBlueDark focus:outline-none focus:ring-2 focus:ring-tabiBlue focus:ring-offset-2"
-                >
-                Create Journey
-                </button>
+                {!creating &&
+                  <button
+                  onClick={async () => { setCreating(true); await createJourney(user, router, journeyName) }}
+                  type="submit"
+                  className="group relative flex w-full justify-center rounded-md border border-transparent bg-tabiBlue py-2 px-4 text-sm font-DMSans font-medium text-white hover:bg-tabiBlueDark focus:outline-none focus:ring-2 focus:ring-tabiBlue focus:ring-offset-2"
+                  >
+                  Create Journey
+                  </button>
+                }
+                {creating &&
+                  <Spinner thickness='4px' speed='0.65s' emptyColor='gray.200' color='#268DC7' size='xl'/>
+                }
             </div>
 
         </div>

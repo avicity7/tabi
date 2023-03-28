@@ -10,6 +10,7 @@ const Signup = () => {
 
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [newUsername, setUsername] = useState('')
 
   const register = async (e: React.MouseEvent<HTMLElement>) => {
     e.preventDefault()
@@ -21,7 +22,17 @@ const Signup = () => {
         password: registerPassword
       })
       if (!error) {
-        router.replace('/')
+        const userId = await supabase.auth.getSession()
+        const { error: usernameInsertError } = await supabase
+          .from('users')
+          .insert({ username: newUsername, user_id: userId.data.session.user.id })
+        if (!usernameInsertError) {
+          router.replace('/')
+        } else {
+          console.log(error)
+        }
+      } else {
+        console.log(error)
       }
     } catch {
       console.log('Error')
@@ -43,34 +54,48 @@ const Signup = () => {
             <input type="hidden" name="remember" defaultValue="true" />
             <div className="-space-y-px rounded-md">
                 <div className = "font-DMSans">
-                <label htmlFor="email-address" className="sr-only">
-                    Email address
-                </label>
-                <input
-                    onChange={(e) => { setEmail(e.target.value) }}
-                    id="email-address"
-                    name="email"
-                    type="email"
-                    autoComplete="email"
-                    required
-                    className="relative block w-full appearance-none rounded-none rounded-t-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-tabiBlue focus:outline-none focus:ring-tabiBlue sm:text-sm"
-                    placeholder="Email address"
-                />
+                  <label htmlFor="email-address" className="sr-only">
+                      Username
+                  </label>
+                  <input
+                      onChange={(e) => { setUsername(e.target.value) }}
+                      id="username"
+                      name="username"
+                      type="username"
+                      required
+                      className="relative block w-full appearance-none rounded-none rounded-t-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-tabiBlue focus:outline-none focus:ring-tabiBlue sm:text-sm"
+                      placeholder="Username"
+                  />
                 </div>
                 <div className = "font-DMSans">
-                <label htmlFor="password" className="sr-only">
-                    Password
-                </label>
-                <input
-                    onChange={(e) => { setPassword(e.target.value) }}
-                    id="password"
-                    name="password"
-                    type="password"
-                    autoComplete="current-password"
-                    required
-                    className="relative block w-full appearance-none rounded-none rounded-b-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-tabiBlue focus:outline-none focus:ring-tabiBlue sm:text-sm"
-                    placeholder="Password"
-                />
+                  <label htmlFor="email-address" className="sr-only">
+                      Email address
+                  </label>
+                  <input
+                      onChange={(e) => { setEmail(e.target.value) }}
+                      id="email-address"
+                      name="email"
+                      type="email"
+                      autoComplete="email"
+                      required
+                      className="relative block w-full appearance-none rounded-none rounded-t-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-tabiBlue focus:outline-none focus:ring-tabiBlue sm:text-sm"
+                      placeholder="Email address"
+                  />
+                </div>
+                <div className = "font-DMSans">
+                  <label htmlFor="password" className="sr-only">
+                      Password
+                  </label>
+                  <input
+                      onChange={(e) => { setPassword(e.target.value) }}
+                      id="password"
+                      name="password"
+                      type="password"
+                      autoComplete="current-password"
+                      required
+                      className="relative block w-full appearance-none rounded-none rounded-b-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-tabiBlue focus:outline-none focus:ring-tabiBlue sm:text-sm"
+                      placeholder="Password"
+                  />
                 </div>
             </div>
 

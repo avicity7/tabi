@@ -9,10 +9,12 @@ import BackButton from '../components/backButton'
 import getUsername from '../utils/getUsername'
 import Footer from '../components/footer'
 import MapPreview from '../components/mapPreview'
+import EditButton from '../components/editButton'
 
 const Journey = (props) => {
   const router = useRouter()
   const username = props.username
+  const userId = props.userId
   const [data, setData] = useState({ journey: '' as any, comments: '' as any })
 
   useEffect(() => {
@@ -77,6 +79,16 @@ const Journey = (props) => {
                       <div>
                           <Image className="min-w-full max-h-[25vh]" objectFit="cover" overflow="hidden" borderRadius = "lg" src='https://www.timetravelturtle.com/wp-content/uploads/2018/11/Tokyo-2018-280_feat1.jpg' alt='Journey Image'/>
                       </div>
+                      { data.journey.user_id === userId &&
+                        <div className="absolute top-0 right-0 mx-5">
+                            <EditButton onClick={() => {
+                              router.push({
+                                pathname: '/editJourney',
+                                query: { journeyId: data.journey.id }
+                              })
+                            }}/>
+                        </div>
+                      }
                   </div>
                   <Text className="font-bold text-2xl px-5 md:px-0 ">{data.journey.journey_name}</Text>
                   <Text className="font-bold text-lg pt-5 px-5 md:px-0">About this Journey</Text>
@@ -142,10 +154,11 @@ export const getServerSideProps = async (ctx) => {
   }
 
   const username = await fetchUsername()
-
+  const userId = session.user.id
   return {
     props: {
-      username
+      username,
+      userId
     }
   }
 }
