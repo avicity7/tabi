@@ -38,10 +38,10 @@ const JourneyDetails = (props) => {
   const [currentDay, setCurrentDay] = useState(0)
 
   const [refresh, setRefresh] = useState(false)
-  const [searchInputData, setSearchInputData] = useState({ name: undefined, editorial_summary: { overview: undefined }, website: undefined, icon: undefined })
+  const [searchInputData, setSearchInputData] = useState({ name: undefined, editorial_summary: { overview: undefined }, website: undefined, icon: undefined, notes: undefined })
 
   const resetMapPopup = () => {
-    setSearchInputData({ name: undefined, editorial_summary: { overview: undefined }, website: undefined, icon: undefined })
+    setSearchInputData({ name: undefined, editorial_summary: { overview: undefined }, website: undefined, icon: undefined, notes: undefined })
   }
 
   const LargeMapView = useMemo(() => dynamic(
@@ -113,7 +113,7 @@ const JourneyDetails = (props) => {
           <div className="grid grid-cols-4 font-DMSans">
               <div className="col-span-2 ml-4 mt-4 scrollbar mr-0">
                   <div className="flex flex-row items-center">
-                      <button className="my-5" onClick={() => { router.push('/') }}>
+                      <button className="my-5" onClick={() => { router.back() }}>
                           <ArrowLeft color="black" size="18" className = "mx-auto" strokeWidth="5"/>
                       </button>
 
@@ -196,6 +196,12 @@ const JourneyDetails = (props) => {
                                                       { destination.editorial_summary !== undefined &&
                                                         <Text className="text-sm font-regular text-left">{destination.editorial_summary.overview}</Text>
                                                       }
+                                                      { destination.notes !== undefined &&
+                                                        <Stack>
+                                                          <Text className="text-sm font-medium text-left text-tabiBlue mt-4">Notes</Text>
+                                                          <Text className="text-sm font-regular text-left">{destination.notes}</Text>
+                                                        </Stack>
+                                                      }
                                                   </Stack>
                                               </div>
                                           </CardBody>
@@ -216,7 +222,7 @@ const JourneyDetails = (props) => {
               {/* Map Destination Popup */}
               <div className="fixed top-13 right-0 bg-white col-span-2 max-w-[50vw] overflow-hidden">
                   <LargeMapView viewState={viewState} setViewState={setViewState} userDestinationData={serverDestinationData} currentDay={currentDay} setSearchInputData={setSearchInputData} resetMapPopup={resetMapPopup} searchInputData={searchInputData} />
-                  { Object.keys(searchInputData).length !== 4 &&
+                  { Object.keys(searchInputData).length !== 5 &&
                       <Stack className="absolute inset-x-10 bottom-5 right-10 rounded-md bg-white shadow-md py-5 px-5 shadow-xl">
                         <div className="flex justify-between">
                           <div className="flex items-center">
@@ -231,6 +237,12 @@ const JourneyDetails = (props) => {
                         </div>
                         { searchInputData.editorial_summary !== undefined &&
                           <Text className="text-sm font-regular text-left">{searchInputData.editorial_summary.overview}</Text>
+                        }
+                        { searchInputData.notes !== undefined &&
+                          <Stack className="pb-2">
+                            <Text className="text-sm font-medium text-left text-tabiBlue mt-4">Notes</Text>
+                            <Text className="text-sm font-regular text-left">{searchInputData.notes}</Text>
+                          </Stack>
                         }
                         <div className="flex flex-row items-center min-w-full pt-2">
                           { searchInputData.website !== undefined &&

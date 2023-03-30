@@ -75,17 +75,19 @@ const EditJourney = (props) => {
   const [userJourneyBody, setUserJourneyBody] = useState('')
   const [isPublic, setPublic] = useState('')
   const [journeyId, setJourneyId] = useState()
+  const [notes, setNotes] = useState('')
 
   const [currentDay, setCurrentDay] = useState(0)
 
   const [refresh, setRefresh] = useState(false)
   const [editingJourneyName, setEditingJourneyName] = useState(false)
   const [editingJourneyBody, setEditingJourneyBody] = useState(false)
+  const [addingNotes, setAddingNotes] = useState(false)
 
-  const [searchInputData, setSearchInputData] = useState({ name: undefined, editorial_summary: { overview: undefined }, website: undefined, icon: undefined })
+  const [searchInputData, setSearchInputData] = useState({ name: undefined, editorial_summary: { overview: undefined }, website: undefined, icon: undefined, notes: undefined })
 
   const resetMapPopup = () => {
-    setSearchInputData({ name: undefined, editorial_summary: { overview: undefined }, website: undefined, icon: undefined })
+    setSearchInputData({ name: undefined, editorial_summary: { overview: undefined }, website: undefined, icon: undefined, notes: undefined })
   }
 
   const LargeMapView = useMemo(() => dynamic(
@@ -319,6 +321,12 @@ const EditJourney = (props) => {
                                                       { destination.editorial_summary !== undefined &&
                                                         <Text className="text-sm font-regular text-left">{destination.editorial_summary.overview}</Text>
                                                       }
+                                                      { destination.notes !== undefined &&
+                                                        <Stack>
+                                                          <Text className="text-sm font-medium text-left text-tabiBlue mt-4">Notes</Text>
+                                                          <Text className="text-sm font-regular text-left">{destination.notes}</Text>
+                                                        </Stack>
+                                                      }
                                                   </Stack>
                                               </div>
                                           </CardBody>
@@ -342,7 +350,7 @@ const EditJourney = (props) => {
               {/* Map Destination Popup */}
               <div className="fixed top-13 right-0 bg-white col-span-2 max-w-[50vw] overflow-hidden">
                   <LargeMapView viewState={viewState} setViewState={setViewState} userDestinationData={userDestinationData} currentDay={currentDay} setSearchInputData={setSearchInputData} resetMapPopup={resetMapPopup} searchInputData={searchInputData} />
-                  { Object.keys(searchInputData).length !== 4 &&
+                  { Object.keys(searchInputData).length !== 5 &&
                       <Stack className="absolute inset-x-10 bottom-5 right-10 rounded-md bg-white shadow-md py-5 px-5 shadow-xl">
                         <div className="flex justify-between">
                           <div className="flex items-center">
@@ -358,7 +366,50 @@ const EditJourney = (props) => {
                         { searchInputData.editorial_summary !== undefined &&
                           <Text className="text-sm font-regular text-left">{searchInputData.editorial_summary.overview}</Text>
                         }
+                        { searchInputData.notes !== undefined && !addingNotes &&
+                          <Stack className="pb-2">
+                            <Text className="text-sm font-medium text-left text-tabiBlue mt-4">Notes</Text>
+                            <Text className="text-sm font-regular text-left">{searchInputData.notes}</Text>
+                          </Stack>
+                        }
+                        {addingNotes &&
+                          <Stack>
+                              <button className="flex flex-row items-center" onClick={ () => {
+                                setAddingNotes(false)
+                              }}>
+                                <Icon icon="ic:round-close" className='text-[#CBCBCB] hover:text-gray-400'/>
+                              </button>
+                              <Textarea value={notes} placeholder="Enter notes" className="text-sm" onChange={ (e) => { setNotes(e.target.value) }}/>
+                              <button className='flex justify-start w-fit' onClick={ () => {
+                                setAddingNotes(false)
+                                const index = userDestinationData[currentDay].destinations.indexOf(searchInputData)
+                                if (notes !== '') {
+                                  userDestinationData[currentDay].destinations[index].notes = notes
+                                } else {
+                                  userDestinationData[currentDay].destinations[index].notes = undefined
+                                }
+                                updateDestinations(userDestinationData, router.query.journeyId, userId)
+                                setRefresh(!refresh)
+                              }}>
+                                <Text className="text-sm text-tabiBlue hover:text-tabiBlueDark">Save</Text>
+                              </button>
+                          </Stack>
+                        }
                         <div className="flex flex-row items-center min-w-full pt-2">
+                          <button onClick={ () => { setNotes(searchInputData.notes); setAddingNotes(true) }}>
+                              {searchInputData.notes === undefined &&
+                                 <div className="flex items-center text-tabiBlue hover:text-tabiBlueDark mr-4">
+                                  <Icon icon="mi:add" />
+                                  <Text className="ml-1 text-sm font-medium text-left">Add Notes</Text>
+                                </div>
+                              }
+                              {searchInputData.notes !== undefined &&
+                                <div className="flex items-center text-tabiBlue hover:text-tabiBlueDark mr-4">
+                                  <Icon icon="iconoir:edit-pencil" />
+                                  <Text className="ml-1 text-sm font-medium text-left">Edit Notes</Text>
+                                </div>
+                              }
+                          </button>
                           { searchInputData.website !== undefined &&
                             <a href={searchInputData.website} rel="noopener noreferrer" target="_blank">
                               <div className="flex items-center text-tabiBlue hover:text-tabiBlueDark">
