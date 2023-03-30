@@ -1,14 +1,15 @@
 import { useEffect, useState, useMemo } from 'react'
 import { useRouter } from 'next/router'
-import { Stack, Spinner, Text, Card, CardBody, Image } from '@chakra-ui/react'
+import { Stack, Spinner, Text } from '@chakra-ui/react'
 import dynamic from 'next/dynamic'
 import { createServerSupabaseClient } from '@supabase/auth-helpers-nextjs'
 import { ArrowLeft } from 'phosphor-react'
 import { createClient } from '@supabase/supabase-js'
-import { Icon } from '@iconify-icon/react'
 
 import Navbar from '../components/navbar'
 import getUsername from '../utils/getUsername'
+import DestinationCard from '../components/destinationCard'
+import MapPopup from '../components/mapPopup'
 
 const updateDestinations = async (userDestinations, journeyId, userId) => {
   const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL ?? 'error', process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? 'error')
@@ -38,10 +39,10 @@ const JourneyDetails = (props) => {
   const [currentDay, setCurrentDay] = useState(0)
 
   const [refresh, setRefresh] = useState(false)
-  const [searchInputData, setSearchInputData] = useState({ name: undefined, editorial_summary: { overview: undefined }, website: undefined, icon: undefined, notes: undefined })
+  const [searchInputData, setSearchInputData] = useState({ name: undefined, editorial_summary: { overview: undefined }, website: undefined, icon: undefined, notes: undefined, budget: undefined })
 
   const resetMapPopup = () => {
-    setSearchInputData({ name: undefined, editorial_summary: { overview: undefined }, website: undefined, icon: undefined, notes: undefined })
+    setSearchInputData({ name: undefined, editorial_summary: { overview: undefined }, website: undefined, icon: undefined, notes: undefined, budget: undefined })
   }
 
   const LargeMapView = useMemo(() => dynamic(
@@ -183,29 +184,7 @@ const JourneyDetails = (props) => {
                                     })
                                     setSearchInputData(destination)
                                   }}>
-                                      <Card className="my-2" minW="lg" maxW="lg">
-                                          <CardBody>
-                                              <div className="flex flex-row items-center px-1">
-                                                  <Text className="text-tabiBlue text-md text-center font-bold mr-5">{parseInt(index) + 1}</Text>
-
-                                                  <Stack>
-                                                      <div className="flex items-center">
-                                                        <Text className="text-md font-medium text-left mr-2">{destination.name}</Text>
-                                                        <Image src={destination.icon} alt="icon" boxSize='12px'></Image>
-                                                      </div>
-                                                      { destination.editorial_summary !== undefined &&
-                                                        <Text className="text-sm font-regular text-left">{destination.editorial_summary.overview}</Text>
-                                                      }
-                                                      { destination.notes !== undefined &&
-                                                        <Stack>
-                                                          <Text className="text-sm font-medium text-left text-tabiBlue mt-4">Notes</Text>
-                                                          <Text className="text-sm font-regular text-left">{destination.notes}</Text>
-                                                        </Stack>
-                                                      }
-                                                  </Stack>
-                                              </div>
-                                          </CardBody>
-                                      </Card>
+                                    <DestinationCard destination={destination} index={index} />
                                   </button>
                               </li>
                           ))}
@@ -222,53 +201,7 @@ const JourneyDetails = (props) => {
               {/* Map Destination Popup */}
               <div className="fixed top-13 right-0 bg-white col-span-2 max-w-[50vw] overflow-hidden">
                   <LargeMapView viewState={viewState} setViewState={setViewState} userDestinationData={serverDestinationData} currentDay={currentDay} setSearchInputData={setSearchInputData} resetMapPopup={resetMapPopup} searchInputData={searchInputData} />
-                  { Object.keys(searchInputData).length !== 5 &&
-                      <Stack className="absolute inset-x-10 bottom-5 right-10 rounded-md bg-white shadow-md py-5 px-5 shadow-xl">
-                        <div className="flex justify-between">
-                          <div className="flex items-center">
-                            <Text className="font-medium text-left mr-2">{searchInputData.name}</Text>
-                            { searchInputData.icon !== undefined &&
-                              <Image src={searchInputData.icon} alt="icon" boxSize='12px'></Image>
-                            }
-                          </div>
-                          <button onClick={resetMapPopup}>
-                            <Icon icon="ic:round-close"/>
-                          </button>
-                        </div>
-                        { searchInputData.editorial_summary !== undefined &&
-                          <Text className="text-sm font-regular text-left">{searchInputData.editorial_summary.overview}</Text>
-                        }
-                        { searchInputData.notes !== undefined &&
-                          <Stack className="pb-2">
-                            <Text className="text-sm font-medium text-left text-tabiBlue mt-4">Notes</Text>
-                            <Text className="text-sm font-regular text-left">{searchInputData.notes}</Text>
-                          </Stack>
-                        }
-                        <div className="flex flex-row items-center min-w-full pt-2">
-                          { searchInputData.website !== undefined &&
-                            <a href={searchInputData.website} rel="noopener noreferrer" target="_blank">
-                              <div className="flex items-center text-tabiBlue hover:text-tabiBlueDark">
-                                <Icon icon="material-symbols:web-asset" />
-                                <Text className="ml-1 text-sm font-medium text-left">Website</Text>
-                              </div>
-                            </a>
-                          }
-                          <div className="flex grow justify-end">
-                            { serverDestinationData[currentDay].destinations.includes(searchInputData) === false &&
-                            <button onClick={() => {
-                              const temp = serverDestinationData
-                              temp[currentDay].destinations.push(searchInputData)
-                              setServerDestinationData(temp)
-                              updateDestinations(temp, router.query.journeyId, userId)
-                              setRefresh(!refresh)
-                            }}>
-                              <Text className="text-sm text-white font-regular text-left bg-tabiBlue hover:bg-tabiBlueDark px-4 py-1 rounded-full">Add Destination</Text>
-                            </button>
-                            }
-                          </div>
-                        </div>
-                      </Stack>
-                  }
+                  <MapPopup userId={userId} router={router} searchInputData={searchInputData} resetMapPopup={resetMapPopup} userDestinationData={null} setUserDestinationData={null} updateDestinations={updateDestinations} refresh={refresh} setRefresh={setRefresh} currentDay={currentDay}/>
               </div>
           </div>
       </>
