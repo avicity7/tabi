@@ -34,6 +34,7 @@ module.exports = {
     '@typescript-eslint/no-floating-promises': ['off'],
     '@typescript-eslint/strict-null-chekcs': 'off',
     '@typescript-eslint/strict-boolean-expressions': 0,
-    '@typescript-eslint/prefer-nullish-coalescing': 'off'
+    '@typescript-eslint/prefer-nullish-coalescing': 'off',
+    '@typescript-eslint/prefer-optional-chain': 'off'
   }
 }
