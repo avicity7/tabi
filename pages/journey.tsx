@@ -87,7 +87,7 @@ const Journey = (props) => {
           <Navbar activePage={'index'} username={username}/>
 
           <div className="grid place-items-center font-DMSans">
-              <Stack className="w-5/6">
+              <Stack className="w-full lg:w-5/6">
                   <div className = "relative mb-5">
                       <div className="absolute top-0 mx-5">
                           <BackButton onClick={() => { router.push('/') }}/>

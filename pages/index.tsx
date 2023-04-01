@@ -65,7 +65,7 @@ const Home = (props) => {
             <li key={journey.id}>
                 <div className="grid place-items-center font-DMSans">
                   <button onClick={() => { pushToJourney(journey.id) }}>
-                    <Card minW={{ base: '75vw', lg: 'md' }} maxW={{ base: '75vw', lg: 'md' }} className = "my-5 mx-5 shadow-none" overflow="hidden" variant="unstyled">
+                    <Card minW={{ base: '85vw', lg: 'md' }} maxW={{ base: '85vw', lg: 'md' }} className = "my-5 mx-5 shadow-none" overflow="hidden" variant="unstyled">
                       {journey.destinations[0].destinations[1] === undefined &&
                         <Image className="rounded-xl" minH="250" maxH="250" minW="100%" objectFit='cover' src={`https://maps.googleapis.com/maps/api/place/photo?maxheight=1000&photo_reference=${journey.destinations[0].destinations[0].photos[0].photo_reference}&key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_KEY}`} alt='image'/>
                       }
