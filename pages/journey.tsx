@@ -116,7 +116,7 @@ const Journey = (props) => {
                     <Text className="font-sm font-regular pt-2 justify-start display-linebreak px-5 md:px-0">{data.journey.journey_body.replace('<br/>', '\n')}</Text>
                   }
                   <Text className="font-bold text-lg pt-5 justify-start px-5 md:px-0 pb-2">Destinations in this Journey</Text>
-                  <div className ="px-5 md:px-0 rounded-lg overflow-hidden">
+                  <div className ="mx-5 rounded-lg overflow-hidden bg-red-400">
                       <MapPreview journeyDays={data.journey.destinations}/>
                   </div>
                   <button
@@ -147,7 +147,7 @@ const Journey = (props) => {
                       ))}
                   </ul>
                   <div className="flex flex-row pb-20">
-                   <Input placeholder="Enter a comment" onChange={(e) => { setComment(e.target.value) }}/>
+                   <Input className="ml-5" placeholder="Enter a comment" onChange={(e) => { setComment(e.target.value) }}/>
                    <button onClick={ () => {
                      createComment(comment, username, data.journey.id)
                      setRefresh(!refresh)

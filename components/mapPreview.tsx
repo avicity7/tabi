@@ -11,7 +11,7 @@ const MapPreview = ({ journeyDays }) => {
         latitude={journeyDays[0].destinations[0].geometry.location.lat}
         longitude={journeyDays[0].destinations[0].geometry.location.lng}
         zoom = {12}
-        style={{ height: '30vh', width: '100' }}
+        style={{ height: '300px', width: '100%' }}
         mapStyle="mapbox://styles/avicity7/clewhy0yo000901rzkk9xx3bt"
         mapboxAccessToken={process.env.NEXT_PUBLIC_MAPBOX_KEY}
         attributionControl={false}
