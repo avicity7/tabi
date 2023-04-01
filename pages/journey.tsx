@@ -47,6 +47,7 @@ const Journey = (props) => {
         .eq('journey_id', router.query.journeyId)
 
       setData({ journey: journey[0], comments })
+      console.log(journey)
     }
 
     fetchJourney()
@@ -64,7 +65,7 @@ const Journey = (props) => {
                           <BackButton onClick={() => { router.push('/') }}/>
                       </div>
                       <div>
-                          <Skeleton height="25vh" width="80rem"/>
+                          <Skeleton height="25vh" width="100%"/>
                       </div>
                   </div>
                   <Skeleton height='40px'/>
@@ -92,7 +93,7 @@ const Journey = (props) => {
                           <BackButton onClick={() => { router.push('/') }}/>
                       </div>
                       <div>
-                          <Image className="min-w-full max-h-[25vh]" objectFit="cover" overflow="hidden" borderRadius = "lg" src='https://www.timetravelturtle.com/wp-content/uploads/2018/11/Tokyo-2018-280_feat1.jpg' alt='Journey Image'/>
+                          <Image className="min-w-full max-h-[25vh]" objectFit="cover" overflow="hidden" borderRadius = "lg" src={`https://maps.googleapis.com/maps/api/place/photo?maxheight=1000&photo_reference=${data.journey.destinations[0].destinations[0].photos[0].photo_reference}&key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_KEY}`} alt='Journey Image'/>
                       </div>
                       <div className="flex flex-row absolute top-0 right-0 mx-5">
                         <HeartButton onClick={() => {}}/>

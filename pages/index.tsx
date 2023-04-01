@@ -65,12 +65,34 @@ const Home = (props) => {
             <li key={journey.id}>
                 <div className="grid place-items-center font-DMSans">
                   <button onClick={() => { pushToJourney(journey.id) }}>
-                    <Card borderRadius="xl" minW={{ base: '75vw', lg: 'md' }} maxW={{ base: '75vw', lg: 'md' }} className = "my-5 mx-5 shadow-md" overflow="hidden">
-                      <Image objectFit='fill' src='https://www.timetravelturtle.com/wp-content/uploads/2018/11/Tokyo-2018-280_feat1.jpg' alt='tokyo'/>
+                    <Card minW={{ base: '75vw', lg: 'md' }} maxW={{ base: '75vw', lg: 'md' }} className = "my-5 mx-5 shadow-none outline-1 outline-black" overflow="hidden">
+                      {journey.destinations[0].destinations[1] === undefined &&
+                        <Image className="rounded-xl" minH="250" maxH="250" minW="100%" objectFit='cover' src={`https://maps.googleapis.com/maps/api/place/photo?maxheight=1000&photo_reference=${journey.destinations[0].destinations[0].photos[0].photo_reference}&key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_KEY}`} alt='image'/>
+                      }
+                      {journey.destinations[0].destinations[1] !== undefined &&
+                        <div className="grid grid-cols-5 max-h-full rounded-xl">
+                          <>
+                            <Image className="col-span-3 rounded-l-xl" minH="250" maxH="250" minW="100%" objectFit='cover' src={`https://maps.googleapis.com/maps/api/place/photo?maxheight=1000&photo_reference=${journey.destinations[0].destinations[0].photos[0].photo_reference}&key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_KEY}`} alt='image'/>
+                            <div className="col-span-2">
+                              {journey.destinations[0].destinations[2] !== undefined &&
+                                <>
+                                  <Image className="rounded-tr-xl" minH="125" maxH="125" minW="100%" objectFit='cover' src={`https://maps.googleapis.com/maps/api/place/photo?maxheight=1000&photo_reference=${journey.destinations[0].destinations[1].photos[0].photo_reference}&key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_KEY}`} alt='image'/>
+                                  <Image className="rounded-br-xl" minH="125" maxH="125" minW="100%" objectFit='cover' src={`https://maps.googleapis.com/maps/api/place/photo?maxheight=1000&photo_reference=${journey.destinations[0].destinations[2].photos[0].photo_reference}&key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_KEY}`} alt='image'/>
+                                </>
+                              }
+                              {journey.destinations[0].destinations[2] === undefined &&
+                                <>
+                                  <Image className="rounded-r-xl" minH="250" maxH="250" objectFit='cover' src={`https://maps.googleapis.com/maps/api/place/photo?maxheight=1000&photo_reference=${journey.destinations[0].destinations[1].photos[0].photo_reference}&key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_KEY}`} alt='image'/>
+                                </>
+                              }
+                            </div>
+                          </>
+                        </div>
+                      }
                       <CardBody>
                         <Stack spacing='3'>
                           <div className="flex flex-row justify-between">
-                            <Text fontSize='2xl' className="font-bold text-left">{journey.journey_name}</Text>
+                            <Text fontSize='xl' className="font-bold text-left">{journey.journey_name}</Text>
                             <div className="flex flex-row items-center">
                               <FavoriteBorderIcon fontSize="small" style={{ color: '#268DC7' }}/>
                               <Text fontSize='xl' className="font-bold text-left pl-1">{journey.journey_upvotes}</Text>
@@ -80,10 +102,9 @@ const Home = (props) => {
                             <Icon icon="charm:person" style={{ color: '#CBCBCB' }} />
                             <Text fontSize='sm' className="font-normal text-left pl-0.5 pt-0.3" style={{ color: '#CBCBCB' }}>{journey.author_username}</Text>
                           </div>
-                          <Text fontSize='md' className="font-regular text-left" color="black">{journey.journey_summary}</Text>
+                          {/* <Text fontSize='md' className="font-regular text-left" color="black">{journey.journey_summary}</Text> */}
                         </Stack>
                       </CardBody>
-
                     </Card>
                   </button>
                 </div>
