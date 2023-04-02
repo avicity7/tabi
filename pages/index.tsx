@@ -91,7 +91,7 @@ const Home = (props) => {
                       }
                       <CardBody>
                         <Stack spacing='3'>
-                          <div className="flex flex-row justify-between pt-3">
+                          <div className="flex flex-row justify-between pt-5">
                             <Text fontSize='xl' className="font-bold text-left">{journey.journey_name}</Text>
                             <div className="flex flex-row items-center">
                               <FavoriteBorderIcon fontSize="small" style={{ color: '#268DC7' }}/>

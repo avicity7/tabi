@@ -116,8 +116,10 @@ const Journey = (props) => {
                     <Text className="font-sm font-regular pt-2 justify-start display-linebreak px-5 md:px-0">{data.journey.journey_body.replace('<br/>', '\n')}</Text>
                   }
                   <Text className="font-bold text-lg pt-5 justify-start px-5 md:px-0 pb-2">Destinations in this Journey</Text>
-                  <div className ="mx-5 rounded-lg overflow-hidden">
-                      <MapPreview journeyDays={data.journey.destinations}/>
+                  <div className ="px-3 lg:px-0">
+                      <div className="rounded-lg overflow-hiddens">
+                       <MapPreview journeyDays={data.journey.destinations}/>
+                      </div>
                   </div>
                   <button
                     onClick={ () => {
@@ -139,7 +141,7 @@ const Journey = (props) => {
                                       <Avatar name = {comment.author_username} size = "xs" />
                                   </div>
                                   <div>
-                                      <Text className='font-semibold text-sm ml-1 mb-0.5'>{comment.author_username}</Text>
+                                      <Text className='font-semibold text-sm ml-1'>{comment.author_username}</Text>
                                       <Text className="ml-1">{comment.comment_body}</Text>
                                   </div>
                               </div>
