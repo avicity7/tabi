@@ -117,7 +117,7 @@ const Journey = (props) => {
                   }
                   <Text className="font-bold text-lg pt-5 justify-start px-5 md:px-0 pb-2">Destinations in this Journey</Text>
                   <div className ="px-3 lg:px-0">
-                      <div className="rounded-lg overflow-hiddens">
+                      <div className="rounded-lg overflow-hidden">
                        <MapPreview journeyDays={data.journey.destinations}/>
                       </div>
                   </div>
