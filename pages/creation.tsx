@@ -60,7 +60,7 @@ const Creation = () => {
             <div>
                 {!creating &&
                   <button
-                  onClick={async () => { setCreating(true); await createJourney(user, router, journeyName) }}
+                  onClick={async () => { setCreating(true); if (!creating) await createJourney(user, router, journeyName) }}
                   type="submit"
                   className="group relative flex w-full justify-center rounded-md border border-transparent bg-tabiBlue py-2 px-4 text-sm font-DMSans font-medium text-white hover:bg-tabiBlueDark focus:outline-none focus:ring-2 focus:ring-tabiBlue focus:ring-offset-2"
                   >

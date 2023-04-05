@@ -149,13 +149,19 @@ const Journey = (props) => {
                       ))}
                   </ul>
                   <div className="flex flex-row pb-20">
-                   <Input className="ml-5" placeholder="Enter a comment" onChange={(e) => { setComment(e.target.value) }}/>
-                   <button onClick={ () => {
-                     createComment(comment, username, data.journey.id)
-                     setRefresh(!refresh)
-                   }}>
-                    <Text className="bg-tabiBlue hover:bg-tabiBlueDark rounded-full mx-4 px-5 py-0.5 text-white text-md font-medium">Post</Text>
-                   </button>
+                    <form onSubmit={() => {
+                      createComment(comment, username, data.journey.id)
+                      setRefresh(!refresh)
+                    }}>
+                      <Input className="ml-5" placeholder="Enter a comment" onChange={(e) => { setComment(e.target.value) }}/>
+
+                      <button onClick={ () => {
+                        createComment(comment, username, data.journey.id)
+                        setRefresh(!refresh)
+                      }}>
+                      <Text className="bg-tabiBlue hover:bg-tabiBlueDark rounded-full mx-4 px-5 py-0.5 text-white text-md font-medium">Post</Text>
+                      </button>
+                    </form>
                   </div>
               </Stack>
           </div>
