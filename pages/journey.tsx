@@ -164,11 +164,11 @@ const Journey = (props) => {
                           </li>
                       ))}
                   </ul>
-                  <div className="flex flex-row pb-20">
                     <form onSubmit={() => {
                       createComment(comment, username, data.journey.id)
                       setRefresh(!refresh)
                     }}>
+                    <div className="flex flex-row pb-20">
                       <Input className="ml-5" placeholder="Enter a comment" onChange={(e) => { setComment(e.target.value) }}/>
 
                       <button onClick={ () => {
@@ -177,8 +177,8 @@ const Journey = (props) => {
                       }}>
                       <Text className="bg-tabiBlue hover:bg-tabiBlueDark rounded-full mx-4 px-5 py-0.5 text-white text-md font-medium">Post</Text>
                       </button>
+                    </div>
                     </form>
-                  </div>
               </Stack>
           </div>
 
