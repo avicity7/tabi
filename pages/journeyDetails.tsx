@@ -2,9 +2,10 @@ import { useEffect, useState, useMemo } from 'react'
 import { useRouter } from 'next/router'
 import { Stack, Spinner, Text } from '@chakra-ui/react'
 import dynamic from 'next/dynamic'
-import { createServerSupabaseClient } from '@supabase/auth-helpers-nextjs'
 import { ArrowLeft } from 'phosphor-react'
 import { createClient } from '@supabase/supabase-js'
+import { useSupabaseClient } from '@supabase/auth-helpers-react'
+import { getCookie, setCookie } from 'cookies-next'
 
 import Navbar from '../components/navbar'
 import getUsername from '../utils/getUsername'
@@ -26,13 +27,14 @@ const updateDestinations = async (userDestinations, journeyId, userId) => {
 
 const JourneyDetails = (props) => {
   const router = useRouter()
-  const username = props.username
+  const [username, setUsername] = useState(props.username !== undefined ? props.username : '')
   const userId = props.userId
   const [viewState, setViewState] = useState({
     latitude: 35.6812,
     longitude: 139.7671,
     zoom: 14
   })
+  const supabaseClient = useSupabaseClient()
 
   const [serverDestinationData, setServerDestinationData] = useState([])
 
@@ -65,6 +67,12 @@ const JourneyDetails = (props) => {
     const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL ?? 'error', process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? 'error')
     const fetchData = async () => {
       if (!router.isReady) return
+      const user = await supabaseClient.auth.getUser()
+
+      let fetchedUsername = null
+      if (user.data.user !== null) {
+        fetchedUsername = await getUsername(user.data.user.id)
+      }
 
       const { data } = await supabase
         .from('journeys')
@@ -72,6 +80,12 @@ const JourneyDetails = (props) => {
         .eq('id', router.query.journeyId)
         .single()
 
+      if (fetchedUsername !== username) {
+        setUsername(fetchedUsername)
+      }
+      if (getCookie('username') === undefined) {
+        setCookie('username', fetchedUsername)
+      }
       setServerDestinationData(data.destinations)
 
       if (serverDestinationData.length === 0) {
@@ -209,35 +223,10 @@ const JourneyDetails = (props) => {
   }
 }
 
-export const getServerSideProps = async (ctx) => {
-  const supabase = createServerSupabaseClient(ctx)
-  let fetchedUsername = ''
-  const journeyid = ctx.query?.journeyId
+export const getServerSideProps = ({ req, res }) => {
+  const username = getCookie('username', { req, res }) !== undefined ? getCookie('username', { req, res }) : null
 
-  const { data: { session } } = await supabase.auth.getSession()
-
-  if (journeyid == null) {
-    return {
-      notFound: true
-    }
-  }
-
-  const fetchUsername = async () => {
-    try {
-      fetchedUsername = await getUsername(session.user.id)
-      return fetchedUsername
-    } catch {
-      return fetchedUsername
-    }
-  }
-
-  const username = await fetchUsername()
-
-  return {
-    props: {
-      username
-    }
-  }
+  return { props: { username } }
 }
 
 export default JourneyDetails

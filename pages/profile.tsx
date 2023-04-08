@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import { createClient } from '@supabase/supabase-js'
-import { createServerSupabaseClient } from '@supabase/auth-helpers-nextjs'
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder'
 import { Icon } from '@iconify-icon/react'
 import {
@@ -13,6 +12,8 @@ import {
   CardBody,
   Image
 } from '@chakra-ui/react'
+import { useSupabaseClient } from '@supabase/auth-helpers-react'
+import { getCookie, setCookie } from 'cookies-next'
 
 import Navbar from '../components/navbar'
 import JourneyCreateButton from '../components/journeyCreateButton'
@@ -21,27 +22,40 @@ import Footer from '../components/footer'
 
 const Profile = (props) => {
   const router = useRouter()
-  const username = props.username
-  const id = props.id
+  const [username, setUsername] = useState(props.username !== undefined ? props.username : '')
 
   const [publicJourneys, setPublicJourneys] = useState([])
   const [privateJourneys, setPrivateJourneys] = useState([])
   const [loaded, setLoaded] = useState(false)
+  const supabaseClient = useSupabaseClient()
 
   useEffect(() => {
     const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY)
 
     const fetchData = async () => {
+      const user = await supabaseClient.auth.getUser()
+
+      let fetchedUsername = null
+      if (user.data.user !== null) {
+        fetchedUsername = await getUsername(user.data.user.id)
+      }
+
       const { data: publicJourneys } = await supabase
         .from('journeys')
         .select()
-        .match({ user_id: id, public: true })
+        .match({ user_id: user.data.user.id, public: true })
 
       const { data: privateJourneys } = await supabase
         .from('journeys')
         .select()
-        .match({ user_id: id, public: false })
+        .match({ user_id: user.data.user.id, public: false })
 
+      if (fetchedUsername !== username) {
+        setUsername(fetchedUsername)
+      }
+      if (getCookie('username') === undefined) {
+        setCookie('username', fetchedUsername)
+      }
       setPublicJourneys(publicJourneys)
       setPrivateJourneys(privateJourneys)
       setLoaded(!loaded)
@@ -193,36 +207,10 @@ const Profile = (props) => {
   }
 }
 
-export const getServerSideProps = async (ctx) => {
-  const supabase = createServerSupabaseClient(ctx)
-  let fetchedUsername = ''
+export const getServerSideProps = ({ req, res }) => {
+  const username = getCookie('username', { req, res }) !== undefined ? getCookie('username', { req, res }) : null
 
-  const { data: { session } } = await supabase.auth.getSession()
-
-  if (session == null) {
-    return {
-      notFound: true
-    }
-  }
-
-  const fetchUsername = async () => {
-    try {
-      fetchedUsername = await getUsername(session.user.id)
-      return fetchedUsername
-    } catch {
-      return fetchedUsername
-    }
-  }
-
-  const username = await fetchUsername()
-  const id = session.user.id
-
-  return {
-    props: {
-      username,
-      id
-    }
-  }
+  return { props: { username } }
 }
 
 export default Profile

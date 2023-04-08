@@ -2,7 +2,8 @@ import { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
 import { Stack, Image, Text, Skeleton, SkeletonText, Avatar, Input } from '@chakra-ui/react'
 import { createClient } from '@supabase/supabase-js'
-import { createServerSupabaseClient } from '@supabase/auth-helpers-nextjs'
+import { useSupabaseClient } from '@supabase/auth-helpers-react'
+import { getCookie, setCookie } from 'cookies-next'
 
 import Navbar from '../components/navbar'
 import BackButton from '../components/backButton'
@@ -25,15 +26,24 @@ const createComment = async (commentBody, username, journeyId) => {
 
 const Journey = (props) => {
   const router = useRouter()
-  const username = props.username
-  const userId = props.userId
+  const [username, setUsername] = useState(props.username !== undefined ? props.username : '')
+  const [userId, setUserId] = useState('')
   const [data, setData] = useState({ journey: '' as any, comments: '' as any })
   const [comment, setComment] = useState('')
   const [refresh, setRefresh] = useState(false)
+  const supabaseClient = useSupabaseClient()
 
   useEffect(() => {
     const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY)
     const fetchJourney = async () => {
+      const user = await supabaseClient.auth.getUser()
+
+      let fetchedUsername = null
+      if (user.data.user !== null) {
+        fetchedUsername = await getUsername(user.data.user.id)
+        setUserId(user.data.user.id)
+      }
+
       if (!router.isReady) return
       const { data: journey } = await supabase
         .from('journeys')
@@ -46,6 +56,12 @@ const Journey = (props) => {
         .select()
         .eq('journey_id', router.query.journeyId)
 
+      if (fetchedUsername !== username) {
+        setUsername(fetchedUsername)
+      }
+      if (getCookie('username') === undefined) {
+        setCookie('username', fetchedUsername)
+      }
       setData({ journey: journey[0], comments })
       console.log(journey)
     }
@@ -172,31 +188,10 @@ const Journey = (props) => {
   }
 }
 
-export const getServerSideProps = async (ctx) => {
-  const supabase = createServerSupabaseClient(ctx)
-  let fetchedUsername = ''
-  let userId = ''
+export const getServerSideProps = ({ req, res }) => {
+  const username = getCookie('username', { req, res }) !== undefined ? getCookie('username', { req, res }) : null
 
-  const { data: { session } } = await supabase.auth.getSession()
-
-  const fetchUsername = async () => {
-    try {
-      fetchedUsername = await getUsername(session.user.id)
-      return fetchedUsername
-    } catch {
-      return fetchedUsername
-    }
-  }
-
-  const username = await fetchUsername()
-  if (session !== null) {
-    userId = session.user.id
-  }
-  return {
-    props: {
-      username,
-      userId
-    }
-  }
+  return { props: { username } }
 }
+
 export default Journey

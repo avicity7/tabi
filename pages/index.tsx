@@ -5,15 +5,17 @@ import { Icon } from '@iconify-icon/react'
 
 import { useState, useEffect } from 'react'
 import { createClient } from '@supabase/supabase-js'
-import { createServerSupabaseClient } from '@supabase/auth-helpers-nextjs'
+import { useSupabaseClient } from '@supabase/auth-helpers-react'
+import { getCookie, setCookie } from 'cookies-next'
 
 import Navbar from '../components/navbar'
 import getUsername from '../utils/getUsername'
 
 const Home = (props) => {
   const router = useRouter()
-  const username = props.username
+  const [username, setUsername] = useState(props.username !== undefined ? props.username : '')
   const [data, setData] = useState([])
+  const supabaseClient = useSupabaseClient()
 
   const pushToJourney = (journeyId) => {
     router.push({
@@ -25,19 +27,30 @@ const Home = (props) => {
   useEffect(() => {
     const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY)
     const fetchData = async () => {
+      const user = await supabaseClient.auth.getUser()
+      let fetchedUsername = null
+      if (user.data.user !== null) {
+        fetchedUsername = await getUsername(user.data.user.id)
+      }
+
       const { data: journeys } = await supabase
         .from('journeys')
         .select()
         .eq('public', true)
 
       try {
+        if (fetchedUsername !== username) {
+          setUsername(fetchedUsername)
+        }
+        if (getCookie('username') === undefined) {
+          setCookie('username', fetchedUsername)
+        }
         setData(journeys)
       } catch {
 
       }
     }
     fetchData()
-    console.log('refreshing')
   }, [])
 
   if (data.length === 0) { // Return loading Spinner
@@ -116,28 +129,10 @@ const Home = (props) => {
   }
 }
 
-export const getServerSideProps = async (ctx) => {
-  const supabase = createServerSupabaseClient(ctx)
-  let fetchedUsername = ''
+export const getServerSideProps = ({ req, res }) => {
+  const username = getCookie('username', { req, res }) !== undefined ? getCookie('username', { req, res }) : null
 
-  const { data: { session } } = await supabase.auth.getSession()
-
-  const fetchUsername = async () => {
-    try {
-      fetchedUsername = await getUsername(session.user.id)
-      return fetchedUsername
-    } catch {
-      return fetchedUsername
-    }
-  }
-
-  const username = await fetchUsername()
-
-  return {
-    props: {
-      username
-    }
-  }
+  return { props: { username } }
 }
 
 export default Home

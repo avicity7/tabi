@@ -26,7 +26,7 @@ const Login = () => {
         <div className="m-auto w-full max-w-md space-y-8">
             <div>
               <div className='flex justify-center'>
-                <Image src="img/Tabi.png" maxW='12'/>
+                <Image src="/img/Tabi.png" maxW='12'/>
               </div>
               <h2 className="font-DMSans mt-6 text-center text-3xl font-bold tracking-tight text-gray-900">
                   Sign in to your account
