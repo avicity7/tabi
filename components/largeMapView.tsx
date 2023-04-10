@@ -16,7 +16,7 @@ const MapView = ({ viewState, setViewState, userDestinationData, currentDay, set
         }
       }}
       style={{ height: '92vh', width: '50vw' }}
-      mapStyle="mapbox://styles/avicity7/clewhy0yo000901rzkk9xx3bt"
+      mapStyle="mapbox://styles/avicity7/clewhy0yo000901rzkk9xx3bt?optimize=true"
       mapboxAccessToken={process.env.NEXT_PUBLIC_MAPBOX_KEY}
       attributionControl={false}
       >
