@@ -22,7 +22,6 @@ import NavbarAvatar from './navbarAvatar'
 
 const Navbar = (props) => {
   const activePage = props.activePage
-  const username = props.username
   const router = useRouter()
 
   const [searchOpen, setSearchOpen] = useState(false)
@@ -176,7 +175,7 @@ const Navbar = (props) => {
             </Dialog>
           </Transition>
 
-          <NavbarAvatar username={username}/>
+          <NavbarAvatar />
 
         </div>
     </header>

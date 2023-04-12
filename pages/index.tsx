@@ -56,7 +56,7 @@ const Home = (props) => {
   if (data.length === 0) { // Return loading Spinner
     return (
       <div className="scrollbar">
-        <Navbar activePage={'index'} username={username}/>
+        <Navbar activePage={'index'} />
 
         <div className="flex justify-center items-center h-[91.2vh]">
             <Stack>
