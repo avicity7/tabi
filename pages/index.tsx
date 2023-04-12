@@ -1,7 +1,7 @@
-import { useRouter } from 'next/router'
 import { Card, CardBody, Stack, Image, Text, Spinner } from '@chakra-ui/react'
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder'
 import { Icon } from '@iconify-icon/react'
+import Link from 'next/link'
 
 import { useState, useEffect } from 'react'
 import { createClient } from '@supabase/supabase-js'
@@ -12,17 +12,9 @@ import Navbar from '../components/navbar'
 import getUsername from '../utils/getUsername'
 
 const Home = (props) => {
-  const router = useRouter()
   const [username, setUsername] = useState(props.username !== undefined ? props.username : '')
   const [data, setData] = useState([])
   const supabaseClient = useSupabaseClient()
-
-  const pushToJourney = (journeyId) => {
-    router.push({
-      pathname: '/journey',
-      query: { journeyId }
-    })
-  }
 
   useEffect(() => {
     const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY)
@@ -77,7 +69,7 @@ const Home = (props) => {
           {data.map((journey) => (
             <li key={journey.id}>
                 <div className="grid place-items-center font-DMSans">
-                  <button onClick={() => { pushToJourney(journey.id) }}>
+                  <Link href={`/journeys/${encodeURIComponent(journey.id)}`}>
                     <Card minW={{ base: '85vw', lg: 'md' }} maxW={{ base: '85vw', lg: 'md' }} className = "my-5 mx-5 shadow-none" overflow="hidden" variant="unstyled">
                       {journey.destinations[0].destinations[1] === undefined &&
                         <Image className="rounded-xl" minH="250" maxH="250" minW="100%" objectFit='cover' src={`https://maps.googleapis.com/maps/api/place/photo?maxheight=1000&photo_reference=${journey.destinations[0].destinations[0].photos[0].photo_reference}&key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_KEY}`} alt='image'/>
@@ -119,7 +111,7 @@ const Home = (props) => {
                         </Stack>
                       </CardBody>
                     </Card>
-                  </button>
+                  </Link>
                 </div>
             </li>
           ))}
@@ -128,11 +120,5 @@ const Home = (props) => {
     )
   }
 }
-
-// export const getServerSideProps = ({ req, res }) => {
-//   const username = getCookie('username', { req, res }) !== undefined ? getCookie('username', { req, res }) : null
-
-//   return { props: { username } }
-// }
 
 export default Home

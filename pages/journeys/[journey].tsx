@@ -5,13 +5,13 @@ import { createClient } from '@supabase/supabase-js'
 import { useSupabaseClient } from '@supabase/auth-helpers-react'
 import { getCookie, setCookie } from 'cookies-next'
 
-import Navbar from '../components/navbar'
-import BackButton from '../components/backButton'
-import getUsername from '../utils/getUsername'
-import Footer from '../components/footer'
-import MapPreview from '../components/mapPreview'
-import EditButton from '../components/editButton'
-import HeartButton from '../components/heartButton'
+import Navbar from '../../components/navbar'
+import BackButton from '../../components/backButton'
+import getUsername from '../../utils/getUsername'
+import Footer from '../../components/footer'
+import MapPreview from '../../components/mapPreview'
+import EditButton from '../../components/editButton'
+import HeartButton from '../../components/heartButton'
 
 const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL ?? 'error', process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? 'error')
 
@@ -24,9 +24,9 @@ const createComment = async (commentBody, username, journeyId) => {
   }
 }
 
-const Journey = (props) => {
+const Journey = () => {
   const router = useRouter()
-  const [username, setUsername] = useState(props.username !== undefined ? props.username : '')
+  const [username, setUsername] = useState('')
   const [userId, setUserId] = useState('')
   const [data, setData] = useState({ journey: '' as any, comments: '' as any })
   const [comment, setComment] = useState('')
@@ -34,6 +34,7 @@ const Journey = (props) => {
   const supabaseClient = useSupabaseClient()
 
   useEffect(() => {
+    setUsername(getCookie('username') as any)
     const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY)
     const fetchJourney = async () => {
       const user = await supabaseClient.auth.getUser()
@@ -48,13 +49,13 @@ const Journey = (props) => {
       const { data: journey } = await supabase
         .from('journeys')
         .select()
-        .eq('id', router.query.journeyId)
+        .eq('id', router.query.journey)
 
       // Get comments of the journey
       const { data: comments } = await supabase
         .from('comments')
         .select()
-        .eq('journey_id', router.query.journeyId)
+        .eq('journey_id', router.query.journey)
 
       if (fetchedUsername !== username) {
         setUsername(fetchedUsername)
@@ -188,10 +189,10 @@ const Journey = (props) => {
   }
 }
 
-export const getServerSideProps = ({ req, res }) => {
-  const username = getCookie('username', { req, res }) !== undefined ? getCookie('username', { req, res }) : null
+// export const getServerSideProps = ({ req, res }) => {
+//   const username = getCookie('username', { req, res }) !== undefined ? getCookie('username', { req, res }) : null
 
-  return { props: { username } }
-}
+//   return { props: { username } }
+// }
 
 export default Journey

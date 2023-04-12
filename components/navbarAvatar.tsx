@@ -19,10 +19,11 @@ const logout = async (e: React.MouseEvent<HTMLElement>) => {
 
 const NavbarAvatar = (props) => {
   const router = useRouter()
-  const [username, setUsername] = useState(props.username !== undefined ? props.username : '')
+  const [username, setUsername] = useState('')
   const supabaseClient = useSupabaseClient()
 
   useEffect(() => {
+    setUsername(getCookie('username') as any)
     const fetchData = async () => {
       const user = await supabaseClient.auth.getUser()
       let fetchedUsername = null
@@ -30,7 +31,7 @@ const NavbarAvatar = (props) => {
         fetchedUsername = await getUsername(user.data.user.id)
       }
       try {
-        if (fetchedUsername !== username) {
+        if (username !== fetchedUsername) {
           setUsername(fetchedUsername)
         }
         if (getCookie('username') === undefined) {
@@ -45,7 +46,9 @@ const NavbarAvatar = (props) => {
 
   return (
     <Menu as="div" className="relative inline-block text-left">
-        <Menu.Button><Avatar name={username} size="sm" /></Menu.Button>
+        {username !== '' &&
+          <Menu.Button><Avatar name={username} size="sm" /></Menu.Button>
+        }
         <Menu.Items className="absolute right-0 mt-2 origin-top-right rounded-md bg-white shadow-md">
             <Stack className="flex px-6">
                 {username !== '' && username !== null &&
@@ -80,12 +83,6 @@ const NavbarAvatar = (props) => {
         </Menu.Items>
     </Menu>
   )
-}
-
-export const getServerSideProps = ({ req, res }) => {
-  const username = getCookie('username', { req, res }) !== undefined ? getCookie('username', { req, res }) : null
-
-  return { props: { username } }
 }
 
 export default NavbarAvatar
