@@ -12,7 +12,7 @@ const MapPreview = ({ journeyDays }) => {
       <>
         {/* Day buttons */}
         <div className="grid grid-cols-10 gap-0 px-5 lg:px-0">
-            <Stack className='col-span-2 place-items-start'>
+            <Stack className='col-span-2 place-items-start lg:place-items-end'>
                 <ul>
                     {journeyDays.map((day, index) => (
                         <li key={index}>
@@ -47,16 +47,16 @@ const MapPreview = ({ journeyDays }) => {
             </Stack>
 
             {/* Destination Cards */}
-            <Stack className='col-span-8 flex items-start mx-5'>
+            <Stack className='col-span-8 flex items-end lg:items-center mx-0 lg:mx-5'>
                 <ul>
-                {journeyDays[currentDay].destinations.map((destination, index) => (
-                    <li key={destination.place_id}>
-                        <button onClick={() => {
-                        }}>
-                          <DestinationCard destination={destination} index={index} />
-                        </button>
-                    </li>
-                ))}
+                    {journeyDays[currentDay].destinations.map((destination, index) => (
+                        <li key={destination.place_id}>
+                            <button onClick={() => {
+                            }}>
+                            <DestinationCard destination={destination} index={index} />
+                            </button>
+                        </li>
+                    ))}
                 </ul>
 
                 {journeyDays[currentDay].destinations.length === 0 &&
