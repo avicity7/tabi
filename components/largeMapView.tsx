@@ -1,6 +1,7 @@
 import Image from 'next/image'
 import { Text } from '@chakra-ui/react'
 import Map, { Marker } from 'react-map-gl'
+import 'mapbox-gl/dist/mapbox-gl.css'
 
 const MapView = ({ viewState, setViewState, userDestinationData, currentDay, setSearchInputData, resetMapPopup, searchInputData }) => {
   return (
@@ -34,7 +35,7 @@ const MapView = ({ viewState, setViewState, userDestinationData, currentDay, set
             >
             <div className="static">
               <Image
-                src="/marker.png"
+                src="/img/marker.png"
                 alt="Marker"
                 height="40"
                 width="40"
