@@ -51,7 +51,7 @@ const Signup = () => {
                 <Image src="/img/tabi.png" maxW='12'/>
               </div>
               <h2 className="font-DMSans mt-6 text-center text-3xl font-bold tracking-tight text-gray-900">
-                  Create a tabi account
+                  Create an account
               </h2>
             </div>
             <form className="mt-8 space-y-6" action="#" method="POST">
