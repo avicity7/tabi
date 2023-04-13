@@ -24,11 +24,11 @@ const createComment = async (commentBody, username, journeyId) => {
   }
 }
 
-const Journey = () => {
+const Journey = ({ journey }) => {
   const router = useRouter()
   const [username, setUsername] = useState('')
   const [userId, setUserId] = useState('')
-  const [data, setData] = useState({ journey: '' as any, comments: '' as any })
+  const [data, setData] = useState({ journey: journey != null ? journey : '' as any, comments: '' as any })
   const [comment, setComment] = useState('')
   const [refresh, setRefresh] = useState(false)
   const supabaseClient = useSupabaseClient()
@@ -130,7 +130,8 @@ const Journey = () => {
                     <Text className="font-sm font-regular text-gray-400 pt-2 justify-start display-linebreak px-5 md:px-0">The author of this Journey has yet to add a description.</Text>
                   }
                   { data.journey.journey_body !== null &&
-                    <Text className="font-sm font-regular pt-2 justify-start display-linebreak px-5 md:px-0">{data.journey.journey_body.replace('<br/>', '\n')}</Text>
+                    // <Text className="font-sm font-regular pt-2 justify-start display-linebreak px-5 md:px-0">{data.journey.journey_body.replace('<br/>', '\n')}</Text>
+                    <div className="pt-2 display-linebreak">{data.journey.journey_body.replace('<br/>', '\n')}</div>
                   }
                   <Text className="font-bold text-lg pt-5 justify-start px-5 md:px-0 pb-2">Destinations in this Journey</Text>
                   <div className ="px-3 lg:px-0">

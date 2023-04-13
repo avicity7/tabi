@@ -162,7 +162,7 @@ const EditJourney = (props) => {
   if (userDestinationData.length === 0) { // Return loading Spinner
     return (
       <>
-          <Navbar activePage={'index'} username={username}/>
+          <Navbar activePage={'index'} />
 
           <div className="flex justify-center items-center h-[91.2vh]">
               <Stack>
@@ -177,7 +177,7 @@ const EditJourney = (props) => {
   } else {
     return (
       <>
-          <Navbar activePage={'journeyedit'} username={username}/>
+          <Navbar activePage={'journeyedit'} />
 
           <div className="grid grid-cols-4 font-DMSans">
               <div className="col-span-2 ml-4 mt-4 scrollbar mr-0">
@@ -348,12 +348,6 @@ const EditJourney = (props) => {
       </>
     )
   }
-}
-
-export const getServerSideProps = ({ req, res }) => {
-  const username = getCookie('username', { req, res }) !== undefined ? getCookie('username', { req, res }) : null
-
-  return { props: { username } }
 }
 
 export default EditJourney
