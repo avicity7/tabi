@@ -141,20 +141,8 @@ const Journey = ({ journey }) => {
                 <Text className="font-bold text-lg pt-5 justify-start px-5 md:px-0 pb-2">Destinations in this Journey</Text>
                 <div className ="px-3 lg:px-0">
                     <div className="rounded-lg overflow-hidden">
-                      <MapPreview journeyDays={data.journey.destinations}/>
+                      <MapPreview journeyDays={data.journey.destinations} journeyId={data.journey.id}/>
                     </div>
-                </div>
-                <div className="flex justify-center pt-3">
-                  <button
-                    onClick={ () => {
-                      router.push({
-                        pathname: '/journeyDetails',
-                        query: { journeyId: data.journey.id }
-                      })
-                    }}
-                  >
-                      <Text className="font-medium text-tabiBlue hover:text-tabiBlueDark text-sm ">Open Interactive Map</Text>
-                  </button>
                 </div>
                 <Text className="font-bold text-lg pt-5 justify-start px-5 md:px-0 py-2">Comments</Text>
                 <ul className="pb-10">

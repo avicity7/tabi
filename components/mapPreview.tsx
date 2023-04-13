@@ -1,13 +1,14 @@
 import { useState } from 'react'
 import { Skeleton, Text, Stack } from '@chakra-ui/react'
+import { useRouter } from 'next/router'
 import 'mapbox-gl/dist/mapbox-gl.css'
 
 import DestinationCard from './destinationCard'
 
-const MapPreview = ({ journeyDays }) => {
+const MapPreview = ({ journeyDays, journeyId }) => {
   if (journeyDays.length !== 0) {
     const [currentDay, setCurrentDay] = useState(0)
-
+    const router = useRouter()
     return (
       <>
         {/* Day buttons */}
@@ -64,6 +65,22 @@ const MapPreview = ({ journeyDays }) => {
                 }
 
             </Stack>
+
+        </div>
+
+        <div className="grid grid-cols-10 gap-0 px-5 lg:px-0">
+          <div className="col-span-10 lg:col-span-8 flex justify-center pt-5">
+              <button
+              onClick={ () => {
+                router.push({
+                  pathname: '/journeyDetails',
+                  query: { journeyId }
+                })
+              }}
+              >
+                  <Text className="font-medium text-tabiBlue hover:text-tabiBlueDark text-sm ">Open Interactive Map</Text>
+              </button>
+          </div>
         </div>
       </>
     )

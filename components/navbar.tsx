@@ -24,6 +24,7 @@ const Navbar = (props) => {
   const activePage = props.activePage
   const router = useRouter()
 
+  const [searchInput, setSearchInput] = useState('')
   const [searchOpen, setSearchOpen] = useState(false)
   const handleSearchOpen = () => { setSearchOpen(true) }
   const handleSearchClose = () => { setSearchOpen(false) }
@@ -158,14 +159,19 @@ const Navbar = (props) => {
 
                       <Stack>
                         <div className="mt-5 mb-5">
-                          <Input focusBorderColor='#268DC7'/>
+                          <Input focusBorderColor='#268DC7'onChange={(e) => { setSearchInput(e.target.value) }}/>
                         </div>
 
                         <div className="flex justify-end">
                           <button
                             type="button"
                             className="font-DMSans inline-flex justify-center rounded-md border border-transparent bg-tabiBlue px-4 py-2 text-sm font-medium text-white hover:bg-tabiBlueDark"
-                            onClick={() => {}}
+                            onClick={() => {
+                              router.push({
+                                pathname: '/search',
+                                query: { searchInput }
+                              })
+                            }}
                           >
                             Search
                           </button>
