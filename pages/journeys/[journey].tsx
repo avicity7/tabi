@@ -190,10 +190,4 @@ const Journey = ({ journey }) => {
   }
 }
 
-// export const getServerSideProps = ({ req, res }) => {
-//   const username = getCookie('username', { req, res }) !== undefined ? getCookie('username', { req, res }) : null
-
-//   return { props: { username } }
-// }
-
 export default Journey
