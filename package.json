@@ -17,7 +17,6 @@
     "@headlessui/react": "^1.7.12",
     "@heroicons/react": "^2.0.13",
     "@iconify-icon/react": "^1.0.5",
-    "@mapbox/search-js-react": "^1.0.0-beta.14",
     "@mui/icons-material": "^5.11.0",
     "@mui/joy": "^5.0.0-alpha.70",
     "@mui/material": "^5.11.11",
