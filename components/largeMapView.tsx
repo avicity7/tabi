@@ -34,7 +34,7 @@ const MapView = ({ viewState, setViewState, userDestinationData, currentDay, set
             >
             <div className="static">
               <Image
-                src="/img/Marker.png"
+                src="/static/img/Marker.png"
                 alt="Marker"
                 height="40"
                 width="40"
