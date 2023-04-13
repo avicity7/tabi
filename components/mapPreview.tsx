@@ -1,49 +1,71 @@
-import * as React from 'react'
-import Image from 'next/image'
-import Map, { Marker } from 'react-map-gl'
-import { Skeleton, Text } from '@chakra-ui/react'
+import { useState } from 'react'
+import { Skeleton, Text, Stack } from '@chakra-ui/react'
 import 'mapbox-gl/dist/mapbox-gl.css'
+
+import DestinationCard from './destinationCard'
 
 const MapPreview = ({ journeyDays }) => {
   if (journeyDays.length !== 0) {
+    const [currentDay, setCurrentDay] = useState(0)
+
     return (
-      <Map
-        latitude={journeyDays[0].destinations[0].geometry.location.lat}
-        longitude={journeyDays[0].destinations[0].geometry.location.lng}
-        zoom = {12}
-        style={{ height: '300px', width: '100%' }}
-        mapStyle="mapbox://styles/avicity7/clewhy0yo000901rzkk9xx3bt?optimize=true"
-        mapboxAccessToken={process.env.NEXT_PUBLIC_MAPBOX_KEY}
-        attributionControl={false}
-        cursor={'default'}
-        scrollZoom={false}
-        dragRotate={false}
-        >
-          {journeyDays.map((day) => {
-            return (
-              day.destinations.map((destination, index) => {
-                return (
-                  <Marker
-                    key={destination.place_id}
-                    latitude={destination.geometry.location.lat}
-                    longitude={destination.geometry.location.lng}
-                  >
-                  <div className="static">
-                    <Image
-                      src="/img/marker.png"
-                      alt="Marker"
-                      height="40"
-                      width="40"
-                    />
-                    <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 font-DMSans pb-2">
-                      <Text className="text-black font-bold">{parseInt(index) + 1}</Text>
-                    </div>
-                  </div>
-                  </Marker>
-                )
-              }))
-          })}
-      </Map>
+      <>
+        {/* Day buttons */}
+        <div className="grid grid-cols-10 gap-0 px-5 lg:px-0">
+            <Stack className='col-span-2 place-items-start'>
+                <ul>
+                    {journeyDays.map((day, index) => (
+                        <li key={index}>
+                            <div className="grid place-items-center font-DMSans">
+                                {/* Set day button to Blue, no hover effect */}
+                                { index === currentDay &&
+                                    <button className='text-[#268DC7] transition-none'>
+                                        <p className="font-medium text-lg py-2">
+                                            Day {parseInt(index) + 1}
+                                        </p>
+                                    </button>
+                                }
+
+                                {/* NOT the current day to display, hover effect added */}
+                                { index !== currentDay &&
+                                    <button
+                                        className='text-[#CBCBCB] hover:text-tabiBlueDark transition-none'
+                                        onClick={() => {
+                                          setCurrentDay(index)
+                                        }}
+                                    >
+                                        <p className="font-medium text-lg py-2">
+                                            Day {parseInt(index) + 1}
+                                        </p>
+                                    </button>
+                                }
+                            </div>
+                        </li>
+                    ))}
+                </ul>
+
+            </Stack>
+
+            {/* Destination Cards */}
+            <Stack className='col-span-8 flex items-start mx-5'>
+                <ul>
+                {journeyDays[currentDay].destinations.map((destination, index) => (
+                    <li key={destination.place_id}>
+                        <button onClick={() => {
+                        }}>
+                          <DestinationCard destination={destination} index={index} />
+                        </button>
+                    </li>
+                ))}
+                </ul>
+
+                {journeyDays[currentDay].destinations.length === 0 &&
+                    <Text className="flex text-sm text-gray-400 font-medium justify-center mr-4 py-8">No Destinations in this Day.</Text>
+                }
+
+            </Stack>
+        </div>
+      </>
     )
   } else {
     return (

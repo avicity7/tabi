@@ -136,7 +136,7 @@ const Journey = ({ journey }) => {
                 }
                 { data.journey.journey_body !== null &&
                   // <Text className="font-sm font-regular pt-2 justify-start display-linebreak px-5 md:px-0">{data.journey.journey_body.replace('<br/>', '\n')}</Text>
-                  <div className="pt-2 display-linebreak">{data.journey.journey_body.replace('<br/>', '\n')}</div>
+                  <div className="pt-2 display-linebreak px-5 md:px-0">{data.journey.journey_body.replace('<br/>', '\n')}</div>
                 }
                 <Text className="font-bold text-lg pt-5 justify-start px-5 md:px-0 pb-2">Destinations in this Journey</Text>
                 <div className ="px-3 lg:px-0">
@@ -153,7 +153,7 @@ const Journey = ({ journey }) => {
                   }}
                   className="flex justify-center pt-3"
                 >
-                  <Text className="font-medium text-tabiBlue hover:text-tabiBlueDark text-sm ">See All Destinations</Text>
+                  <Text className="font-medium text-tabiBlue hover:text-tabiBlueDark text-sm ">Open Interactive Map</Text>
                 </button>
                 <Text className="font-bold text-lg pt-5 justify-start px-5 md:px-0 py-2">Comments</Text>
                 <ul className="pb-10">

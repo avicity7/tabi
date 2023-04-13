@@ -18,6 +18,7 @@ import { Fragment, useState } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 
 import NavbarAvatar from './navbarAvatar'
+import Image from 'next/image'
 
 const Navbar = (props) => {
   const activePage = props.activePage
@@ -38,8 +39,9 @@ const Navbar = (props) => {
           <Show above="lg">
             <div className="flex align-middle">
               <Link href="/" className="-m-1.5 p-1.5">
-                <span className="font-DMSans font-bold text-3xl">tabi</span>
-                <span className="font-DMSans text-xs ml-1 text-tabiBlue">alpha</span>
+                <div className='flex justify-center'>
+                  <Image src="/img/tabi.png" alt="logo" height={27} width={48} />
+                </div>
               </Link>
               <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 font-DMSans">
                 <button onClick={() => { router.push('/') }}>
@@ -70,8 +72,9 @@ const Navbar = (props) => {
                 <DrawerHeader>
                   <div className="flex lg:min-w-0 lg:flex-1 align-middle" aria-label="Global">
                     <Link href="/" className="-m-1.5 p-1.5">
-                      <span className="font-DMSans font-bold text-3xl">tabi</span>
-                      <span className="font-DMSans text-xs ml-1 text-tabiBlue">alpha</span>
+                    <div className='flex justify-center'>
+                      <Image src="/img/tabi.png" alt="logo" height={27} width={48} />
+                    </div>
                     </Link>
                   </div>
                 </DrawerHeader>
@@ -100,8 +103,9 @@ const Navbar = (props) => {
           <Show below="lg">
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 font-DMSans flex lg:min-w-0 lg:flex-1 align-middle">
               <Link href="/" className="-m-1.5 p-1.5">
-                  <span className="font-DMSans font-bold text-3xl">tabi</span>
-                  <span className="font-DMSans text-xs ml-1 text-tabiBlue">alpha</span>
+                <div className='flex justify-center'>
+                  <Image src="/img/tabi.png" alt="logo" height={27} width={48} />
+                </div>
               </Link>
             </div>
           </Show>
