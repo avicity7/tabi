@@ -2,6 +2,7 @@ import { Card, CardBody, Stack, Image, Text, Spinner } from '@chakra-ui/react'
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder'
 import { Icon } from '@iconify-icon/react'
 import Link from 'next/link'
+import Head from 'next/head'
 
 import { useState, useEffect } from 'react'
 import { createClient } from '@supabase/supabase-js'
@@ -48,6 +49,10 @@ const Home = (props) => {
   if (data.length === 0) { // Return loading Spinner
     return (
       <div className="scrollbar">
+        <Head>
+          <title>Journeys | tabi</title>
+        </Head>
+
         <Navbar activePage={'index'} />
 
         <div className="flex justify-center items-center h-[91.2vh]">
@@ -63,6 +68,10 @@ const Home = (props) => {
   } else { // Show Journeys
     return (
       <div className="scrollbar">
+        <Head>
+          <title>Journeys | tabi</title>
+        </Head>
+
         <Navbar activePage={'index'} username={username}/>
 
         <ul>

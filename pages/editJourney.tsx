@@ -6,6 +6,7 @@ import { ArrowLeft } from 'phosphor-react'
 import { createClient } from '@supabase/supabase-js'
 import { useSupabaseClient } from '@supabase/auth-helpers-react'
 import { getCookie, setCookie } from 'cookies-next'
+import Head from 'next/head'
 
 import Navbar from '../components/navbar'
 import getUsername from '../utils/getUsername'
@@ -177,174 +178,178 @@ const EditJourney = (props) => {
   } else {
     return (
       <>
-          <Navbar activePage={'journeyedit'} />
+        <Head>
+          <title>{userJourneyName} | tabi</title>
+        </Head>
 
-          <div className="grid grid-cols-4 font-DMSans">
-              <div className="col-span-2 ml-4 mt-4 scrollbar mr-0">
-                  <div className="flex flex-row items-center">
-                      <button className="my-5" onClick={() => { router.back() }}>
-                          <ArrowLeft color="black" size="18" className = "mx-auto" strokeWidth="5"/>
+        <Navbar activePage={'journeyedit'} />
+
+        <div className="grid grid-cols-4 font-DMSans">
+            <div className="col-span-2 ml-4 mt-4 scrollbar mr-0">
+                <div className="flex flex-row items-center">
+                    <button className="my-5" onClick={() => { router.back() }}>
+                        <ArrowLeft color="black" size="18" className = "mx-auto" strokeWidth="5"/>
+                    </button>
+
+                    <Text className="font-bold text-lg ml-3.5">Journey Details</Text>
+                </div>
+
+                <Text className="font-regular text-md px-8 mb-2">Journey Name</Text>
+                { !editingJourneyName &&
+                    <div className="px-8 pb-5">
+                      <Text className="font-medium text-lg">{userJourneyName}</Text>
+                      <button onClick={() => { setEditingJourneyName(!editingJourneyName) }}>
+                        <Text className="font-light text-sm text-tabiBlue">Edit</Text>
                       </button>
+                    </div>
+                }
+                { editingJourneyName &&
+                    <div className="px-8 pb-5">
+                        <Input focusBorderColor='#268DC7' value={userJourneyName} onChange={(e) => { setUserJourneyName(e.target.value) }}/>
+                        { userJourneyName === serverJourneyName &&
+                          <button onClick={() => { setEditingJourneyName(!editingJourneyName) }}>
+                            <Text className="font-light text-sm text-tabiBlue">Exit</Text>
+                          </button>
+                        }
+                        { userJourneyName !== serverJourneyName &&
+                          <button onClick={() => { updateJourneyName(userJourneyName, journeyId, userId); setEditingJourneyName(!editingJourneyName) }}>
+                            <Text className="font-medium text-sm text-tabiBlue">Save</Text>
+                          </button>
+                        }
+                    </div>
+                }
 
-                      <Text className="font-bold text-lg ml-3.5">Journey Details</Text>
-                  </div>
-
-                  <Text className="font-regular text-md px-8 mb-2">Journey Name</Text>
-                  { !editingJourneyName &&
-                      <div className="px-8 pb-5">
-                        <Text className="font-medium text-lg">{userJourneyName}</Text>
-                        <button onClick={() => { setEditingJourneyName(!editingJourneyName) }}>
+                <Text className="font-regular text-md px-8 mb-2">Journey Description</Text>
+                { !editingJourneyBody &&
+                    <div className="px-8 pb-5">
+                        <Text className="font-medium text-sm display-linebreak" noOfLines={2}>{userJourneyBody}</Text>
+                        <button onClick={() => { setEditingJourneyBody(!editingJourneyBody) }}>
                           <Text className="font-light text-sm text-tabiBlue">Edit</Text>
                         </button>
-                      </div>
-                  }
-                  { editingJourneyName &&
-                      <div className="px-8 pb-5">
-                          <Input focusBorderColor='#268DC7' value={userJourneyName} onChange={(e) => { setUserJourneyName(e.target.value) }}/>
-                          { userJourneyName === serverJourneyName &&
-                            <button onClick={() => { setEditingJourneyName(!editingJourneyName) }}>
-                              <Text className="font-light text-sm text-tabiBlue">Exit</Text>
-                            </button>
-                          }
-                          { userJourneyName !== serverJourneyName &&
-                            <button onClick={() => { updateJourneyName(userJourneyName, journeyId, userId); setEditingJourneyName(!editingJourneyName) }}>
-                              <Text className="font-medium text-sm text-tabiBlue">Save</Text>
-                            </button>
-                          }
-                      </div>
-                  }
-
-                  <Text className="font-regular text-md px-8 mb-2">Journey Description</Text>
-                  { !editingJourneyBody &&
-                      <div className="px-8 pb-5">
-                          <Text className="font-medium text-sm display-linebreak" noOfLines={2}>{userJourneyBody}</Text>
+                    </div>
+                }
+                { editingJourneyBody &&
+                    <div className="px-8 pb-8">
+                        <Textarea className="scrollbar" focusBorderColor='#268DC7' value={userJourneyBody} onChange={(e) => { setUserJourneyBody(e.target.value) }}/>
+                        { userJourneyBody === serverJourneyBody &&
                           <button onClick={() => { setEditingJourneyBody(!editingJourneyBody) }}>
-                            <Text className="font-light text-sm text-tabiBlue">Edit</Text>
+                            <Text className="font-light text-sm text-tabiBlue">Exit</Text>
                           </button>
-                      </div>
-                  }
-                  { editingJourneyBody &&
-                      <div className="px-8 pb-8">
-                          <Textarea className="scrollbar" focusBorderColor='#268DC7' value={userJourneyBody} onChange={(e) => { setUserJourneyBody(e.target.value) }}/>
-                          { userJourneyBody === serverJourneyBody &&
-                            <button onClick={() => { setEditingJourneyBody(!editingJourneyBody) }}>
-                              <Text className="font-light text-sm text-tabiBlue">Exit</Text>
-                            </button>
-                          }
-                          { userJourneyBody !== serverJourneyBody &&
-                            <button onClick={() => { updateJourneyBody(userJourneyBody, journeyId, userId); setEditingJourneyBody(!editingJourneyBody) }}>
-                              <Text className="font-medium text-sm text-tabiBlue">Save</Text>
-                            </button>
-                          }
-                      </div>
-                  }
-                  <Text className="font-regular text-md px-8 mb-2">Visibility</Text>
-                  <div className="px-8 pb-8">
-                    <RadioGroup onChange={setPublic} value={isPublic}>
-                      <Stack className="text-sm font-medium">
-                        <Radio borderWidth="4px" _checked={{ bg: 'white', color: 'white', borderColor: '#268DC7' }} value={'public'}>Public</Radio>
-                        <Radio borderWidth="4px" _checked={{ bg: 'white', color: 'white', borderColor: '#268DC7' }} value={'private'}>Private</Radio>
-                      </Stack>
-                    </RadioGroup>
-                  </div>
-                  <div className="ml-4 mb-4 mt-6">
-                      <Text className="font-bold text-lg ml-3.5">Destinations</Text>
-                  </div>
-
-                  {/* Day buttons */}
-                  <div className="grid grid-cols-10 gap-0">
-                      <Stack className='col-span-2 place-items-center'>
-                          <ul>
-                              {userDestinationData.map((day, index) => (
-                                  <li key={index}>
-                                      <div className="grid place-items-center font-DMSans">
-                                          {/* Set day button to Blue, no hover effect */}
-                                          { index === currentDay &&
-                                              <button className='text-[#268DC7] transition-none'>
-                                                  <p className="font-medium text-lg py-2">
-                                                      Day {index + 1}
-                                                  </p>
-                                              </button>
-                                          }
-
-                                          {/* NOT the current day to display, hover effect added */}
-                                          { index !== currentDay &&
-                                              <button
-                                                  className='text-[#CBCBCB] hover:text-tabiBlueDark transition-none'
-                                                  onClick={() => {
-                                                    try {
-                                                      setViewState({
-                                                        latitude: userDestinationData[index].destinations[0].geometry.location.lat,
-                                                        longitude: userDestinationData[index].destinations[0].geometry.location.lng,
-                                                        zoom: 10
-                                                      })
-                                                    } catch {
-                                                      setViewState({
-                                                        latitude: viewState.latitude,
-                                                        longitude: viewState.longitude,
-                                                        zoom: 10
-                                                      })
-                                                    }
-                                                    setCurrentDay(index)
-                                                    resetMapPopup()
-                                                  }}
-                                              >
-                                                  <p className="font-medium text-lg py-2">
-                                                      Day {index + 1}
-                                                  </p>
-                                              </button>
-                                          }
-                                      </div>
-                                  </li>
-                              ))}
-                          </ul>
-
-                          <button className='text-[#CBCBCB] hover:text-tabiBlueDark transition-none' onClick={() => {
-                            const data = userDestinationData
-                            data.push({ destinations: [] })
-                            setUserDestinationData(data)
-                            setRefresh(!refresh)
-                          }}>
-                              <p className="font-bold text-xl">+</p>
+                        }
+                        { userJourneyBody !== serverJourneyBody &&
+                          <button onClick={() => { updateJourneyBody(userJourneyBody, journeyId, userId); setEditingJourneyBody(!editingJourneyBody) }}>
+                            <Text className="font-medium text-sm text-tabiBlue">Save</Text>
                           </button>
-                      </Stack>
+                        }
+                    </div>
+                }
+                <Text className="font-regular text-md px-8 mb-2">Visibility</Text>
+                <div className="px-8 pb-8">
+                  <RadioGroup onChange={setPublic} value={isPublic}>
+                    <Stack className="text-sm font-medium">
+                      <Radio borderWidth="4px" _checked={{ bg: 'white', color: 'white', borderColor: '#268DC7' }} value={'public'}>Public</Radio>
+                      <Radio borderWidth="4px" _checked={{ bg: 'white', color: 'white', borderColor: '#268DC7' }} value={'private'}>Private</Radio>
+                    </Stack>
+                  </RadioGroup>
+                </div>
+                <div className="ml-4 mb-4 mt-6">
+                    <Text className="font-bold text-lg ml-3.5">Destinations</Text>
+                </div>
 
-                      {/* Destination Cards */}
-                      <Stack className='col-span-8 flex justify-center items-center mx-5'>
-                          <ul>
-                          {userDestinationData[currentDay].destinations.map((destination, index) => (
-                              <li key={destination.place_id}>
-                                  <button onClick={() => {
-                                    setViewState({
-                                      latitude: destination.geometry.location.lat,
-                                      longitude: destination.geometry.location.lng,
-                                      zoom: 14
-                                    })
-                                    setSearchInputData(destination)
-                                  }}>
-                                      <DestinationCard destination={destination} index={index} />
-                                  </button>
-                              </li>
-                          ))}
-                          </ul>
+                {/* Day buttons */}
+                <div className="grid grid-cols-10 gap-0">
+                    <Stack className='col-span-2 place-items-center'>
+                        <ul>
+                            {userDestinationData.map((day, index) => (
+                                <li key={index}>
+                                    <div className="grid place-items-center font-DMSans">
+                                        {/* Set day button to Blue, no hover effect */}
+                                        { index === currentDay &&
+                                            <button className='text-[#268DC7] transition-none'>
+                                                <p className="font-medium text-lg py-2">
+                                                    Day {index + 1}
+                                                </p>
+                                            </button>
+                                        }
 
-                          {userDestinationData[currentDay].destinations.length === 0 &&
-                              <Text className="flex text-sm text-gray-400 font-medium justify-center mr-4 py-8">No Destinations in this Day.</Text>
-                          }
+                                        {/* NOT the current day to display, hover effect added */}
+                                        { index !== currentDay &&
+                                            <button
+                                                className='text-[#CBCBCB] hover:text-tabiBlueDark transition-none'
+                                                onClick={() => {
+                                                  try {
+                                                    setViewState({
+                                                      latitude: userDestinationData[index].destinations[0].geometry.location.lat,
+                                                      longitude: userDestinationData[index].destinations[0].geometry.location.lng,
+                                                      zoom: 10
+                                                    })
+                                                  } catch {
+                                                    setViewState({
+                                                      latitude: viewState.latitude,
+                                                      longitude: viewState.longitude,
+                                                      zoom: 10
+                                                    })
+                                                  }
+                                                  setCurrentDay(index)
+                                                  resetMapPopup()
+                                                }}
+                                            >
+                                                <p className="font-medium text-lg py-2">
+                                                    Day {index + 1}
+                                                </p>
+                                            </button>
+                                        }
+                                    </div>
+                                </li>
+                            ))}
+                        </ul>
 
-                          <div className="mt-8 min-w-[70%] pb-16">
-                              <SearchInput viewState={viewState} setViewState={setViewState} setSearchInputData={setSearchInputData}/>
-                          </div>
-                      </Stack>
-                  </div>
-              </div>
+                        <button className='text-[#CBCBCB] hover:text-tabiBlueDark transition-none' onClick={() => {
+                          const data = userDestinationData
+                          data.push({ destinations: [] })
+                          setUserDestinationData(data)
+                          setRefresh(!refresh)
+                        }}>
+                            <p className="font-bold text-xl">+</p>
+                        </button>
+                    </Stack>
 
-              {/* Map Destination Popup */}
-              <div className="fixed top-13 right-0 bg-white col-span-2 max-w-[50vw] overflow-hidden">
-                  <LargeMapView viewState={viewState} setViewState={setViewState} userDestinationData={userDestinationData} currentDay={currentDay} setSearchInputData={setSearchInputData} resetMapPopup={resetMapPopup} searchInputData={searchInputData} />
-                  <MapPopup userId={userId} router={router} searchInputData={searchInputData} resetMapPopup={resetMapPopup} userDestinationData={userDestinationData} setUserDestinationData={setUserDestinationData} updateDestinations={updateDestinations} refresh={refresh} setRefresh={setRefresh} currentDay={currentDay}/>
-              </div>
-          </div>
+                    {/* Destination Cards */}
+                    <Stack className='col-span-8 flex justify-center items-center mx-5'>
+                        <ul>
+                        {userDestinationData[currentDay].destinations.map((destination, index) => (
+                            <li key={destination.place_id}>
+                                <button onClick={() => {
+                                  setViewState({
+                                    latitude: destination.geometry.location.lat,
+                                    longitude: destination.geometry.location.lng,
+                                    zoom: 14
+                                  })
+                                  setSearchInputData(destination)
+                                }}>
+                                    <DestinationCard destination={destination} index={index} />
+                                </button>
+                            </li>
+                        ))}
+                        </ul>
+
+                        {userDestinationData[currentDay].destinations.length === 0 &&
+                            <Text className="flex text-sm text-gray-400 font-medium justify-center mr-4 py-8">No Destinations in this Day.</Text>
+                        }
+
+                        <div className="mt-8 min-w-[70%] pb-16">
+                            <SearchInput viewState={viewState} setViewState={setViewState} setSearchInputData={setSearchInputData}/>
+                        </div>
+                    </Stack>
+                </div>
+            </div>
+
+            {/* Map Destination Popup */}
+            <div className="fixed top-13 right-0 bg-white col-span-2 max-w-[50vw] overflow-hidden">
+                <LargeMapView viewState={viewState} setViewState={setViewState} userDestinationData={userDestinationData} currentDay={currentDay} setSearchInputData={setSearchInputData} resetMapPopup={resetMapPopup} searchInputData={searchInputData} />
+                <MapPopup userId={userId} router={router} searchInputData={searchInputData} resetMapPopup={resetMapPopup} userDestinationData={userDestinationData} setUserDestinationData={setUserDestinationData} updateDestinations={updateDestinations} refresh={refresh} setRefresh={setRefresh} currentDay={currentDay}/>
+            </div>
+        </div>
       </>
     )
   }

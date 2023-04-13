@@ -4,6 +4,7 @@ import { Stack, Image, Text, Skeleton, SkeletonText, Avatar, Input } from '@chak
 import { createClient } from '@supabase/supabase-js'
 import { useSupabaseClient } from '@supabase/auth-helpers-react'
 import { getCookie, setCookie } from 'cookies-next'
+import Head from 'next/head'
 
 import Navbar from '../../components/navbar'
 import BackButton from '../../components/backButton'
@@ -101,90 +102,94 @@ const Journey = ({ journey }) => {
   } else {
     return (
       <div>
-          <Navbar activePage={'index'} username={username}/>
+        <Head>
+          <title>{data.journey.journey_name} | tabi</title>
+        </Head>
 
-          <div className="grid place-items-center font-DMSans">
-              <Stack className="w-full lg:w-5/6">
-                  <div className = "relative mb-5">
-                      <div className="absolute top-0 mx-5">
-                          <BackButton onClick={() => { router.push('/') }}/>
-                      </div>
-                      <div>
-                          <Image className="min-w-full max-h-[25vh]" objectFit="cover" overflow="hidden" borderRadius = "lg" src={`https://maps.googleapis.com/maps/api/place/photo?maxheight=1000&photo_reference=${data.journey.destinations[0].destinations[0].photos[0].photo_reference}&key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_KEY}`} alt='Journey Image'/>
-                      </div>
-                      <div className="flex flex-row absolute top-0 right-0 mx-5">
-                        <HeartButton onClick={() => {}}/>
-                        { data.journey.user_id === userId &&
-                          <EditButton onClick={() => {
-                            router.push({
-                              pathname: '/editJourney',
-                              query: { journeyId: data.journey.id }
-                            })
-                          }}/>
-                        }
-                      </div>
-                  </div>
-                  <Text className="font-bold text-2xl px-5 md:px-0 ">{data.journey.journey_name}</Text>
-                  <Text className="font-bold text-lg pt-5 px-5 md:px-0">About this Journey</Text>
-                  { data.journey.journey_body === null &&
-                    <Text className="font-sm font-regular text-gray-400 pt-2 justify-start display-linebreak px-5 md:px-0">The author of this Journey has yet to add a description.</Text>
-                  }
-                  { data.journey.journey_body !== null &&
-                    // <Text className="font-sm font-regular pt-2 justify-start display-linebreak px-5 md:px-0">{data.journey.journey_body.replace('<br/>', '\n')}</Text>
-                    <div className="pt-2 display-linebreak">{data.journey.journey_body.replace('<br/>', '\n')}</div>
-                  }
-                  <Text className="font-bold text-lg pt-5 justify-start px-5 md:px-0 pb-2">Destinations in this Journey</Text>
-                  <div className ="px-3 lg:px-0">
-                      <div className="rounded-lg overflow-hidden">
-                       <MapPreview journeyDays={data.journey.destinations}/>
-                      </div>
-                  </div>
-                  <button
-                    onClick={ () => {
-                      router.push({
-                        pathname: '/journeyDetails',
-                        query: { journeyId: data.journey.id }
-                      })
-                    }}
-                    className="flex justify-center pt-3"
-                  >
-                    <Text className="font-medium text-tabiBlue hover:text-tabiBlueDark text-sm ">See All Destinations</Text>
-                  </button>
-                  <Text className="font-bold text-lg pt-5 justify-start px-5 md:px-0 py-2">Comments</Text>
-                  <ul className="pb-10">
-                      {data.comments.map((comment) => (
-                          <li key="{comment}">
-                              <div className="flex items-center font-DMSans px-5 md:px-0 mb-2">
-                                  <div className='mr-2 mb-1'>
-                                      <Avatar name = {comment.author_username} size = "xs" />
-                                  </div>
-                                  <div>
-                                      <Text className='font-semibold text-sm ml-1'>{comment.author_username}</Text>
-                                      <Text className="ml-1">{comment.comment_body}</Text>
-                                  </div>
-                              </div>
-                          </li>
-                      ))}
-                  </ul>
-                    <form onSubmit={() => {
+        <Navbar activePage={'index'} username={username}/>
+
+        <div className="grid place-items-center font-DMSans">
+            <Stack className="w-full lg:w-5/6">
+                <div className = "relative mb-5">
+                    <div className="absolute top-0 mx-5">
+                        <BackButton onClick={() => { router.push('/') }}/>
+                    </div>
+                    <div>
+                        <Image className="min-w-full max-h-[25vh]" objectFit="cover" overflow="hidden" borderRadius = "lg" src={`https://maps.googleapis.com/maps/api/place/photo?maxheight=1000&photo_reference=${data.journey.destinations[0].destinations[0].photos[0].photo_reference}&key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_KEY}`} alt='Journey Image'/>
+                    </div>
+                    <div className="flex flex-row absolute top-0 right-0 mx-5">
+                      <HeartButton onClick={() => {}}/>
+                      { data.journey.user_id === userId &&
+                        <EditButton onClick={() => {
+                          router.push({
+                            pathname: '/editJourney',
+                            query: { journeyId: data.journey.id }
+                          })
+                        }}/>
+                      }
+                    </div>
+                </div>
+                <Text className="font-bold text-2xl px-5 md:px-0 ">{data.journey.journey_name}</Text>
+                <Text className="font-bold text-lg pt-5 px-5 md:px-0">About this Journey</Text>
+                { data.journey.journey_body === null &&
+                  <Text className="font-sm font-regular text-gray-400 pt-2 justify-start display-linebreak px-5 md:px-0">The author of this Journey has yet to add a description.</Text>
+                }
+                { data.journey.journey_body !== null &&
+                  // <Text className="font-sm font-regular pt-2 justify-start display-linebreak px-5 md:px-0">{data.journey.journey_body.replace('<br/>', '\n')}</Text>
+                  <div className="pt-2 display-linebreak">{data.journey.journey_body.replace('<br/>', '\n')}</div>
+                }
+                <Text className="font-bold text-lg pt-5 justify-start px-5 md:px-0 pb-2">Destinations in this Journey</Text>
+                <div className ="px-3 lg:px-0">
+                    <div className="rounded-lg overflow-hidden">
+                      <MapPreview journeyDays={data.journey.destinations}/>
+                    </div>
+                </div>
+                <button
+                  onClick={ () => {
+                    router.push({
+                      pathname: '/journeyDetails',
+                      query: { journeyId: data.journey.id }
+                    })
+                  }}
+                  className="flex justify-center pt-3"
+                >
+                  <Text className="font-medium text-tabiBlue hover:text-tabiBlueDark text-sm ">See All Destinations</Text>
+                </button>
+                <Text className="font-bold text-lg pt-5 justify-start px-5 md:px-0 py-2">Comments</Text>
+                <ul className="pb-10">
+                    {data.comments.map((comment) => (
+                        <li key="{comment}">
+                            <div className="flex items-center font-DMSans px-5 md:px-0 mb-2">
+                                <div className='mr-2 mb-1'>
+                                    <Avatar name = {comment.author_username} size = "xs" />
+                                </div>
+                                <div>
+                                    <Text className='font-semibold text-sm ml-1'>{comment.author_username}</Text>
+                                    <Text className="ml-1">{comment.comment_body}</Text>
+                                </div>
+                            </div>
+                        </li>
+                    ))}
+                </ul>
+                  <form onSubmit={() => {
+                    createComment(comment, username, data.journey.id)
+                    setRefresh(!refresh)
+                  }}>
+                  <div className="flex flex-row pb-20">
+                    <Input className="ml-5" placeholder="Enter a comment" onChange={(e) => { setComment(e.target.value) }}/>
+
+                    <button onClick={ () => {
                       createComment(comment, username, data.journey.id)
                       setRefresh(!refresh)
                     }}>
-                    <div className="flex flex-row pb-20">
-                      <Input className="ml-5" placeholder="Enter a comment" onChange={(e) => { setComment(e.target.value) }}/>
+                    <Text className="bg-tabiBlue hover:bg-tabiBlueDark rounded-full mx-4 px-5 py-0.5 text-white text-md font-medium">Post</Text>
+                    </button>
+                  </div>
+                  </form>
+            </Stack>
+        </div>
 
-                      <button onClick={ () => {
-                        createComment(comment, username, data.journey.id)
-                        setRefresh(!refresh)
-                      }}>
-                      <Text className="bg-tabiBlue hover:bg-tabiBlueDark rounded-full mx-4 px-5 py-0.5 text-white text-md font-medium">Post</Text>
-                      </button>
-                    </div>
-                    </form>
-              </Stack>
-          </div>
-
-          <Footer />
+        <Footer />
       </div>
     )
   }

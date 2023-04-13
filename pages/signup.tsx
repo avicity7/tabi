@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useSupabaseClient } from '@supabase/auth-helpers-react'
 import { useRouter } from 'next/router'
+import Head from 'next/head'
 
 import { Image } from '@chakra-ui/react'
 
@@ -41,6 +42,9 @@ const Signup = () => {
 
   return (
     <div className="flex h-[80vh] items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+        <Head>
+          <title>Journeys | tabi</title>
+        </Head>
         <div className="m-auto w-full max-w-md space-y-8">
             <div>
               <div className='flex justify-center'>

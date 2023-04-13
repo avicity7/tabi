@@ -3,6 +3,7 @@ import { useRouter } from 'next/router'
 import { useUser } from '@supabase/auth-helpers-react'
 import { createClient } from '@supabase/supabase-js'
 import { Spinner } from '@chakra-ui/react'
+import Head from 'next/head'
 
 import getUsername from '../utils/getUsername'
 
@@ -33,6 +34,10 @@ const Creation = () => {
 
   return (
     <div className="flex h-[80vh] items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+        <Head>
+          <title>Journey Creation | tabi</title>
+        </Head>
+
         <div className="m-auto w-full max-w-md space-y-8">
             <div>
             <h1 className="mx-auto text-center font-DMSans font-bold text-4xl">tabi</h1>
