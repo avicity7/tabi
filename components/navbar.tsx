@@ -158,24 +158,32 @@ const Navbar = (props) => {
                       </div>
 
                       <Stack>
-                        <div className="mt-5 mb-5">
-                          <Input focusBorderColor='#268DC7'onChange={(e) => { setSearchInput(e.target.value) }}/>
-                        </div>
+                        <form onSubmit={(e) => {
+                          e.preventDefault()
+                          router.push({
+                            pathname: '/search',
+                            query: { searchInput }
+                          })
+                        }}>
+                          <div className="mt-5 mb-5">
+                            <Input focusBorderColor='#268DC7'onChange={(e) => { setSearchInput(e.target.value) }}/>
+                          </div>
 
-                        <div className="flex justify-end">
-                          <button
-                            type="button"
-                            className="font-DMSans inline-flex justify-center rounded-md border border-transparent bg-tabiBlue px-4 py-2 text-sm font-medium text-white hover:bg-tabiBlueDark"
-                            onClick={() => {
-                              router.push({
-                                pathname: '/search',
-                                query: { searchInput }
-                              })
-                            }}
-                          >
-                            Search
-                          </button>
-                        </div>
+                          <div className="flex justify-end">
+                            <button
+                              type="button"
+                              className="font-DMSans inline-flex justify-center rounded-md border border-transparent bg-tabiBlue px-4 py-2 text-sm font-medium text-white hover:bg-tabiBlueDark"
+                              onClick={() => {
+                                router.push({
+                                  pathname: '/search',
+                                  query: { searchInput }
+                                })
+                              }}
+                            >
+                              Search
+                            </button>
+                          </div>
+                        </form>
                       </Stack>
                     </Dialog.Panel>
                   </Transition.Child>

@@ -14,6 +14,7 @@ import Navbar from '../components/navbar'
 
 const Search = (props) => {
   const [username, setUsername] = useState(props.username !== undefined ? props.username : '')
+  const [noResults, setNoResults] = useState(false)
   const [data, setData] = useState([])
   const supabaseClient = useSupabaseClient()
   const router = useRouter()
@@ -42,11 +43,15 @@ const Search = (props) => {
 
         const temp = []
         for (let i = 0; i < journeys.length; i++) {
-          if (journeys[i].journey_name.includes(router.query.searchInput)) {
+          if (journeys[i].journey_name.toLowerCase().includes(String(router.query.searchInput).toLowerCase())) {
             temp.push(journeys[i])
           }
         }
-        setData(temp)
+        if (temp.length !== 0) {
+          setData(temp)
+        } else {
+          setNoResults(true)
+        }
       } catch {
 
       }
@@ -54,7 +59,7 @@ const Search = (props) => {
     if (router.isReady) fetchData()
   }, [router.isReady])
 
-  if (data.length === 0) { // Return loading Spinner
+  if (data.length === 0 && !noResults) { // Return loading Spinner
     return (
       <div className="scrollbar">
         <Head>
@@ -68,12 +73,29 @@ const Search = (props) => {
                 <div className="flex justify-center">
                     <Spinner thickness='4px' speed='0.65s' emptyColor='gray.200' color='#268DC7' size='xl'/>
                 </div>
-                <p className="font-DMSans font-medium">Loading Journeys...</p>
+                <p className="font-DMSans font-medium">Searching...</p>
             </Stack>
         </div>
     </div>
     )
-  } else { // Show Journeys
+  } else if (noResults) {
+    return (
+      <div className="scrollbar">
+        <Head>
+          <title>Search | tabi</title>
+        </Head>
+
+        <Navbar activePage={'index'} />
+
+        <div className="flex justify-center items-center h-[91.2vh]">
+            <Stack className="flex items-center font-DMSans mb-5">
+                <p className="font-DMSans font-medium">No Journeys found with the name:</p>
+                <Text className="text-xl font-bold">{ router.query.searchInput }</Text>
+            </Stack>
+        </div>
+    </div>
+    )
+  } else if (data.length !== 0) { // Show Journeys
     return (
       <div className="scrollbar">
         <Head>
