@@ -1,7 +1,6 @@
 import { useRouter } from 'next/router'
 import {
   Stack, Text, Input,
-  Show,
   Hide,
   Drawer,
   DrawerBody,
@@ -22,7 +21,6 @@ import NavbarAvatar from './navbarAvatar'
 
 const Navbar = (props) => {
   const activePage = props.activePage
-  const username = props.username
   const router = useRouter()
 
   const [searchOpen, setSearchOpen] = useState(false)
@@ -62,7 +60,7 @@ const Navbar = (props) => {
             </div>
           </Hide>
 
-          <Show below="lg">
+          <Hide above="lg">
             <button onClick={handleDrawerOpen}>
               <MenuRoundedIcon />
             </button>
@@ -97,16 +95,16 @@ const Navbar = (props) => {
                 </DrawerBody>
               </DrawerContent>
             </Drawer>
-          </Show>
+          </Hide>
 
-          <Show below="lg">
+          <Hide above="lg">
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 font-DMSans flex lg:min-w-0 lg:flex-1 align-middle">
               <Link href="/" className="-m-1.5 p-1.5">
                   <span className="font-DMSans font-bold text-3xl">tabi</span>
                   <span className="font-DMSans text-xs ml-1 text-tabiBlue">alpha</span>
               </Link>
             </div>
-          </Show>
+          </Hide>
 
           <div className='flex flex-1 justify-end px-5'>
             <button onClick={handleSearchOpen} className='min-w-0 justify-end'>
@@ -176,7 +174,7 @@ const Navbar = (props) => {
             </Dialog>
           </Transition>
 
-          <NavbarAvatar username={username}/>
+          <NavbarAvatar />
 
         </div>
     </header>

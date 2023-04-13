@@ -2,7 +2,11 @@ import { Avatar, Stack } from '@chakra-ui/react'
 import { Menu } from '@headlessui/react'
 import { useRouter } from 'next/router'
 import { ListDivider } from '@mui/joy'
+import { useState, useEffect } from 'react'
 import { createClient } from '@supabase/supabase-js'
+import { useSupabaseClient } from '@supabase/auth-helpers-react'
+import getUsername from '../utils/getUsername'
+import { getCookie, setCookie } from 'cookies-next'
 
 const logout = async (e: React.MouseEvent<HTMLElement>) => {
   const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL ?? 'error', process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? 'error')
@@ -13,12 +17,38 @@ const logout = async (e: React.MouseEvent<HTMLElement>) => {
   }
 }
 
-const NavbarAvatar = ({ username }) => {
+const NavbarAvatar = (props) => {
   const router = useRouter()
-  console.log(username)
+  const [username, setUsername] = useState('')
+  const supabaseClient = useSupabaseClient()
+
+  useEffect(() => {
+    setUsername(getCookie('username') as any)
+    const fetchData = async () => {
+      const user = await supabaseClient.auth.getUser()
+      let fetchedUsername = null
+      if (user.data.user !== null) {
+        fetchedUsername = await getUsername(user.data.user.id)
+      }
+      try {
+        if (username !== fetchedUsername) {
+          setUsername(fetchedUsername)
+        }
+        if (getCookie('username') === undefined) {
+          setCookie('username', fetchedUsername)
+        }
+      } catch {
+
+      }
+    }
+    fetchData()
+  }, [])
+
   return (
     <Menu as="div" className="relative inline-block text-left">
-        <Menu.Button><Avatar name={username} size="sm" /></Menu.Button>
+        {username !== '' &&
+          <Menu.Button><Avatar name={username} size="sm" /></Menu.Button>
+        }
         <Menu.Items className="absolute right-0 mt-2 origin-top-right rounded-md bg-white shadow-md">
             <Stack className="flex px-6">
                 {username !== '' && username !== null &&
