@@ -9,7 +9,8 @@ import {
   Spinner,
   Card,
   CardBody,
-  Image
+  Image,
+  Skeleton
 } from '@chakra-ui/react'
 import { useSupabaseClient } from '@supabase/auth-helpers-react'
 import { getCookie, setCookie } from 'cookies-next'
@@ -126,7 +127,7 @@ const Profile = (props) => {
           <JourneyCreateButton />
 
           { privateJourneys.length !== 0 &&
-              <div className="font-DMSans px-10 my-3">
+              <div className="font-DMSans px-5 lg:px-10 my-3">
                   <Text className="font-medium text-lg">Your Private Journeys</Text>
                   <ul>
                     {privateJourneys.map((journey) => (
@@ -134,7 +135,14 @@ const Profile = (props) => {
                           <div className="grid place-items-start font-DMSans">
                             <Link href={`/journeys/${encodeURIComponent(journey.id)}`}>
                               <Card minW={'xs'} maxW={'xs'} className = "my-5 shadow-none" overflow="hidden" variant="unstyled">
-                                {journey.destinations[0].destinations[1] === undefined &&
+                                {journey.destinations[0].destinations[0] === undefined &&
+                                  <div className="staticrounded-xl overflow-hidden">
+                                    <Skeleton height="250px" speed={0}>
+                                      <Text className="relative ">{journey.journey_name}</Text>
+                                    </Skeleton>
+                                  </div>
+                                }
+                                {journey.destinations[0].destinations[0] !== undefined && journey.destinations[0].destinations[1] === undefined &&
                                   <Image className="rounded-xl" minH="250" maxH="250" minW="100%" objectFit='cover' src={`https://maps.googleapis.com/maps/api/place/photo?maxheight=1000&photo_reference=${journey.destinations[0].destinations[0].photos[0].photo_reference}&key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_KEY}`} alt='image'/>
                                 }
                                 {journey.destinations[0].destinations[1] !== undefined &&
@@ -178,15 +186,22 @@ const Profile = (props) => {
           }
 
           { publicJourneys.length !== 0 &&
-              <div className="font-DMSans px-10 my-3">
+              <div className="font-DMSans px-5 lg:px-10 my-3">
                   <Text className="font-medium text-lg">Your Public Journeys</Text>
-                  <ul>
+                  <ul className="flex flex-row">
                     {publicJourneys.map((journey) => (
                       <li key={journey.id}>
-                          <div className="grid place-items-start font-DMSans">
+                          <div className="grid font-DMSans mr-10">
                             <Link href={`/journeys/${encodeURIComponent(journey.id)}`}>
                               <Card minW={'xs'} maxW={'xs'} className = "my-5 shadow-none" overflow="hidden" variant="unstyled">
-                                {journey.destinations[0].destinations[1] === undefined &&
+                                {journey.destinations[0].destinations[0] === undefined &&
+                                  <div className="static rounded-xl overflow-hidden">
+                                    <Skeleton height="250px" speed={0}>
+                                      <Text className="relative ">{journey.journey_name}</Text>
+                                    </Skeleton>
+                                  </div>
+                                }
+                                {journey.destinations[0].destinations[0] !== undefined && journey.destinations[0].destinations[1] === undefined &&
                                   <Image className="rounded-xl" minH="250" maxH="250" minW="100%" objectFit='cover' src={`https://maps.googleapis.com/maps/api/place/photo?maxheight=1000&photo_reference=${journey.destinations[0].destinations[0].photos[0].photo_reference}&key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_KEY}`} alt='image'/>
                                 }
                                 {journey.destinations[0].destinations[1] !== undefined &&

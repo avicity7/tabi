@@ -64,7 +64,6 @@ const EditJourney = (props) => {
   const supabaseClient = useSupabaseClient()
   const router = useRouter()
   const [username, setUsername] = useState(props.username !== undefined ? props.username : '')
-  const userId = props.userId
   const [viewState, setViewState] = useState({
     latitude: 35.6812,
     longitude: 139.7671,
@@ -77,6 +76,7 @@ const EditJourney = (props) => {
   const [userJourneyName, setUserJourneyName] = useState('')
   const [serverJourneyBody, setServerJourneyBody] = useState('')
   const [userJourneyBody, setUserJourneyBody] = useState('')
+  const [userId, setUserId] = useState('')
   const [isPublic, setPublic] = useState('')
   const [journeyId, setJourneyId] = useState()
 
@@ -110,10 +110,12 @@ const EditJourney = (props) => {
 
   useEffect(() => {
     const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL ?? 'error', process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? 'error')
+
     const fetchData = async () => {
       if (!router.isReady) return
 
       const user = await supabaseClient.auth.getUser()
+      setUserId(user.data.user.id)
 
       let fetchedUsername = null
       if (user.data.user !== null) {
@@ -126,10 +128,10 @@ const EditJourney = (props) => {
         .eq('id', router.query.journeyId)
         .single()
 
-      console.log(data.destinations)
       if (fetchedUsername !== username) {
         setUsername(fetchedUsername)
       }
+
       if (getCookie('username') === undefined) {
         setCookie('username', fetchedUsername)
       }

@@ -1,4 +1,4 @@
-import { Card, CardBody, Stack, Image, Text, Spinner } from '@chakra-ui/react'
+import { Card, CardBody, Stack, Image, Text, Spinner, Skeleton } from '@chakra-ui/react'
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder'
 import { Icon } from '@iconify-icon/react'
 import Link from 'next/link'
@@ -80,7 +80,14 @@ const Home = (props) => {
                 <div className="grid place-items-center font-DMSans">
                   <Link href={`/journeys/${encodeURIComponent(journey.id)}`}>
                     <Card minW={{ base: '85vw', lg: 'md' }} maxW={{ base: '85vw', lg: 'md' }} className = "my-5 mx-5 shadow-none" overflow="hidden" variant="unstyled">
-                      {journey.destinations[0].destinations[1] === undefined &&
+                      {journey.destinations[0].destinations[0] === undefined &&
+                        <div className="static rounded-xl overflow-hidden">
+                          <Skeleton height="250px" speed={0}>
+                            <Text className="relative ">{journey.journey_name}</Text>
+                          </Skeleton>
+                        </div>
+                      }
+                      {journey.destinations[0].destinations[0] !== undefined && journey.destinations[0].destinations[1] === undefined &&
                         <Image className="rounded-xl" minH="250" maxH="250" minW="100%" objectFit='cover' src={`https://maps.googleapis.com/maps/api/place/photo?maxheight=1000&photo_reference=${journey.destinations[0].destinations[0].photos[0].photo_reference}&key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_KEY}`} alt='image'/>
                       }
                       {journey.destinations[0].destinations[1] !== undefined &&
