@@ -12,8 +12,8 @@ const MapPreview = ({ journeyDays, journeyId }) => {
     return (
       <>
         {/* Day buttons */}
-        <div className="grid grid-cols-10 gap-0 px-5 lg:px-0">
-            <Stack className='col-span-2 place-items-start lg:place-items-end'>
+        <div className="flex 0 px-5">
+            <Stack>
                 <ul>
                     {journeyDays.map((day, index) => (
                         <li key={index}>
@@ -48,7 +48,7 @@ const MapPreview = ({ journeyDays, journeyId }) => {
             </Stack>
 
             {/* Destination Cards */}
-            <Stack className='col-span-8 flex items-end lg:items-center mx-0 lg:mx-5'>
+            <Stack className='mx-10 lg:mx-15'>
                 <ul>
                     {journeyDays[currentDay].destinations.map((destination, index) => (
                         <li key={destination.place_id}>
@@ -68,19 +68,17 @@ const MapPreview = ({ journeyDays, journeyId }) => {
 
         </div>
 
-        <div className="grid grid-cols-10 gap-0 px-5 lg:px-0">
-          <div className="col-span-10 lg:col-span-8 flex justify-center pt-5">
-              <button
-              onClick={ () => {
-                router.push({
-                  pathname: '/journeyDetails',
-                  query: { journeyId }
-                })
-              }}
-              >
-                  <Text className="font-medium text-tabiBlue hover:text-tabiBlueDark text-sm ">Open Interactive Map</Text>
-              </button>
-          </div>
+        <div className="mt-10">
+          <button
+          onClick={ () => {
+            router.push({
+              pathname: '/journeyDetails',
+              query: { journeyId }
+            })
+          }}
+          >
+              <Text className="font-medium text-tabiBlue hover:text-tabiBlueDark text-sm ">Open Interactive Map</Text>
+          </button>
         </div>
       </>
     )

@@ -13,6 +13,7 @@ import Footer from '../../components/footer'
 import MapPreview from '../../components/mapPreview'
 import EditButton from '../../components/editButton'
 import HeartButton from '../../components/heartButton'
+import ActionButton from '../../components/actionButton'
 
 const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL ?? 'error', process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? 'error')
 
@@ -110,6 +111,7 @@ const Journey = ({ journey }) => {
                         })
                       }}/>
                     }
+                    <ActionButton onClick={() => {}}/>
                   </div>
               </div>
               <Skeleton height='40px' isLoaded={data.journey !== '' || data.comments !== ''}>
