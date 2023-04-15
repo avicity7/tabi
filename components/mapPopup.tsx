@@ -75,7 +75,7 @@ const MapPopup = ({ userId, router, searchInputData, resetMapPopup, userDestinat
               <button className='flex justify-start w-fit' onClick={ () => {
                 setAddingBudget(false)
                 const index = userDestinationData[currentDay].destinations.indexOf(searchInputData)
-                if (budget !== null) {
+                if (budget !== null && budget !== '') {
                   userDestinationData[currentDay].destinations[index].budget = budget
                 } else {
                   userDestinationData[currentDay].destinations[index].budget = undefined

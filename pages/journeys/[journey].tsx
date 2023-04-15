@@ -122,7 +122,7 @@ const Journey = ({ journey }) => {
                 }
                 { data.journey.journey_body !== null && (data.journey !== '' || data.comments !== '') &&
                   // <Text className="font-sm font-regular pt-2 justify-start display-linebreak px-5 md:px-0">{data.journey.journey_body.replace('<br/>', '\n')}</Text>
-                  <div className="pt-2 display-linebreak px-5 md:px-0">{data.journey.journey_body.replace('<br/>', '\n')}</div>
+                  <div className="pt-2 display-linebreak px-5 md:px-0 whitespace-pre-wrap">{data.journey.journey_body.replace('<br/>', '\n')}</div>
                 }
               </SkeletonText>
               <Text className="font-bold text-lg pt-5 justify-start px-5 md:px-0 pb-2">Destinations in this Journey</Text>

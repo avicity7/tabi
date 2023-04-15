@@ -120,8 +120,8 @@ const Home = (props) => {
                             </div>
                           </div>
                           <div className="flex flex-row items-center">
-                            <Icon icon="charm:person" style={{ color: '#CBCBCB' }} />
-                            <Text fontSize='sm' className="font-normal text-left pl-0.5 pt-0.3" style={{ color: '#CBCBCB' }}>{journey.author_username}</Text>
+                            <Icon icon="charm:person" style={{ color: '#268DC7' }} />
+                            <Text fontSize='sm' className="font-normal text-left pl-0.5 pt-0.3">{journey.author_username}</Text>
                           </div>
                           {/* <Text fontSize='md' className="font-regular text-left" color="black">{journey.journey_summary}</Text> */}
                         </Stack>
