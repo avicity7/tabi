@@ -17,23 +17,29 @@ import ActionButton from '../../components/actionButton'
 
 const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL ?? 'error', process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? 'error')
 
-const createComment = async (commentBody, username, journeyId) => {
-  const { error } = await supabase
-    .from('comments')
-    .insert({ comment_body: commentBody, journey_id: journeyId, author_username: username })
-  if (error) {
-    console.log(error)
-  }
-}
-
 const Journey = ({ journey }) => {
   const router = useRouter()
   const [username, setUsername] = useState('')
   const [userId, setUserId] = useState('')
   const [data, setData] = useState({ journey: journey != null ? journey : '' as any, comments: '' as any })
   const [comment, setComment] = useState('')
+  const [creatingComment, setCreatingComment] = useState(false)
   const [refresh, setRefresh] = useState(false)
   const supabaseClient = useSupabaseClient()
+
+  const createComment = async (commentBody, username, journeyId) => {
+    if (!creatingComment) {
+      setCreatingComment(true)
+      const { error } = await supabase
+        .from('comments')
+        .insert({ comment_body: commentBody, journey_id: journeyId, author_username: username })
+      if (error) {
+        console.log(error)
+      } else {
+        setCreatingComment(false)
+      }
+    }
+  }
 
   useEffect(() => {
     setUsername(getCookie('username') as any)
