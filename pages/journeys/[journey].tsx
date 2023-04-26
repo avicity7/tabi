@@ -157,7 +157,8 @@ const Journey = ({ journey }) => {
                   </ul>
                 }
               </SkeletonText>
-                <form onSubmit={() => {
+                <form onSubmit={(e) => {
+                  e.preventDefault()
                   createComment(comment, username, data.journey.id)
                   setRefresh(!refresh)
                 }}>
