@@ -7,7 +7,8 @@ const MapView = ({ viewState, setViewState, userDestinationData, currentDay, set
   return (
     <Map
       {...viewState}
-      onMove={(e) => {
+      reuseMaps
+      onMove={e => {
         setViewState(e.viewState)
         if (Object.keys(searchInputData).length !== 4) {
           resetMapPopup()

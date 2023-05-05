@@ -148,7 +148,7 @@ const Navbar = (props) => {
                           as="h3"
                           className="text-lg font-bold font-DMSans"
                         >
-                          Search
+                          Find a Journey
                         </Dialog.Title>
                         <div className="mb-1">
                           <button onClick={handleSearchClose}>
