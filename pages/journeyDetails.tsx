@@ -244,16 +244,16 @@ const JourneyDetails = (props) => {
         </Show>
 
         <Show below='lg'>
-          <div className="ml-4 my-3 flex flex-row items-center">
+          <div className="ml-4 my-3 flex flex-row items-center font-DMSans">
               <button onClick={() => { router.back() }}>
                   <ArrowLeft color="black" size="18" strokeWidth="5"/>
               </button>
 
-              <Text className="font-bold text-lg ml-3.5 mb-1">Destinations</Text>
+              <Text className="font-bold text-lg ml-3.5">Destinations</Text>
           </div>
 
           {/* Map Destination Popup */}
-          <div className="sticky top-1 right-0 bg-white">
+          <div className="sticky top-1 right-0 bg-white font-DMSans">
               <SmallMapView viewState={viewState} setViewState={setViewState} userDestinationData={serverDestinationData} currentDay={currentDay} setSearchInputData={setSearchInputData} resetMapPopup={resetMapPopup} searchInputData={searchInputData} />
               <MapPopup userId={userId} router={router} searchInputData={searchInputData} resetMapPopup={resetMapPopup} userDestinationData={null} setUserDestinationData={null} updateDestinations={updateDestinations} refresh={refresh} setRefresh={setRefresh} currentDay={currentDay}/>
           </div>
