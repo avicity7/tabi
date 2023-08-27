@@ -11,6 +11,20 @@ const MapPreview = ({ journeyDays, journeyId }) => {
     const router = useRouter()
     return (
       <>
+        {/* <div className='flex flex-row align-center mb-5 px-3 max-w-2xl'>
+          <Text className='font-regular text-tabiBlueDark text-lg'>Overview</Text>
+          <button
+          onClick={ () => {
+            router.push({
+              pathname: '/journeyDetails',
+              query: { journeyId }
+            })
+          }}
+          className='ml-6'
+          >
+              <Text className='font-regular text-neutral-400 hover:text-tabiBlue text-sm'>Switch to Interactive Map</Text>
+          </button>
+        </div> */}
         {/* Day buttons */}
         <div className="flex 0 px-5">
             <Stack>
@@ -52,8 +66,14 @@ const MapPreview = ({ journeyDays, journeyId }) => {
                 <ul>
                     {journeyDays[currentDay].destinations.map((destination, index) => (
                         <li key={destination.place_id}>
-                            <button onClick={() => {
-                            }}>
+                            <button
+                              onClick={ () => {
+                                router.push({
+                                  pathname: '/journeyDetails',
+                                  query: { journeyId }
+                                })
+                              }}
+                            >
                             <DestinationCard destination={destination} index={index} />
                             </button>
                         </li>
@@ -63,17 +83,6 @@ const MapPreview = ({ journeyDays, journeyId }) => {
                 {journeyDays[currentDay].destinations.length === 0 &&
                     <Text className="flex text-sm text-gray-400 font-medium justify-center mr-4 py-8">No Destinations in this Day.</Text>
                 }
-
-              <button
-              onClick={ () => {
-                router.push({
-                  pathname: '/journeyDetails',
-                  query: { journeyId }
-                })
-              }}
-              >
-                  <Text className="font-medium text-tabiBlue hover:text-tabiBlueDark text-sm ">Open Interactive Map</Text>
-              </button>
             </Stack>
         </div>
 

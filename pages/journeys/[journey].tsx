@@ -133,7 +133,9 @@ const Journey = ({ journey }) => {
                   <div className="pt-2 display-linebreak px-5 md:px-0 whitespace-pre-wrap">{data.journey.journey_body.replace('<br/>', '\n')}</div>
                 }
               </SkeletonText>
-              <Text className="font-bold text-lg pt-5 justify-start px-5 md:px-0 pb-2">Destinations in this Journey</Text>
+              <div className="pt-5 pb-2 px-5 md:px-0 max-w-2xl">
+                <Text className="font-bold text-lg justify-start">Destinations in this Journey</Text>
+              </div>
               <div className ="px-3 lg:px-0">
                   <div className="rounded-lg">
                     <Skeleton height="max" isLoaded={data.journey !== '' || data.comments !== ''}>
