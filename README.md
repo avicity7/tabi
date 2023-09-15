@@ -1,4 +1,4 @@
-# tabi
+![image](https://github.com/avicity7/tabi/blob/main/public/img/Banner.png?raw=true)
 *Helping you go on your next Journey*
 
 ## Tech Stack 
