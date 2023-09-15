@@ -11,23 +11,9 @@ const MapPreview = ({ journeyDays, journeyId }) => {
     const router = useRouter()
     return (
       <>
-        {/* <div className='flex flex-row align-center mb-5 px-3 max-w-2xl'>
-          <Text className='font-regular text-tabiBlueDark text-lg'>Overview</Text>
-          <button
-          onClick={ () => {
-            router.push({
-              pathname: '/journeyDetails',
-              query: { journeyId }
-            })
-          }}
-          className='ml-6'
-          >
-              <Text className='font-regular text-neutral-400 hover:text-tabiBlue text-sm'>Switch to Interactive Map</Text>
-          </button>
-        </div> */}
         {/* Day buttons */}
-        <div className="flex 0 px-5">
-            <Stack>
+        <div className="flex">
+            <Stack className="ml-5 mr-8">
                 <ul>
                     {journeyDays.map((day, index) => (
                         <li key={index}>
@@ -62,7 +48,7 @@ const MapPreview = ({ journeyDays, journeyId }) => {
             </Stack>
 
             {/* Destination Cards */}
-            <Stack className='mx-2 pl-10'>
+            <Stack>
                 <ul>
                     {journeyDays[currentDay].destinations.map((destination, index) => (
                         <li key={destination.place_id}>
