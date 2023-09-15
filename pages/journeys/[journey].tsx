@@ -86,7 +86,7 @@ const Journey = ({ journey }) => {
         </Head>
       }
 
-      <Navbar activePage={'index'} username={username}/>
+      <Navbar activePage={null} username={username}/>
 
       <div className="grid place-items-center font-DMSans">
           <Stack className="w-full lg:w-5/6">
@@ -117,7 +117,7 @@ const Journey = ({ journey }) => {
                         })
                       }}/>
                     }
-                    <ActionButton onClick={() => {}}/>
+                    <ActionButton journeyId={data.journey.id}/>
                   </div>
               </div>
               <Skeleton height='40px' isLoaded={data.journey !== '' || data.comments !== ''}>
@@ -129,7 +129,6 @@ const Journey = ({ journey }) => {
                   <Text className="font-sm font-regular text-gray-400 pt-2 justify-start display-linebreak px-5 md:px-0">The author of this Journey has yet to add a description.</Text>
                 }
                 { data.journey.journey_body !== null && (data.journey !== '' || data.comments !== '') &&
-                  // <Text className="font-sm font-regular pt-2 justify-start display-linebreak px-5 md:px-0">{data.journey.journey_body.replace('<br/>', '\n')}</Text>
                   <div className="pt-2 display-linebreak px-5 md:px-0 whitespace-pre-wrap">{data.journey.journey_body.replace('<br/>', '\n')}</div>
                 }
               </SkeletonText>
