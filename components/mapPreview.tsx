@@ -13,7 +13,7 @@ const MapPreview = ({ journeyDays, journeyId }) => {
       <>
         {/* Day buttons */}
         <div className="flex ml-5">
-            <Stack>
+            <Stack className="mr-8">
                 <ul>
                     {journeyDays.map((day, index) => (
                         <li key={index}>
