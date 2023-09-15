@@ -48,7 +48,7 @@ const MapPreview = ({ journeyDays, journeyId }) => {
             </Stack>
 
             {/* Destination Cards */}
-            <Stack className='pl-10'>
+            <Stack>
                 <ul>
                     {journeyDays[currentDay].destinations.map((destination, index) => (
                         <li key={destination.place_id}>

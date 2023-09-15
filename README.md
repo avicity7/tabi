@@ -1,5 +1,6 @@
-# tabi
-*Helping you go on your next Journey*
+![image](https://github.com/avicity7/tabi/blob/main/public/img/Banner.png?raw=true)
+
+<p align="center">Helping you go on your next Journey.</p>
 
 ## Tech Stack 
 Frontend Framework - Next.js
