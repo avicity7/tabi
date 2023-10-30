@@ -4,7 +4,7 @@ import { Stack } from '@chakra-ui/react'
 import { useState } from 'react'
 import { Icon } from '@iconify-icon/react'
 
-const ActionButton = ({ onClick }) => {
+const ActionButton = ({ journeyId }) => {
   const [shareOpen, setShareOpen] = useState(false)
 
   return (
@@ -16,7 +16,7 @@ const ActionButton = ({ onClick }) => {
         <Menu.Items className="absolute right-0 mt-16 origin-top-right rounded-md bg-white shadow-md">
           <Stack>
             <Menu.Item>
-              <button className="font-medium text-sm font-DMSans w-max py-3 px-3 flex flex-row items-center" onClick={() => { setShareOpen(true) }}>
+              <button className="font-medium text-sm font-DMSans w-max py-3 px-3 flex flex-row items-center" onClick={() => { setShareOpen(true); navigator.clipboard.writeText('tabi.vercel.app/jouneys/' + String(journeyId)) }}>
                 <Share size="16" className="mr-1"/>Share
               </button>
             </Menu.Item>

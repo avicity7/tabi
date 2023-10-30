@@ -72,7 +72,6 @@ const Journey = ({ journey }) => {
         setCookie('username', fetchedUsername)
       }
       setData({ journey: journey[0], comments })
-      console.log(journey)
     }
 
     fetchJourney()
@@ -117,7 +116,7 @@ const Journey = ({ journey }) => {
                         })
                       }}/>
                     }
-                    <ActionButton onClick={() => {}}/>
+                    <ActionButton journeyId={data.journey.id}/>
                   </div>
               </div>
               <Skeleton height='40px' isLoaded={data.journey !== '' || data.comments !== ''}>
