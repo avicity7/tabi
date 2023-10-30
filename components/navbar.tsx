@@ -71,7 +71,7 @@ const Navbar = (props) => {
               <DrawerOverlay />
               <DrawerContent borderRadius="md">
                 <DrawerHeader>
-                  <div className="flex lg:min-w-0 lg:flex-1 align-middle" aria-label="Global">
+                  <div className="flex lg:min-w-0 lg:flex-1 align-middle">
                     <Link href="/" className="-m-1.5 p-1.5">
                     <div className='flex justify-center'>
                       <Image src="/img/tabi.png" alt="logo" height={27} width={48} />

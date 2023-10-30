@@ -2,7 +2,7 @@ import { Stack, Text, Card, CardBody, Image } from '@chakra-ui/react'
 
 const DestinationCard = ({ destination, index }) => {
   return (
-    <Card className="my-2" minW={{ base: '3xs', lg: 'lg' }} maxW={{ base: '3xs', lg: 'lg' }}>
+    <Card className="my-2" minW={{ base: '2xs', lg: 'lg' }} maxW={{ base: '2xs', lg: 'lg' }}>
       <CardBody>
           <div className="flex flex-row items-center px-1">
               <Text className="text-tabiBlue text-md text-center font-bold mr-5">{parseInt(index) + 1}</Text>

@@ -253,7 +253,7 @@ const JourneyDetails = (props) => {
           </div>
 
           {/* Map Destination Popup */}
-          <div className="sticky top-1 right-0 bg-white font-DMSans">
+          <div className="sticky bg-white font-DMSans">
               <SmallMapView viewState={viewState} setViewState={setViewState} userDestinationData={serverDestinationData} currentDay={currentDay} setSearchInputData={setSearchInputData} resetMapPopup={resetMapPopup} searchInputData={searchInputData} />
               <MapPopup userId={userId} router={router} searchInputData={searchInputData} resetMapPopup={resetMapPopup} userDestinationData={null} setUserDestinationData={null} updateDestinations={updateDestinations} refresh={refresh} setRefresh={setRefresh} currentDay={currentDay}/>
           </div>
