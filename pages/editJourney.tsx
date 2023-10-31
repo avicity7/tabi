@@ -175,8 +175,13 @@ const EditJourney = (props) => {
     if (serverDestinationData.length === 0) {
       fetchData()
     }
+
     updateVisibility(isPublic, journeyId, userId)
-  }, [router.query.privateJourneyID, router.isReady, refresh, currentDay, isPublic])
+
+    if (userDestinationData !== serverDestinationData) {
+      updateDestinations(userDestinationData, journeyId, userId)
+    }
+  }, [router.query.privateJourneyID, router.isReady, refresh, currentDay, isPublic, userDestinationData])
 
   if (userDestinationData.length === 0) { // Return loading Spinner
     return (
