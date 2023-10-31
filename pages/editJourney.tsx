@@ -355,16 +355,18 @@ const EditJourney = (props) => {
                                         { ...provided.dragHandleProps }
                                         style={{ ...provided.draggableProps.style }}
                                       >
-                                        <DestinationCard destination={destination} index={index} />
-                                          {/* <button onClick={() => {
+                                        <DestinationCard
+                                          destination={destination}
+                                          index={index}
+                                          onClick={() => {
                                             setViewState({
                                               latitude: destination.geometry.location.lat,
                                               longitude: destination.geometry.location.lng,
                                               zoom: 14
                                             })
                                             setSearchInputData(destination)
-                                          }}>
-                                          </button> */}
+                                          }}
+                                        />
                                       </div>
                                     )}
                                   </Draggable>
