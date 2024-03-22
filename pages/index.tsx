@@ -39,6 +39,7 @@ const Home = (props) => {
           setCookie('username', fetchedUsername)
         }
         setData(journeys)
+        console.log(journeys)
       } catch {
 
       }
@@ -95,7 +96,7 @@ const Home = (props) => {
                           <>
                             <Image className="col-span-3 rounded-l-xl" minH="250" maxH="250" minW="100%" objectFit='cover' src={`https://maps.googleapis.com/maps/api/place/photo?maxheight=1000&photo_reference=${journey.destinations[0].destinations[0].photos[0].photo_reference}&key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_KEY}`} alt='image'/>
                             <div className="col-span-2">
-                              {journey.destinations[0].destinations[2] !== undefined &&
+                              {journey.destinations[0].destinations[2] !== undefined && journey.destinations[0].destinations[1].photos !== undefined &&
                                 <>
                                   <Image className="rounded-tr-xl" minH="125" maxH="125" minW="100%" objectFit='cover' src={`https://maps.googleapis.com/maps/api/place/photo?maxheight=1000&photo_reference=${journey.destinations[0].destinations[1].photos[0].photo_reference}&key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_KEY}`} alt='image'/>
                                   <Image className="rounded-br-xl" minH="125" maxH="125" minW="100%" objectFit='cover' src={`https://maps.googleapis.com/maps/api/place/photo?maxheight=1000&photo_reference=${journey.destinations[0].destinations[2].photos[0].photo_reference}&key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_KEY}`} alt='image'/>
