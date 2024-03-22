@@ -1,6 +1,7 @@
 import { useEffect, useState, useMemo } from 'react'
 import { useRouter } from 'next/router'
 import { Input, Stack, Spinner, Text, Textarea, Radio, RadioGroup } from '@chakra-ui/react'
+import { DragDropContext, Draggable } from 'react-beautiful-dnd'
 import dynamic from 'next/dynamic'
 import { ArrowLeft } from 'phosphor-react'
 import { createClient } from '@supabase/supabase-js'
@@ -92,6 +93,21 @@ const EditJourney = (props) => {
     setSearchInputData({ name: undefined, editorial_summary: { overview: undefined }, website: undefined, icon: undefined, notes: undefined, budget: undefined })
   }
 
+  const Droppable = dynamic(
+    async () => (await import('react-beautiful-dnd')).Droppable,
+    { ssr: false }
+  )
+
+  const onDragEnd = (result) => {
+    if (!result.destination) {
+      return
+    }
+    const schemaCopy = userDestinationData.slice()
+    const [item] = schemaCopy[currentDay].destinations.splice(result.source.index, 1)
+    schemaCopy[currentDay].destinations.splice(result.destination.index, 0, item)
+    setUserDestinationData(schemaCopy)
+  }
+
   const LargeMapView = useMemo(() => dynamic(
     async () => await import('../components/largeMapView'),
     {
@@ -159,8 +175,13 @@ const EditJourney = (props) => {
     if (serverDestinationData.length === 0) {
       fetchData()
     }
+
     updateVisibility(isPublic, journeyId, userId)
-  }, [router.query.privateJourneyID, router.isReady, refresh, currentDay, isPublic])
+
+    if (userDestinationData !== serverDestinationData) {
+      updateDestinations(userDestinationData, journeyId, userId)
+    }
+  }, [router.query.privateJourneyID, router.isReady, refresh, currentDay, isPublic, userDestinationData])
 
   if (userDestinationData.length === 0) { // Return loading Spinner
     return (
@@ -317,23 +338,49 @@ const EditJourney = (props) => {
                     </Stack>
 
                     {/* Destination Cards */}
+
                     <Stack className='col-span-8 flex justify-center items-center mx-5'>
-                        <ul>
-                        {userDestinationData[currentDay].destinations.map((destination, index) => (
-                            <li key={destination.place_id}>
-                                <button onClick={() => {
-                                  setViewState({
-                                    latitude: destination.geometry.location.lat,
-                                    longitude: destination.geometry.location.lng,
-                                    zoom: 14
-                                  })
-                                  setSearchInputData(destination)
-                                }}>
-                                    <DestinationCard destination={destination} index={index} />
-                                </button>
-                            </li>
-                        ))}
-                        </ul>
+                      <DragDropContext onDragEnd={onDragEnd}>
+                          <Droppable droppableId='column1'>
+                            {(provided, snap) => (
+                              <div
+                                ref={provided.innerRef}
+                                {...provided.droppableProps}
+                              >
+                              {userDestinationData[currentDay].destinations.map((destination, index) => (
+                                  <Draggable
+                                    key={destination.place_id}
+                                    draggableId={destination.place_id}
+                                    index={index}
+                                  >
+                                    {(provided, snap) => (
+                                      <div
+                                        ref={provided.innerRef}
+                                        { ...provided.draggableProps }
+                                        { ...provided.dragHandleProps }
+                                        style={{ ...provided.draggableProps.style }}
+                                      >
+                                        <DestinationCard
+                                          destination={destination}
+                                          index={index}
+                                          onClick={() => {
+                                            setViewState({
+                                              latitude: destination.geometry.location.lat,
+                                              longitude: destination.geometry.location.lng,
+                                              zoom: 14
+                                            })
+                                            setSearchInputData(destination)
+                                          }}
+                                        />
+                                      </div>
+                                    )}
+                                  </Draggable>
+                              ))}
+                              {provided.placeholder}
+                              </div>
+                            )}
+                          </Droppable>
+                        </DragDropContext>
 
                         {userDestinationData[currentDay].destinations.length === 0 &&
                             <Text className="flex text-sm text-gray-400 font-medium justify-center mr-4 py-8">No Destinations in this Day.</Text>

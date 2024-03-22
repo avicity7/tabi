@@ -1,6 +1,6 @@
 import { Stack, Text, Card, CardBody, Image } from '@chakra-ui/react'
 
-const DestinationCard = ({ destination, index }) => {
+const DestinationCard = ({ destination, index, onClick }) => {
   return (
     <Card className="my-2" minW={{ base: '2xs', lg: 'lg' }} maxW={{ base: '2xs', lg: 'lg' }}>
       <CardBody>
@@ -27,6 +27,14 @@ const DestinationCard = ({ destination, index }) => {
                       <Text className="text-md font-medium text-left">${destination.budget}</Text>
                     </Stack>
                   }
+                  <div className='pt-2 max-w-fit'>
+                    <button
+                      onClick={onClick}
+                      className='text-white text-xs p-2 bg-tabiBlue hover:bg-tabiBlueDark rounded'
+                    >
+                      Open Details
+                    </button>
+                  </div>
               </Stack>
           </div>
       </CardBody>

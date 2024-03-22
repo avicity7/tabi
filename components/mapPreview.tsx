@@ -60,7 +60,7 @@ const MapPreview = ({ journeyDays, journeyId }) => {
                                 })
                               }}
                             >
-                            <DestinationCard destination={destination} index={index} />
+                            <DestinationCard destination={destination} index={index} onClick={null}/>
                             </button>
                         </li>
                     ))}

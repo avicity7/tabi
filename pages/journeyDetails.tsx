@@ -221,7 +221,7 @@ const JourneyDetails = (props) => {
                                     })
                                     setSearchInputData(destination)
                                   }}>
-                                    <DestinationCard destination={destination} index={index} />
+                                    <DestinationCard destination={destination} index={index} onClick={null}/>
                                   </button>
                               </li>
                           ))}
@@ -323,7 +323,7 @@ const JourneyDetails = (props) => {
                                     })
                                     setSearchInputData(destination)
                                   }}>
-                                    <DestinationCard destination={destination} index={index} />
+                                    <DestinationCard destination={destination} index={index} onClick={null}/>
                                   </button>
                               </li>
                           ))}

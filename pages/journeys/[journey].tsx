@@ -72,7 +72,6 @@ const Journey = ({ journey }) => {
         setCookie('username', fetchedUsername)
       }
       setData({ journey: journey[0], comments })
-      console.log(journey)
     }
 
     fetchJourney()

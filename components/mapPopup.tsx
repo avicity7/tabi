@@ -23,6 +23,9 @@ const MapPopup = ({ userId, router, searchInputData, resetMapPopup, userDestinat
             <Icon icon="ic:round-close"/>
           </button>
         </div>
+        {searchInputData.photos !== undefined &&
+          <Image className="rounded-xl" minH="250" maxH="250" minW="100%" objectFit='cover' src={`https://maps.googleapis.com/maps/api/place/photo?maxheight=1000&photo_reference=${searchInputData.photos[0].photo_reference}&key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_KEY}`} alt='image'/>
+        }
         { searchInputData.editorial_summary !== undefined &&
           <Text className="text-sm font-regular text-left">{searchInputData.editorial_summary.overview}</Text>
         }
